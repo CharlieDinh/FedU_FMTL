@@ -11,18 +11,40 @@ NUM_LABELS = 6
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 dir_path = os.path.dirname(dir_path)
-dir_path_train = os.path.join(dir_path, 'human_activity/Original_Data/train')
-dir_path_test = os.path.join(dir_path, 'human_activity/Original_Data/test')
+dir_path = os.path.join(dir_path, 'vehicle_sensor/Original_Data')
 
-x_train = pd.read_csv(os.path.join(dir_path_train, 'X_train.txt'), delimiter='\n', header=None).values
-y_train = pd.read_csv(os.path.join(dir_path_train, 'y_train.txt'), delimiter='\n', header=None).values
-task_index_train = pd.read_csv(os.path.join(dir_path_train, 'subject_train.txt'), delimiter='\n', header=None).values
-x_test = pd.read_csv(os.path.join(dir_path_test, 'X_test.txt'), delimiter='\n', header=None).values
-y_test = pd.read_csv(os.path.join(dir_path_test, 'y_test.txt'), delimiter='\n', header=None).values
-task_index_test = pd.read_csv(os.path.join(dir_path_test, 'subject_test.txt'), delimiter='\n', header=None).values
+x = []
+y = []
+task_index = []
 
-train_path = './data/train/human_train.json'
-test_path = './data/test/human_test.json'
+for root, dir, file_names in os.walk(dir_path):
+    if 'acoustic' not in root and 'seismic' not in root:
+        x_tmp = []
+        for file_name in file_names:
+            if 'feat' in file_name:
+                dt_tmp = pd.read_csv(os.path.join(root, file_name),  sep=' ',
+                                         skipinitialspace=True, header=None).values[:, :50]
+                x_tmp.append(dt_tmp)
+        if len(x_tmp) == 2:
+            x_tmp = np.concatenate(x_tmp, axis=1)
+            x.append(x_tmp)
+            task_index.append(int(os.path.basename(root)[1:])*np.ones(x_tmp.shape[0]))
+            y.append(int('aav' in os.path.basename(os.path.dirname(root)))*np.ones(x_tmp.shape[0]))
+
+x = np.concatenate(x)
+y = np.concatenate(y)
+y = tf.keras.utils.to_categorical(y, num_classes=2)
+task_index = np.concatenate(task_index)
+argsort = np.argsort(task_index)
+x = x[argsort]
+y = y[argsort]
+task_index = task_index[argsort]
+split_index = np.where(np.roll(task_index, 1) != task_index)[0][1:]
+X = np.split(x, split_index)
+y = np.split(y, split_index)
+
+train_path = './data/train/vehicle_train.json'
+test_path = './data/test/vehicle_test.json'
 
 dir_path = os.path.dirname(train_path)
 if not os.path.exists(dir_path):
@@ -30,19 +52,6 @@ if not os.path.exists(dir_path):
 dir_path = os.path.dirname(test_path)
 if not os.path.exists(dir_path):
     os.makedirs(dir_path)
-    
-X = np.concatenate((x_train, x_test))
-y = np.concatenate((y_train, y_test)).squeeze()
-task_index = np.concatenate((task_index_train, task_index_test)).squeeze()
-argsort = np.argsort(task_index)
-X = X[argsort]
-y = np.array(y[argsort])
-y = y-1
-#y = tf.keras.utils.to_categorical(y, num_classes=NUM_LABELS)
-task_index = task_index[argsort]
-split_index = np.where(np.roll(task_index, 1) != task_index)[0][1:]
-X = np.split(X, split_index)#.tolist()
-y = np.split(y, split_index)#.tolist()
 
 train_data = {'users': [], 'user_data':{}, 'num_samples':[]}
 test_data = {'users': [], 'user_data':{}, 'num_samples':[]}

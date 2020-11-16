@@ -23,8 +23,8 @@ def main(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_
         if(model == "mclr"):
             if(dataset == "Mnist"):
                 model = Mclr_Logistic(), model
-            else:
-                model = Mclr_Logistic(60,10), model
+            elif(dataset == "Mnist") :
+                model = Mclr_Logistic(60,6), model
                 
         if(model == "cnn"):
             if(dataset == "Mnist"):
@@ -60,8 +60,8 @@ def main(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset", type=str, default="Cifar10", choices=["human_activity", "gleam","vehicle_sensor","Mnist", "Synthetic", "Cifar10"])
-    parser.add_argument("--model", type=str, default="cnn", choices=["dnn", "mclr", "cnn"])
+    parser.add_argument("--dataset", type=str, default="human_activity", choices=["human_activity", "gleam","vehicle_sensor","Mnist", "Synthetic", "Cifar10"])
+    parser.add_argument("--model", type=str, default="mclr", choices=["dnn", "mclr", "cnn"])
     parser.add_argument("--batch_size", type=int, default=20)
     parser.add_argument("--learning_rate", type=float, default=0.005, help="Local learning rate")
     parser.add_argument("--beta", type=float, default=1.0, help="Average moving parameter for pFedMe, or Second learning rate of Per-FedAvg")
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     parser.add_argument("--num_global_iters", type=int, default=800)
     parser.add_argument("--local_epochs", type=int, default=20)
     parser.add_argument("--optimizer", type=str, default="SGD")
-    parser.add_argument("--algorithm", type=str, default="pFedMe",choices=["pFedMe", "PerAvg", "FedAvg"]) 
+    parser.add_argument("--algorithm", type=str, default="FedAvg",choices=["pFedMe", "PerAvg", "FedAvg"]) 
     parser.add_argument("--numusers", type=int, default=20, help="Number of Users per round")
     parser.add_argument("--K", type=int, default=5, help="Computation steps")
     parser.add_argument("--personal_learning_rate", type=float, default=0.09, help="Persionalized learning rate to caculate theta aproximately using K steps")
