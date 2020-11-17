@@ -23,15 +23,13 @@ def main(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_
         if(model == "mclr"):
             if(dataset == "human_activity"):
                 model = Mclr_Logistic(561,6), model
-            elif(dataset == "Mnist"):
+            elif(dataset == "gleam"):
+                model = Mclr_Logistic(561,6), model
+            elif(dataset == "vehicle_sensor"):
+                model = Mclr_Logistic(561,6), model
+            else:#(dataset == "Mnist"):
                 model = Mclr_Logistic(), model
-                
-        if(model == "cnn"):
-            if(dataset == "Mnist"):
-                model = Net(), model
-            elif(dataset == "Cifar10"):
-                model = CifarNet(), model
-            
+
         if(model == "dnn"):
             if(dataset == "Mnist"):
                 model = DNN(), model
@@ -41,21 +39,14 @@ def main(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_
         # select algorithm
         if(algorithm == "FedAvg"):
             server = FedAvg(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, i)
-        
         if(algorithm == "pFedMe"):
             server = pFedMe(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
-
-        if(algorithm == "PerAvg"):
-            server = PerAvg(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, i)
-
+        if(algorithm == "SSGD"):
+            server = pFedMe(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
+            
         server.train()
         server.test()
 
-    # Average data 
-    if(algorithm == "PerAvg"):
-        algorithm == "PerAvg_p"
-    if(algorithm == "pFedMe"):
-        average_data(num_users=numusers, loc_ep1=local_epochs, Numb_Glob_Iters=num_glob_iters, lamb=lamda,learning_rate=learning_rate, beta = beta, algorithms="pFedMe_p", batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate,times = times)
     average_data(num_users=numusers, loc_ep1=local_epochs, Numb_Glob_Iters=num_glob_iters, lamb=lamda,learning_rate=learning_rate, beta = beta, algorithms=algorithm, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate,times = times)
 
 if __name__ == "__main__":
@@ -69,7 +60,7 @@ if __name__ == "__main__":
     parser.add_argument("--num_global_iters", type=int, default=800)
     parser.add_argument("--local_epochs", type=int, default=20)
     parser.add_argument("--optimizer", type=str, default="SGD")
-    parser.add_argument("--algorithm", type=str, default="FedAvg",choices=["pFedMe", "PerAvg", "FedAvg"]) 
+    parser.add_argument("--algorithm", type=str, default="FedAvg",choices=["pFedMe", "PerAvg", "FedAvg", "SSGD"]) 
     parser.add_argument("--numusers", type=int, default=20, help="Number of Users per round")
     parser.add_argument("--K", type=int, default=5, help="Computation steps")
     parser.add_argument("--personal_learning_rate", type=float, default=0.09, help="Persionalized learning rate to caculate theta aproximately using K steps")
