@@ -16,33 +16,36 @@ torch.manual_seed(0)
 
 def main(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters,
          local_epochs, optimizer, numusers, K, personal_learning_rate, times):\
+    
+    # Get device status: Check GPU or CPU
+    device = torch.device("cuda:{}".format(args.gpu) if torch.cuda.is_available() and args.gpu != -1 else "cpu")
 
     for i in range(times):
         print("---------------Running time:------------",i)
         # Generate model
         if(model == "mclr"):
             if(dataset == "human_activity"):
-                model = Mclr_Logistic(561,6), model
+                model = Mclr_Logistic(561,6).to(device), model
             elif(dataset == "gleam"):
-                model = Mclr_Logistic(561,6), model
+                model = Mclr_Logistic(561,6).to(device), model
             elif(dataset == "vehicle_sensor"):
-                model = Mclr_Logistic(561,6), model
+                model = Mclr_Logistic(561,6).to(device), model
             else:#(dataset == "Mnist"):
-                model = Mclr_Logistic(), model
+                model = Mclr_Logistic().to(device), model
 
         if(model == "dnn"):
             if(dataset == "Mnist"):
-                model = DNN(), model
+                model = DNN().to(device), model
             else: 
-                model = DNN(60,20,10), model
+                model = DNN(60,20,10).to(device), model
 
         # select algorithm
         if(algorithm == "FedAvg"):
-            server = FedAvg(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, i)
+            server = FedAvg(device, dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, i)
         if(algorithm == "pFedMe"):
-            server = pFedMe(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
+            server = pFedMe(device, dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
         if(algorithm == "SSGD"):
-            server = pFedMe(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
+            server = pFedMe(device, dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
             
         server.train()
         server.test()
