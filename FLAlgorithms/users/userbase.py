@@ -23,8 +23,13 @@ class User:
         self.beta = beta
         self.lamda = lamda
         self.local_epochs = local_epochs
-        self.trainloader = DataLoader(train_data, self.batch_size)
-        self.testloader =  DataLoader(test_data, self.batch_size)
+        if(self.batch_size == 0):
+            self.trainloader = DataLoader(train_data, self.train_samples)
+            self.testloader =  DataLoader(test_data, self.test_samples)
+        else:
+            self.trainloader = DataLoader(train_data, self.batch_size)
+            self.testloader =  DataLoader(test_data, self.batch_size)
+
         self.testloaderfull = DataLoader(test_data, self.test_samples)
         self.trainloaderfull = DataLoader(train_data, self.train_samples)
         self.iter_trainloader = iter(self.trainloader)
@@ -118,24 +123,32 @@ class User:
         return train_acc, loss , self.train_samples
     
     def get_next_train_batch(self):
-        try:
-            # Samples a new batch for persionalizing
-            (X, y) = next(self.iter_trainloader)
-        except StopIteration:
-            # restart the generator if the previous generator is exhausted.
-            self.iter_trainloader = iter(self.trainloader)
-            (X, y) = next(self.iter_trainloader)
-        return (X.to(self.device), y.to(self.device))
+        if(self.batch_size == 0):
+            for X, y in self.trainloaderfull:
+                return (X.to(self.device), y.to(self.device))
+        else:
+            try:
+                # Samples a new batch for persionalizing
+                (X, y) = next(self.iter_trainloader)
+            except StopIteration:
+                # restart the generator if the previous generator is exhausted.
+                self.iter_trainloader = iter(self.trainloader)
+                (X, y) = next(self.iter_trainloader)
+            return (X.to(self.device), y.to(self.device))
     
     def get_next_test_batch(self):
-        try:
-            # Samples a new batch for persionalizing
-            (X, y) = next(self.iter_testloader)
-        except StopIteration:
-            # restart the generator if the previous generator is exhausted.
-            self.iter_testloader = iter(self.testloader)
-            (X, y) = next(self.iter_testloader)
-        return (X.to(self.device), y.to(self.device))
+        if(self.batch_size == 0):
+            for X, y in self.testloaderfull:
+                return (X.to(self.device), y.to(self.device))
+        else:
+            try:
+                # Samples a new batch for persionalizing
+                (X, y) = next(self.iter_testloader)
+            except StopIteration:
+                # restart the generator if the previous generator is exhausted.
+                self.iter_testloader = iter(self.testloader)
+                (X, y) = next(self.iter_testloader)
+            return (X.to(self.device), y.to(self.device))
 
     def save_model(self):
         model_path = os.path.join("models", self.dataset)

@@ -25,7 +25,7 @@ for i in range(len(x_train)):
     x_train[i][0] = [float(x) for x in x_train[i][0].split()]
 for i in range(len(x_test)):
     x_test[i][0] = [float(x) for x in x_test[i][0].split()]
-    
+
 train_path = './data/train/human_train.json'
 test_path = './data/test/human_test.json'
 
@@ -58,7 +58,7 @@ for i in range(NUM_USERS):
     random.shuffle(combined)
     X[i][:], y[i][:] = zip(*combined)
     num_samples = len(X[i])
-    train_len = int(0.75*num_samples)
+    train_len = int(0.8*num_samples)
     test_len = num_samples - train_len
     
     train_data['users'].append(uname) 

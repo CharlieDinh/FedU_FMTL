@@ -33,7 +33,7 @@ for root, dir, file_names in os.walk(dir_path):
 
 x = np.concatenate(x)
 y = np.concatenate(y)
-y = tf.keras.utils.to_categorical(y, num_classes=2)
+#y = tf.keras.utils.to_categorical(y, num_classes=2)
 task_index = np.concatenate(task_index)
 argsort = np.argsort(task_index)
 x = x[argsort]

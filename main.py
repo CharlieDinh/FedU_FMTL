@@ -29,7 +29,7 @@ def main(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_
             elif(dataset == "gleam"):
                 model = Mclr_Logistic(561,6).to(device), model
             elif(dataset == "vehicle_sensor"):
-                model = Mclr_Logistic(561,6).to(device), model
+                model = Mclr_Logistic(100,2).to(device), model
             else:#(dataset == "Mnist"):
                 model = Mclr_Logistic().to(device), model
 
@@ -54,17 +54,17 @@ def main(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset", type=str, default="human_activity", choices=["human_activity", "gleam","vehicle_sensor","Mnist", "Synthetic", "Cifar10"])
+    parser.add_argument("--dataset", type=str, default="vehicle_sensor", choices=["human_activity", "gleam","vehicle_sensor","Mnist", "Synthetic", "Cifar10"])
     parser.add_argument("--model", type=str, default="mclr", choices=["dnn", "mclr", "cnn"])
-    parser.add_argument("--batch_size", type=int, default=20)
-    parser.add_argument("--learning_rate", type=float, default=0.005, help="Local learning rate")
+    parser.add_argument("--batch_size", type=int, default=0)
+    parser.add_argument("--learning_rate", type=float, default=0.001, help="Local learning rate")
     parser.add_argument("--beta", type=float, default=1.0, help="Average moving parameter for pFedMe, or Second learning rate of Per-FedAvg")
     parser.add_argument("--lamda", type=int, default=15, help="Regularization term")
     parser.add_argument("--num_global_iters", type=int, default=800)
     parser.add_argument("--local_epochs", type=int, default=20)
     parser.add_argument("--optimizer", type=str, default="SGD")
     parser.add_argument("--algorithm", type=str, default="FedAvg",choices=["pFedMe", "PerAvg", "FedAvg", "SSGD"]) 
-    parser.add_argument("--numusers", type=int, default=20, help="Number of Users per round")
+    parser.add_argument("--numusers", type=int, default=30, help="Number of Users per round")
     parser.add_argument("--K", type=int, default=5, help="Computation steps")
     parser.add_argument("--personal_learning_rate", type=float, default=0.09, help="Persionalized learning rate to caculate theta aproximately using K steps")
     parser.add_argument("--times", type=int, default=5, help="running time")
