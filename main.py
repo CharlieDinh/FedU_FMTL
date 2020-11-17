@@ -21,10 +21,10 @@ def main(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_
         print("---------------Running time:------------",i)
         # Generate model
         if(model == "mclr"):
-            if(dataset == "Mnist"):
+            if(dataset == "human_activity"):
+                model = Mclr_Logistic(561,6), model
+            elif(dataset == "Mnist"):
                 model = Mclr_Logistic(), model
-            elif(dataset == "Mnist") :
-                model = Mclr_Logistic(60,6), model
                 
         if(model == "cnn"):
             if(dataset == "Mnist"):

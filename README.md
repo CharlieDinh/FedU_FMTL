@@ -10,7 +10,7 @@ Authors: Canh T. Dinh, Nguyen H. Tran, ....
 
 - The code can be run on any pc, doesn't require GPU.
   
-# Dataset: We use 2 datasets: MNIST and Synthetic
+# Dataset: We use 2 datasets: Human 
 # Produce experiments and figures
 ## Using same parameters
 ## Effect of hyper-parameters:

@@ -21,6 +21,11 @@ x_test = pd.read_csv(os.path.join(dir_path_test, 'X_test.txt'), delimiter='\n', 
 y_test = pd.read_csv(os.path.join(dir_path_test, 'y_test.txt'), delimiter='\n', header=None).values
 task_index_test = pd.read_csv(os.path.join(dir_path_test, 'subject_test.txt'), delimiter='\n', header=None).values
 
+for i in range(len(x_train)):
+    x_train[i][0] = [float(x) for x in x_train[i][0].split()]
+for i in range(len(x_test)):
+    x_test[i][0] = [float(x) for x in x_test[i][0].split()]
+    
 train_path = './data/train/human_train.json'
 test_path = './data/test/human_test.json'
 

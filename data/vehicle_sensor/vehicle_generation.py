@@ -43,9 +43,9 @@ split_index = np.where(np.roll(task_index, 1) != task_index)[0][1:]
 X = np.split(x, split_index)
 y = np.split(y, split_index)
 
+print(len(X))
 train_path = './data/train/vehicle_train.json'
 test_path = './data/test/vehicle_test.json'
-
 dir_path = os.path.dirname(train_path)
 if not os.path.exists(dir_path):
     os.makedirs(dir_path)
@@ -56,7 +56,7 @@ if not os.path.exists(dir_path):
 train_data = {'users': [], 'user_data':{}, 'num_samples':[]}
 test_data = {'users': [], 'user_data':{}, 'num_samples':[]}
 
-for i in range(NUM_USERS):
+for i in range(len(X)):
     uname = 'f_{0:05d}'.format(i)
     combined = list(zip(X[i], y[i]))
     random.shuffle(combined)
