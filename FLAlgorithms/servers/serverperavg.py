@@ -14,10 +14,9 @@ class PerAvg(Server):
                          local_epochs, optimizer, num_users, times)
 
         # Initialize data for all  users
-        data = read_data(dataset)
-        total_users = len(data[0])
+        total_users = len(dataset[0][0])
         for i in range(total_users):
-            id, train , test = read_user_data(i, data, dataset)
+            id, train , test = read_user_data(i, dataset[0], dataset[1])
             user = UserPerAvg(id, train, test, model, batch_size, learning_rate, beta, lamda, local_epochs, optimizer ,total_users , num_users)
             self.users.append(user)
             self.total_train_samples += user.train_samples

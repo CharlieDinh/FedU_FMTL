@@ -19,7 +19,7 @@ class UserSSGD(User):
         else:
             self.loss = nn.NLLLoss()
 
-        self.optimizer = torch.optim.SGD(self.model.parameters(), lr=self.learning_rate)
+        self.optimizer = torch.optim.SGD(self.model.parameters(), lr=self.learning_rate, weight_decay = lamda)
 
     def set_grads(self, new_grads):
         if isinstance(new_grads, nn.Parameter):
@@ -29,7 +29,7 @@ class UserSSGD(User):
             for idx, model_grad in enumerate(self.model.parameters()):
                 model_grad.data = new_grads[idx]
 
-    def train(self, epochs):
+    def train(self, epochs, user_list):
         LOSS = 0
         self.model.train()
         for epoch in range(1, self.local_epochs + 1):

@@ -9,6 +9,7 @@ import os
 from FLAlgorithms.servers.serveravg import FedAvg
 from FLAlgorithms.servers.serverpFedMe import pFedMe
 from FLAlgorithms.servers.serverperavg import PerAvg
+from utils.model_utils import read_data
 from FLAlgorithms.trainmodel.models import *
 from utils.plot_utils import *
 import torch
@@ -40,12 +41,14 @@ def main(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_
                 model = DNN(60,20,10).to(device), model
 
         # select algorithm
+        data = read_data(dataset) , dataset
+
         if(algorithm == "FedAvg"):
-            server = FedAvg(device, dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, i)
+            server = FedAvg(device, data, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, i)
         if(algorithm == "pFedMe"):
-            server = pFedMe(device, dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
+            server = pFedMe(device, data, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
         if(algorithm == "SSGD"):
-            server = pFedMe(device, dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
+            server = pFedMe(device, data, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
             
         server.train()
         server.test()
