@@ -9,9 +9,9 @@ from FLAlgorithms.users.userbase import User
 # Implementation for FedAvg clients
 
 class UserAVG(User):
-    def __init__(self, device, numeric_id, train_data, test_data, model, batch_size, learning_rate, beta, lambda,
+    def __init__(self, device, numeric_id, train_data, test_data, model, batch_size, learning_rate, beta, L_k,
                  local_epochs, optimizer):
-        super().__init__(device, numeric_id, train_data, test_data, model[0], batch_size, learning_rate, beta, lambda,
+        super().__init__(device, numeric_id, train_data, test_data, model[0], batch_size, learning_rate, beta, L_k,
                          local_epochs)
 
         if(model[1] == "Mclr_CrossEntropy"):

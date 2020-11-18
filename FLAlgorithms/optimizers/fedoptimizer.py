@@ -47,11 +47,11 @@ class FEDLOptimizer(Optimizer):
         return loss
 
 class pFedMeOptimizer(Optimizer):
-    def __init__(self, params, lr=0.01, lambda=0.1 , mu = 0.001):
+    def __init__(self, params, lr=0.01, L_k=0.1 , mu = 0.001):
         #self.local_weight_updated = local_weight # w_i,K
         if lr < 0.0:
             raise ValueError("Invalid learning rate: {}".format(lr))
-        defaults = dict(lr=lr, lambda=lambda, mu = mu)
+        defaults = dict(lr=lr, L_k=L_k, mu = mu)
         super(pFedMeOptimizer, self).__init__(params, defaults)
     
     def step(self, local_weight_updated, closure=None):
@@ -61,7 +61,7 @@ class pFedMeOptimizer(Optimizer):
         weight_update = local_weight_updated.copy()
         for group in self.param_groups:
             for p, localweight in zip( group['params'], weight_update):
-                p.data = p.data - group['lr'] * (p.grad.data + group['lambda'] * (p.data - localweight.data) + group['mu']*p.data)
+                p.data = p.data - group['lr'] * (p.grad.data + group['L_k'] * (p.data - localweight.data) + group['mu']*p.data)
         return  group['params'], loss
     
     def update_param(self, local_weight_updated, closure=None):

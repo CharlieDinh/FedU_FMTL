@@ -9,13 +9,14 @@ import os
 from FLAlgorithms.servers.serveravg import FedAvg
 from FLAlgorithms.servers.serverpFedMe import pFedMe
 from FLAlgorithms.servers.serverperavg import PerAvg
+from FLAlgorithms.servers.serverSSGD import FedSSGD
 from utils.model_utils import read_data
 from FLAlgorithms.trainmodel.models import *
 from utils.plot_utils import *
 import torch
 torch.manual_seed(0)
 
-def main(dataset, algorithm, model, batch_size, learning_rate, beta, lambda, num_glob_iters,
+def main(dataset, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters,
          local_epochs, optimizer, numusers, K, personal_learning_rate, times):\
     
     # Get device status: Check GPU or CPU
@@ -44,16 +45,16 @@ def main(dataset, algorithm, model, batch_size, learning_rate, beta, lambda, num
         data = read_data(dataset) , dataset
 
         if(algorithm == "FedAvg"):
-            server = FedAvg(device, data, algorithm, model, batch_size, learning_rate, beta, lambda, num_glob_iters, local_epochs, optimizer, numusers, i)
+            server = FedAvg(device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
         if(algorithm == "pFedMe"):
-            server = pFedMe(device, data, algorithm, model, batch_size, learning_rate, beta, lambda, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
+            server = pFedMe(device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
         if(algorithm == "SSGD"):
-            server = pFedMe(device, data, algorithm, model, batch_size, learning_rate, beta, lambda, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
-            
+            server = FedSSGD(device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
+
         server.train()
         server.test()
 
-    average_data(num_users=numusers, loc_ep1=local_epochs, Numb_Glob_Iters=num_glob_iters, lamb=lambda,learning_rate=learning_rate, beta = beta, algorithms=algorithm, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate,times = times)
+    average_data(num_users=numusers, loc_ep1=local_epochs, Numb_Glob_Iters=num_glob_iters, lamb=L_k,learning_rate=learning_rate, beta = beta, algorithms=algorithm, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate,times = times)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -62,12 +63,12 @@ if __name__ == "__main__":
     parser.add_argument("--batch_size", type=int, default=0)
     parser.add_argument("--learning_rate", type=float, default=0.001, help="Local learning rate")
     parser.add_argument("--beta", type=float, default=1.0, help="Average moving parameter for pFedMe, or Second learning rate of Per-FedAvg")
-    parser.add_argument("--lambda", type=int, default=15, help="Regularization term")
+    parser.add_argument("--L_k", type=int, default=15, help="Regularization term")
     parser.add_argument("--num_global_iters", type=int, default=800)
     parser.add_argument("--local_epochs", type=int, default=20)
     parser.add_argument("--optimizer", type=str, default="SGD")
-    parser.add_argument("--algorithm", type=str, default="FedAvg",choices=["pFedMe", "PerAvg", "FedAvg", "SSGD"]) 
-    parser.add_argument("--numusers", type=int, default=30, help="Number of Users per round")
+    parser.add_argument("--algorithm", type=str, default="SSGD",choices=["pFedMe", "PerAvg", "FedAvg", "SSGD"]) 
+    parser.add_argument("--numusers", type=int, default=23, help="Number of Users per round")
     parser.add_argument("--K", type=int, default=5, help="Computation steps")
     parser.add_argument("--personal_learning_rate", type=float, default=0.09, help="Persionalized learning rate to caculate theta aproximately using K steps")
     parser.add_argument("--times", type=int, default=5, help="running time")
@@ -93,7 +94,7 @@ if __name__ == "__main__":
         batch_size=args.batch_size,
         learning_rate=args.learning_rate,
         beta = args.beta, 
-        lambda = args.lambda,
+        L_k = args.L_k,
         num_glob_iters=args.num_global_iters,
         local_epochs=args.local_epochs,
         optimizer= args.optimizer,

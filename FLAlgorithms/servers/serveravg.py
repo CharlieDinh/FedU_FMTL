@@ -9,16 +9,14 @@ import numpy as np
 # Implementation for FedAvg Server
 
 class FedAvg(Server):
-    def __init__(self, device, dataset,algorithm, model, batch_size, learning_rate, beta, lambda, num_glob_iters,
-                 local_epochs, optimizer, num_users, times):
-        super().__init__(device, dataset,algorithm, model[0], batch_size, learning_rate, beta, lambda, num_glob_iters,
-                         local_epochs, optimizer, num_users, times)
+    def __init__(self, device, dataset,algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, num_users, times):
+        super().__init__(device, dataset,algorithm, model[0], batch_size, learning_rate, beta, L_k, num_glob_iters,local_epochs, optimizer, num_users, times)
 
         # Initialize data for all  users
         total_users = len(dataset[0][0])
         for i in range(total_users):
             id, train , test = read_user_data(i, dataset[0], dataset[1])
-            user = UserAVG(device, id, train, test, model, batch_size, learning_rate,beta,lambda, local_epochs, optimizer)
+            user = UserAVG(device, id, train, test, model, batch_size, learning_rate,beta,L_k, local_epochs, optimizer)
             self.users.append(user)
             self.total_train_samples += user.train_samples
             

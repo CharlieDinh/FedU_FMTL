@@ -10,9 +10,9 @@ from FLAlgorithms.users.userbase import User
 # Implementation for Per-FedAvg clients
 
 class UserPerAvg(User):
-    def __init__(self, device, numeric_id, train_data, test_data, model, batch_size, learning_rate,beta,lambda,
+    def __init__(self, device, numeric_id, train_data, test_data, model, batch_size, learning_rate,beta,L_k,
                  local_epochs, optimizer, total_users , num_users):
-        super().__init__(device, numeric_id, train_data, test_data, model[0], batch_size, learning_rate, beta, lambda,
+        super().__init__(device, numeric_id, train_data, test_data, model[0], batch_size, learning_rate, beta, L_k,
                          local_epochs)
         self.total_users = total_users
         self.num_users = num_users
