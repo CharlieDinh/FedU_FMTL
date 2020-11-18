@@ -9,16 +9,16 @@ import numpy as np
 # Implementation for FedAvg Server
 
 class FedSSGD(Server):
-    def __init__(self, dataset,algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters,
+    def __init__(self, dataset,algorithm, model, batch_size, learning_rate, beta, lambda, num_glob_iters,
                  local_epochs, optimizer, num_users, times):
-        super().__init__(dataset,algorithm, model[0], batch_size, learning_rate, beta, lamda, num_glob_iters,
+        super().__init__(dataset,algorithm, model[0], batch_size, learning_rate, beta, lambda, num_glob_iters,
                          local_epochs, optimizer, num_users, times)
 
         # Initialize data for all  users
         total_users = len(dataset[0][0])
         for i in range(total_users):
             id, train , test = read_user_data(i, dataset[0], dataset[1])
-            user = UserSSGD(id, train, test, model, batch_size, learning_rate,beta,lamda, local_epochs, optimizer)
+            user = UserSSGD(id, train, test, model, batch_size, learning_rate,beta,lambda, local_epochs, optimizer)
             self.users.append(user)
             self.total_train_samples += user.train_samples
             
@@ -47,12 +47,13 @@ class FedSSGD(Server):
             self.evaluate()
 
             self.selected_users = self.select_users(glob_iter,self.num_users)
+            # local update at each users
             for user in self.selected_users:
-                user.train(self.local_epochs, self.users) #* user.train_samples
-            self.aggregate_parameters()
-            #loss_ /= self.total_train_samples
-            #loss.append(loss_)
-            #print(loss_)
-        #print(loss)
+                user.train(self.local_epochs)
+                
+            # Agegrate parameter at each user 
+            for user in self.selected_users:
+                user.aggregate_parameters(self.users)
+
         self.save_results()
         self.save_model()

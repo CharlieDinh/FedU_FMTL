@@ -9,9 +9,9 @@ from FLAlgorithms.users.userbase import User
 # Implementation for FedAvg clients
 
 class UserSSGD(User):
-    def __init__(self, device, numeric_id, train_data, test_data, model, batch_size, learning_rate, beta, lamda,
+    def __init__(self, device, numeric_id, train_data, test_data, model, batch_size, learning_rate, beta, lambda,
                  local_epochs, optimizer):
-        super().__init__(device, numeric_id, train_data, test_data, model[0], batch_size, learning_rate, beta, lamda,
+        super().__init__(device, numeric_id, train_data, test_data, model[0], batch_size, learning_rate, beta, lambda,
                          local_epochs)
 
         if(model[1] == "Mclr_CrossEntropy"):
@@ -19,7 +19,7 @@ class UserSSGD(User):
         else:
             self.loss = nn.NLLLoss()
 
-        self.optimizer = torch.optim.SGD(self.model.parameters(), lr=self.learning_rate, weight_decay = lamda)
+        self.optimizer = torch.optim.SGD(self.model.parameters(), lr=self.learning_rate, weight_decay = lambda)
 
     def set_grads(self, new_grads):
         if isinstance(new_grads, nn.Parameter):
@@ -29,7 +29,7 @@ class UserSSGD(User):
             for idx, model_grad in enumerate(self.model.parameters()):
                 model_grad.data = new_grads[idx]
 
-    def train(self, epochs, user_list):
+    def train(self, epochs):
         LOSS = 0
         self.model.train()
         for epoch in range(1, self.local_epochs + 1):
@@ -42,4 +42,7 @@ class UserSSGD(User):
             self.optimizer.step()
             self.clone_model_paramenter(self.model.parameters(), self.local_model)
         return LOSS
+    
+    def aggregate_parameters(self, user_list):
+        
 

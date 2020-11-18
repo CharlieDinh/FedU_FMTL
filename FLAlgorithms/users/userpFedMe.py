@@ -11,9 +11,9 @@ import copy
 # Implementation for pFeMe clients
 
 class UserpFedMe(User):
-    def __init__(self, device, numeric_id, train_data, test_data, model, batch_size, learning_rate,beta,lamda,
+    def __init__(self, device, numeric_id, train_data, test_data, model, batch_size, learning_rate,beta,lambda,
                  local_epochs, optimizer, K, personal_learning_rate):
-        super().__init__(device, numeric_id, train_data, test_data, model[0], batch_size, learning_rate, beta, lamda,
+        super().__init__(device, numeric_id, train_data, test_data, model[0], batch_size, learning_rate, beta, lambda,
                          local_epochs)
 
         if(model[1] == "Mclr_CrossEntropy"):
@@ -23,7 +23,7 @@ class UserpFedMe(User):
 
         self.K = K
         self.personal_learning_rate = personal_learning_rate
-        self.optimizer = pFedMeOptimizer(self.model.parameters(), lr=self.personal_learning_rate, lamda=self.lamda)
+        self.optimizer = pFedMeOptimizer(self.model.parameters(), lr=self.personal_learning_rate, lambda=self.lambda)
 
     def set_grads(self, new_grads):
         if isinstance(new_grads, nn.Parameter):
@@ -51,7 +51,7 @@ class UserpFedMe(User):
 
             # update local weight after finding aproximate theta
             for new_param, localweight in zip(self.persionalized_model_bar, self.local_model):
-                localweight.data = localweight.data - self.lamda* self.learning_rate * (localweight.data - new_param.data)
+                localweight.data = localweight.data - self.lambda* self.learning_rate * (localweight.data - new_param.data)
 
         #update local model as local_weight_upated
         #self.clone_model_paramenter(self.local_weight_updated, self.local_model)
