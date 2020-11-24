@@ -66,7 +66,7 @@ class Server:
             self.add_parameters(user, user.train_samples / total_train)
 
     def save_model(self):
-        model_path = os.path.join("models", self.dataset)
+        model_path = os.path.join("models", self.dataset[1])
         if not os.path.exists(model_path):
             os.makedirs(model_path)
         torch.save(self.model, os.path.join(model_path, "server" + ".pt"))
@@ -126,7 +126,10 @@ class Server:
             
     # Save loss, accurancy to h5 fiel
     def save_results(self):
-        alg = self.dataset + "_" + self.algorithm
+        dir_path = "./results"
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path)
+        alg = self.dataset[1] + "_" + self.algorithm
         alg = alg + "_" + str(self.learning_rate) + "_" + str(self.beta) + "_" + str(self.L_k) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b" + "_" + str(self.local_epochs)
         if(self.algorithm == "pFedMe" or self.algorithm == "pFedMe_p"):
             alg = alg + "_" + str(self.K) + "_" + str(self.personal_learning_rate)
@@ -139,7 +142,7 @@ class Server:
                 hf.close()
         
         # store persionalized value
-        alg = self.dataset + "_" + self.algorithm + "_p"
+        alg = self.dataset[1] + "_" + self.algorithm + "_p"
         alg = alg  + "_" + str(self.learning_rate) + "_" + str(self.beta) + "_" + str(self.L_k) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b"+ "_" + str(self.local_epochs)
         if(self.algorithm == "pFedMe" or self.algorithm == "pFedMe_p"):
             alg = alg + "_" + str(self.K) + "_" + str(self.personal_learning_rate)
