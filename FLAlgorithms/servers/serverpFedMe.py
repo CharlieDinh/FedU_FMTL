@@ -17,10 +17,11 @@ class pFedMe(Server):
         # Initialize data for all  users
         self.K = K
         self.personal_learning_rate = personal_learning_rate
+
         total_users = len(dataset[0][0])
         for i in range(total_users):
             id, train , test = read_user_data(i, dataset[0], dataset[1])
-            user = UserpFedMe(id, train, test, model, batch_size, learning_rate, beta, L_k, local_epochs, optimizer, K, personal_learning_rate)
+            user = UserpFedMe(device, id, train, test, model, batch_size, learning_rate, beta, L_k, local_epochs, optimizer, K, personal_learning_rate)
             self.users.append(user)
             self.total_train_samples += user.train_samples
         print("Number of users / total users:",num_users, " / " ,total_users)
