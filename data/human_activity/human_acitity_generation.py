@@ -6,6 +6,8 @@ import os
 import random
 import json
 
+random.seed(1)
+
 NUM_USERS = 30 
 NUM_LABELS = 6
 
@@ -36,39 +38,42 @@ dir_path = os.path.dirname(test_path)
 if not os.path.exists(dir_path):
     os.makedirs(dir_path)
     
-X = np.concatenate((x_train, x_test))
-y = np.concatenate((y_train, y_test)).squeeze()
+X_Con = np.concatenate((x_train, x_test))
+y_Con = np.concatenate((y_train, y_test)).squeeze()
+y_Con = y_Con - 1 
 task_index = np.concatenate((task_index_train, task_index_test)).squeeze()
-argsort = np.argsort(task_index)
-X = X[argsort]
-y = np.array(y[argsort])
-y = y-1
-#y = tf.keras.utils.to_categorical(y, num_classes=NUM_LABELS)
-task_index = task_index[argsort]
-split_index = np.where(np.roll(task_index, 1) != task_index)[0][1:]
-X = np.split(X, split_index)#.tolist()
-y = np.split(y, split_index)#.tolist()
+
+X = []
+y = []
+
+for i in range(NUM_USERS):
+    index = np.where(task_index == i+1)
+    min = index[0][0]
+    max = index[0][-1] + 1
+    X.append(X_Con[min:max])
+    y.append(y_Con[min:max])
+
 
 train_data = {'users': [], 'user_data':{}, 'num_samples':[]}
 test_data = {'users': [], 'user_data':{}, 'num_samples':[]}
 
 for i in range(NUM_USERS):
     uname = 'f_{0:05d}'.format(i)
-    combined = list(zip(X[i], y[i]))
-    random.shuffle(combined)
-    X[i][:], y[i][:] = zip(*combined)
-    num_samples = len(X[i])
-    train_len = int(0.8*num_samples)
-    test_len = num_samples - train_len
-    
-    train_data['users'].append(uname) 
-    train_data['user_data'][uname] = {'x': X[i][:train_len].tolist(), 'y': y[i][:train_len].tolist()}
-    train_data['num_samples'].append(train_len)
-    test_data['users'].append(uname)
-    test_data['user_data'][uname] = {'x': X[i][train_len:].tolist(), 'y': y[i][train_len:].tolist()}
-    test_data['num_samples'].append(test_len)
 
-print("Num_samples:", train_data['num_samples'])
+    X_train, X_test, y_train, y_test = train_test_split(X[i], y[i], train_size=0.75, stratify=y[i])
+
+    train_data["user_data"][uname] = {'x': X_train.tolist(), 'y': y_train.tolist()}
+    train_data['users'].append(uname)
+    train_data['num_samples'].append(len(y_train))
+    
+    test_data['users'].append(uname)
+    test_data["user_data"][uname] = {'x': X_test.tolist(), 'y': y_test.tolist()}
+    test_data['num_samples'].append(len(y_test))
+
+    
+print("train", train_data['num_samples'])
+print("test", test_data['num_samples'])
+print("Num_samples:", train_data['num_samples']+ test_data['num_samples'])
 print("Total_samples:",sum(train_data['num_samples'] + test_data['num_samples']))
     
 with open(train_path,'w') as outfile:

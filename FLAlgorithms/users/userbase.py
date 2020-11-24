@@ -24,14 +24,14 @@ class User:
         self.L_k = L_k
         self.local_epochs = local_epochs
         if(self.batch_size == 0):
-            self.trainloader = DataLoader(train_data, self.train_samples)
-            self.testloader =  DataLoader(test_data, self.test_samples)
+            self.trainloader = DataLoader(train_data, self.train_samples,shuffle=True)
+            self.testloader =  DataLoader(test_data, self.test_samples,shuffle=True)
         else:
-            self.trainloader = DataLoader(train_data, self.batch_size)
-            self.testloader =  DataLoader(test_data, self.batch_size)
+            self.trainloader = DataLoader(train_data, self.batch_size,shuffle=True)
+            self.testloader =  DataLoader(test_data, self.batch_size,shuffle=True)
 
-        self.testloaderfull = DataLoader(test_data, self.test_samples)
-        self.trainloaderfull = DataLoader(train_data, self.train_samples)
+        self.testloaderfull = DataLoader(test_data, self.test_samples,shuffle=True)
+        self.trainloaderfull = DataLoader(train_data, self.train_samples,shuffle=True)
         self.iter_trainloader = iter(self.trainloader)
         self.iter_testloader = iter(self.testloader)
 
