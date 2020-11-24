@@ -23,7 +23,7 @@ def main(dataset, algorithm, model, batch_size, learning_rate, beta, L_k, num_gl
     device = torch.device("cuda:{}".format(args.gpu) if torch.cuda.is_available() and args.gpu != -1 else "cpu")
 
     data = read_data(dataset) , dataset
-    
+
     for i in range(times):
         print("---------------Running time:------------",i)
         # Generate model
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", type=str, default="vehicle_sensor", choices=["human_activity", "gleam","vehicle_sensor","Mnist", "Synthetic", "Cifar10"])
     parser.add_argument("--model", type=str, default="mclr", choices=["dnn", "mclr", "cnn"])
-    parser.add_argument("--batch_size", type=int, default=16)
+    parser.add_argument("--batch_size", type=int, default=20)
     parser.add_argument("--learning_rate", type=float, default=0.001, help="Local learning rate")
     parser.add_argument("--beta", type=float, default=1.0, help="Average moving parameter for pFedMe, or Second learning rate of Per-FedAvg")
     parser.add_argument("--L_k", type=int, default=0, help="Regularization term")
@@ -77,10 +77,10 @@ if __name__ == "__main__":
     parser.add_argument("--local_epochs", type=int, default=20)
     parser.add_argument("--optimizer", type=str, default="SGD")
     parser.add_argument("--algorithm", type=str, default="FedAvg",choices=["pFedMe", "PerAvg", "FedAvg", "SSGD"]) 
-    parser.add_argument("--numusers", type=int, default=30, help="Number of Users per round")
+    parser.add_argument("--numusers", type=int, default=23, help="Number of Users per round")
     parser.add_argument("--K", type=int, default=5, help="Computation steps")
     parser.add_argument("--personal_learning_rate", type=float, default=0.09, help="Persionalized learning rate to caculate theta aproximately using K steps")
-    parser.add_argument("--times", type=int, default=5, help="running time")
+    parser.add_argument("--times", type=int, default=1, help="running time")
     args = parser.parse_args()
 
     print("=" * 80)

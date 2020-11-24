@@ -29,20 +29,35 @@ class UserSSGD(User):
             for idx, model_grad in enumerate(self.model.parameters()):
                 model_grad.data = new_grads[idx]
 
+    # def train(self, epochs):
+    #     LOSS = 0
+    #     self.model.train()
+    #     for epoch in range(1, self.local_epochs + 1):
+    #         self.model.train()
+    #         X, y = self.get_next_train_batch()
+    #         self.optimizer.zero_grad()
+    #         output = self.model(X)
+    #         loss = self.loss(output, y)
+    #         loss.backward()
+    #         self.optimizer.step()
+    #         self.clone_model_paramenter(self.model.parameters(), self.local_model)
+    #     return LOSS
+    
     def train(self, epochs):
         LOSS = 0
         self.model.train()
         for epoch in range(1, self.local_epochs + 1):
             self.model.train()
-            X, y = self.get_next_train_batch()
-            self.optimizer.zero_grad()
-            output = self.model(X)
-            loss = self.loss(output, y)
-            loss.backward()
-            self.optimizer.step()
-            self.clone_model_paramenter(self.model.parameters(), self.local_model)
+            for X,y in self.trainloader:
+                X, y = X.to(self.device), y.to(self.device)#self.get_next_train_batch()
+                self.optimizer.zero_grad()
+                output = self.model(X)
+                loss = self.loss(output, y)
+                loss.backward()
+                self.optimizer.step()
+        self.clone_model_paramenter(self.model.parameters(), self.local_model)
         return LOSS
-    
+
     def aggregate_parameters(self, user_list):
         avg_weight_different = copy.deepcopy(list(self.model.parameters()))
         alpha = np.ones(len(user_list))
