@@ -37,6 +37,7 @@ class FedAvg(Server):
     def train(self):
         loss = []
         for glob_iter in range(self.num_glob_iters):
+            self.experiment.set_epoch( glob_iter + 1)
             print("-------------Round number: ",glob_iter, " -------------")
             #loss_ = 0
             self.send_parameters()

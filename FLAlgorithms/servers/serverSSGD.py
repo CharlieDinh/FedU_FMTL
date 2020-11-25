@@ -41,6 +41,7 @@ class FedSSGD(Server):
         self.send_parameters()
 
         for glob_iter in range(self.num_glob_iters):
+            self.experiment.set_epoch( glob_iter + 1)
             print("-------------Round number: ",glob_iter, " -------------")
             self.selected_users = self.select_users(glob_iter,self.num_users)
             # local update at each users
