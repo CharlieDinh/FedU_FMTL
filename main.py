@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from comet_ml import Experiment
 import h5py
 import matplotlib.pyplot as plt
 import numpy as np
@@ -16,8 +17,12 @@ from utils.plot_utils import *
 import torch
 torch.manual_seed(0)
 
-def main(dataset, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters,
-         local_epochs, optimizer, numusers, K, personal_learning_rate, times):\
+# import comet_ml at the top of your file
+
+
+# Create an experiment with your api key:
+def main(experiment, dataset, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters,
+         local_epochs, optimizer, numusers, K, personal_learning_rate, times):
     
     # Get device status: Check GPU or CPU
     device = torch.device("cuda:{}".format(args.gpu) if torch.cuda.is_available() and args.gpu != -1 else "cpu")
@@ -54,11 +59,14 @@ def main(dataset, algorithm, model, batch_size, learning_rate, beta, L_k, num_gl
         # select algorithm
 
         if(algorithm == "FedAvg"):
-            server = FedAvg(device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
+            experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+            server = FedAvg(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
         if(algorithm == "pFedMe"):
-            server = pFedMe(device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
+            experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(personal_learning_rate) + "_" + str(learning_rate)+  "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+            server = pFedMe(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
         if(algorithm == "SSGD"):
-            server = FedSSGD(device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
+            experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+            server = FedSSGD(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
 
         server.train()
         server.test()
@@ -67,19 +75,19 @@ def main(dataset, algorithm, model, batch_size, learning_rate, beta, L_k, num_gl
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset", type=str, default="vehicle_sensor", choices=["human_activity", "gleam","vehicle_sensor","Mnist", "Synthetic", "Cifar10"])
+    parser.add_argument("--dataset", type=str, default="human_activity", choices=["human_activity", "gleam","vehicle_sensor","Mnist", "Synthetic", "Cifar10"])
     parser.add_argument("--model", type=str, default="mclr", choices=["dnn", "mclr", "cnn"])
     parser.add_argument("--batch_size", type=int, default=20)
     parser.add_argument("--learning_rate", type=float, default=0.001, help="Local learning rate")
     parser.add_argument("--beta", type=float, default=1.0, help="Average moving parameter for pFedMe, or Second learning rate of Per-FedAvg")
-    parser.add_argument("--L_k", type=int, default=0, help="Regularization term")
+    parser.add_argument("--L_k", type=int, default=20, help="Regularization term")
     parser.add_argument("--num_global_iters", type=int, default=200)
     parser.add_argument("--local_epochs", type=int, default=20)
     parser.add_argument("--optimizer", type=str, default="SGD")
-    parser.add_argument("--algorithm", type=str, default="FedAvg",choices=["pFedMe", "PerAvg", "FedAvg", "SSGD"]) 
-    parser.add_argument("--numusers", type=int, default=23, help="Number of Users per round")
+    parser.add_argument("--algorithm", type=str, default="pFedMe",choices=["pFedMe", "PerAvg", "FedAvg", "SSGD"]) 
+    parser.add_argument("--numusers", type=int, default=30, help="Number of Users per round")
     parser.add_argument("--K", type=int, default=5, help="Computation steps")
-    parser.add_argument("--personal_learning_rate", type=float, default=0.09, help="Persionalized learning rate to caculate theta aproximately using K steps")
+    parser.add_argument("--personal_learning_rate", type=float, default=0.01, help="Persionalized learning rate to caculate theta aproximately using K steps")
     parser.add_argument("--times", type=int, default=1, help="running time")
     args = parser.parse_args()
 
@@ -96,7 +104,33 @@ if __name__ == "__main__":
     print("Local Model       : {}".format(args.model))
     print("=" * 80)
 
+    experiment = Experiment(    
+    api_key="VtHmmkcG2ngy1isOwjkm5sHhP",
+    project_name="done",
+    workspace="done-experiments",
+    )
+
+    hyper_params = {
+        "dataset":args.dataset,
+        "algorithm" : args.algorithm,
+        "model":args.model,
+        "batch_size":args.batch_size,
+        "learning_rate":args.learning_rate,
+        "beta" : args.beta, 
+        "L_k" : args.L_k,
+        "num_glob_iters":args.num_global_iters,
+        "local_epochs":args.local_epochs,
+        "optimizer": args.optimizer,
+        "numusers": args.numusers,
+        "K" : args.K,
+        "personal_learning_rate" : args.personal_learning_rate,
+        "times" : args.times
+    }
+
+    experiment.log_parameters(hyper_params)
+
     main(
+        experiment= experiment,
         dataset=args.dataset,
         algorithm = args.algorithm,
         model=args.model,
@@ -112,3 +146,5 @@ if __name__ == "__main__":
         personal_learning_rate=args.personal_learning_rate,
         times = args.times
         )
+
+

@@ -6,7 +6,7 @@ from utils.model_utils import Metrics
 import copy
 
 class Server:
-    def __init__(self, device, dataset,algorithm, model, batch_size, learning_rate ,beta, L_k,
+    def __init__(self, experiment, device, dataset,algorithm, model, batch_size, learning_rate ,beta, L_k,
                  num_glob_iters, local_epochs, optimizer,num_users, times):
 
         # Set up the main attributes
@@ -26,6 +26,7 @@ class Server:
         self.algorithm = algorithm
         self.rs_train_acc, self.rs_train_loss, self.rs_glob_acc,self.rs_train_acc_per, self.rs_train_loss_per, self.rs_glob_acc_per = [], [], [], [], [], []
         self.times = times
+        self.experiment = experiment
         # Initialize the server's grads to zeros
         #for param in self.model.parameters():
         #    param.data = torch.zeros_like(param.data)
@@ -221,6 +222,9 @@ class Server:
         self.rs_glob_acc.append(glob_acc)
         self.rs_train_acc.append(train_acc)
         self.rs_train_loss.append(train_loss)
+        self.experiment.log_metric("glob_acc",glob_acc)
+        self.experiment.log_metric("train_acc",train_acc)
+        self.experiment.log_metric("train_loss",train_loss)
         #print("stats_train[1]",stats_train[3][0])
         print("Average Global Accurancy: ", glob_acc)
         print("Average Global Trainning Accurancy: ", train_acc)
@@ -236,6 +240,9 @@ class Server:
         self.rs_glob_acc_per.append(glob_acc)
         self.rs_train_acc_per.append(train_acc)
         self.rs_train_loss_per.append(train_loss)
+        self.experiment.log_metric("glob_acc_persionalized",glob_acc)
+        self.experiment.log_metric("train_acc_persionalized",train_acc)
+        self.experiment.log_metric("train_loss_persionalized",train_loss)
         #print("stats_train[1]",stats_train[3][0])
         print("Average Personal Accurancy: ", glob_acc)
         print("Average Personal Trainning Accurancy: ", train_acc)
@@ -259,6 +266,9 @@ class Server:
         self.rs_glob_acc_per.append(glob_acc)
         self.rs_train_acc_per.append(train_acc)
         self.rs_train_loss_per.append(train_loss)
+        self.experiment.log_metric("glob_acc",glob_acc)
+        self.experiment.log_metric("train_acc",train_acc)
+        self.experiment.log_metric("train_loss",train_loss)
         #print("stats_train[1]",stats_train[3][0])
         print("Average Personal Accurancy: ", glob_acc)
         print("Average Personal Trainning Accurancy: ", train_acc)

@@ -30,8 +30,8 @@ if(1): # plot for Synthetic covex
     num_glob_iters = 600
     dataset = "Synthetic"
     local_ep = [20,20,20,20]
-    L_k = [20,20,20,20]
-    learning_rate = [0.005, 0.005, 0.005, 0.005]
+    L_k = [0,0,0,0]
+    learning_rate = [0.001, 0.001, 0.001, 0.001]
     beta =  [1.0, 1.0, 0.001, 1.0]
     batch_size = [20,20,20,20]
     K = [5,5,5,5]

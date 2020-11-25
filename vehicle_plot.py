@@ -11,7 +11,7 @@ import torch
 torch.manual_seed(0)
 
 if(1): # plot for MNIST convex 
-    numusers = 30
+    numusers = 23
     num_glob_iters = 200
     dataset = "vehicle_sensor"
     local_ep = [20,20,20,20]

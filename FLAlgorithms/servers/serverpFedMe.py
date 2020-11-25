@@ -9,9 +9,9 @@ import numpy as np
 # Implementation for pFedMe Server
 
 class pFedMe(Server):
-    def __init__(self, device, dataset, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters,
+    def __init__(self, experiment, device, dataset, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters,
                  local_epochs, optimizer, num_users, K, personal_learning_rate, times):
-        super().__init__(device, dataset,algorithm, model[0], batch_size, learning_rate, beta, L_k, num_glob_iters,
+        super().__init__(experiment, device, dataset,algorithm, model[0], batch_size, learning_rate, beta, L_k, num_glob_iters,
                          local_epochs, optimizer, num_users, times)
 
         # Initialize data for all  users
