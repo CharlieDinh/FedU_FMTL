@@ -84,7 +84,7 @@ if __name__ == "__main__":
     parser.add_argument("--num_global_iters", type=int, default=200)
     parser.add_argument("--local_epochs", type=int, default=20)
     parser.add_argument("--optimizer", type=str, default="SGD")
-    parser.add_argument("--algorithm", type=str, default="pFedMe",choices=["pFedMe", "PerAvg", "FedAvg", "SSGD"]) 
+    parser.add_argument("--algorithm", type=str, default="FedAvg",choices=["pFedMe", "PerAvg", "FedAvg", "SSGD"]) 
     parser.add_argument("--numusers", type=int, default=30, help="Number of Users per round")
     parser.add_argument("--K", type=int, default=5, help="Computation steps")
     parser.add_argument("--personal_learning_rate", type=float, default=0.01, help="Persionalized learning rate to caculate theta aproximately using K steps")
@@ -104,10 +104,11 @@ if __name__ == "__main__":
     print("Local Model       : {}".format(args.model))
     print("=" * 80)
 
-    experiment = Experiment(    
-    api_key="VtHmmkcG2ngy1isOwjkm5sHhP",
-    project_name="done",
-    workspace="done-experiments",
+    # Create an experiment with your api key:
+    experiment = Experiment(
+        api_key="VtHmmkcG2ngy1isOwjkm5sHhP",
+        project_name="multitask-learning",
+        workspace="federated-learning-exp",
     )
 
     hyper_params = {
