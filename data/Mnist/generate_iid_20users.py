@@ -1,15 +1,14 @@
-from sklearn.datasets import fetch_mldata
+from sklearn.datasets import fetch_openml
 from tqdm import trange
 import numpy as np
 import random
 import json
 import os
-from sklearn.model_selection import train_test_split
 
 random.seed(1)
 np.random.seed(1)
 NUM_USERS = 20 # should be muitiple of 10
-NUM_LABELS = 10
+NUM_LABELS = 2
 # Setup directory for train/test data
 train_path = './data/train/mnist_train.json'
 test_path = './data/test/mnist_test.json'
@@ -21,13 +20,13 @@ if not os.path.exists(dir_path):
     os.makedirs(dir_path)
 
 # Get MNIST data, normalize, and divide by level
-mnist = fetch_mldata('MNIST original', data_home='./data')
+mnist = fetch_openml('mnist_784', data_home='./data')
 mu = np.mean(mnist.data.astype(np.float32), 0)
 sigma = np.std(mnist.data.astype(np.float32), 0)
 mnist.data = (mnist.data.astype(np.float32) - mu)/(sigma+0.001)
 mnist_data = []
 for i in trange(10):
-    idx = mnist.target==i
+    idx = mnist.target==str(i)
     mnist_data.append(mnist.data[idx])
 
 print("\nNumb samples of each label:\n", [len(v) for v in mnist_data])
@@ -48,7 +47,7 @@ def ram_dom_gen(total, size):
     nums = []
     temp = []
     for i in range(size - 1):
-        val = np.random.randint(total//(size + 1), total//(size - 8))
+        val = np.random.randint(total//(size + 1), total//2)
         temp.append(val)
         total -= val
     temp.append(total)
@@ -76,6 +75,7 @@ print(number_samples)
 X = [[] for _ in range(NUM_USERS)]
 y = [[] for _ in range(NUM_USERS)]
 count = 0
+idx = np.zeros(10, dtype=np.int64)
 for user in trange(NUM_USERS):
     for j in range(NUM_LABELS):  # 4 labels for each users
         l = (user + j) % 10
@@ -99,15 +99,20 @@ test_data = {'users': [], 'user_data':{}, 'num_samples':[]}
 # for i in trange(5, ncols=120):
 for i in range(NUM_USERS):
     uname = 'f_{0:05d}'.format(i)
-    X_train, X_test, y_train, y_test = train_test_split(X[i], y[i], train_size=0.75, stratify=y[i])
-
-    train_data["user_data"][uname] = {'x': X_train.tolist(), 'y': y_train.tolist()}
-    train_data['users'].append(uname)
-    train_data['num_samples'].append(len(y_train))
     
+    combined = list(zip(X[i], y[i]))
+    random.shuffle(combined)
+    X[i][:], y[i][:] = zip(*combined)
+    num_samples = len(X[i])
+    train_len = int(0.75*num_samples)
+    test_len = num_samples - train_len
+    
+    train_data['users'].append(uname) 
+    train_data['user_data'][uname] = {'x': X[i][:train_len], 'y': y[i][:train_len]}
+    train_data['num_samples'].append(train_len)
     test_data['users'].append(uname)
-    test_data["user_data"][uname] = {'x': X_test.tolist(), 'y': y_test.tolist()}
-    test_data['num_samples'].append(len(y_test))
+    test_data['user_data'][uname] = {'x': X[i][train_len:], 'y': y[i][train_len:]}
+    test_data['num_samples'].append(test_len)
 
 print("Num_samples:", train_data['num_samples'])
 print("Total_samples:",sum(train_data['num_samples'] + test_data['num_samples']))

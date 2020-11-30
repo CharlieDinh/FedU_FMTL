@@ -98,6 +98,11 @@ class Server:
         #np.random.seed(round)
         return np.random.choice(self.users, num_users, replace=False) #, p=pk)
 
+    def meta_split_users(self, ratio=0.8):
+        len_train = int(len(self.users)*0.8)
+        self.train_users = self.users[0:len_train]
+        self.test_users = self.users[len_train:]
+
     # define function for persionalized agegatation.
     def persionalized_update_parameters(self,user, ratio):
         # only argegate the local_weight_update
@@ -222,9 +227,10 @@ class Server:
         self.rs_glob_acc.append(glob_acc)
         self.rs_train_acc.append(train_acc)
         self.rs_train_loss.append(train_loss)
-        self.experiment.log_metric("glob_acc",glob_acc)
-        self.experiment.log_metric("train_acc",train_acc)
-        self.experiment.log_metric("train_loss",train_loss)
+        if(self.experiment):
+            self.experiment.log_metric("glob_acc",glob_acc)
+            self.experiment.log_metric("train_acc",train_acc)
+            self.experiment.log_metric("train_loss",train_loss)
         #print("stats_train[1]",stats_train[3][0])
         print("Average Global Accurancy: ", glob_acc)
         print("Average Global Trainning Accurancy: ", train_acc)
@@ -240,9 +246,10 @@ class Server:
         self.rs_glob_acc_per.append(glob_acc)
         self.rs_train_acc_per.append(train_acc)
         self.rs_train_loss_per.append(train_loss)
-        self.experiment.log_metric("glob_acc_persionalized",glob_acc)
-        self.experiment.log_metric("train_acc_persionalized",train_acc)
-        self.experiment.log_metric("train_loss_persionalized",train_loss)
+        if(self.experiment):
+            self.experiment.log_metric("glob_acc_persionalized",glob_acc)
+            self.experiment.log_metric("train_acc_persionalized",train_acc)
+            self.experiment.log_metric("train_loss_persionalized",train_loss)
         #print("stats_train[1]",stats_train[3][0])
         print("Average Personal Accurancy: ", glob_acc)
         print("Average Personal Trainning Accurancy: ", train_acc)
@@ -266,10 +273,57 @@ class Server:
         self.rs_glob_acc_per.append(glob_acc)
         self.rs_train_acc_per.append(train_acc)
         self.rs_train_loss_per.append(train_loss)
-        self.experiment.log_metric("glob_acc",glob_acc)
-        self.experiment.log_metric("train_acc",train_acc)
-        self.experiment.log_metric("train_loss",train_loss)
+        if(self.experiment):
+            self.experiment.log_metric("glob_acc",glob_acc)
+            self.experiment.log_metric("train_acc",train_acc)
+            self.experiment.log_metric("train_loss",train_loss)
         #print("stats_train[1]",stats_train[3][0])
         print("Average Personal Accurancy: ", glob_acc)
         print("Average Personal Trainning Accurancy: ", train_acc)
         print("Average Personal Trainning Loss: ",train_loss)
+
+    def meta_evaluate(self):
+        stats = self.meta_test()  
+        stats_train = self.meta_train_error_and_loss()
+        glob_acc = np.sum(stats[2])*1.0/np.sum(stats[1])
+        train_acc = np.sum(stats_train[2])*1.0/np.sum(stats_train[1])
+        # train_loss = np.dot(stats_train[3], stats_train[1])*1.0/np.sum(stats_train[1])
+        train_loss = sum([x * y for (x, y) in zip(stats_train[1], stats_train[3])]).item() / np.sum(stats_train[1])
+        self.rs_glob_acc.append(glob_acc)
+        self.rs_train_acc.append(train_acc)
+        self.rs_train_loss.append(train_loss)
+        if(self.experiment):
+            self.experiment.log_metric("glob_acc",glob_acc)
+            self.experiment.log_metric("train_acc",train_acc)
+            self.experiment.log_metric("train_loss",train_loss)
+        #print("stats_train[1]",stats_train[3][0])
+        print("Average Meta Accurancy: ", glob_acc)
+        print("Average Meta Trainning Accurancy: ", train_acc)
+        print("Average Meta Trainning Loss: ",train_loss)
+
+    def meta_test(self):
+        '''tests self.latest_model on given clients
+        '''
+        num_samples = []
+        tot_correct = []
+        losses = []
+        for c in self.test_users:
+            ct, ns = c.test()
+            tot_correct.append(ct*1.0)
+            num_samples.append(ns)
+        ids = [c.id for c in self.users]
+        return ids, num_samples, tot_correct
+
+    def meta_train_error_and_loss(self):
+        num_samples = []
+        tot_correct = []
+        losses = []
+        for c in self.test_users:
+            ct, cl, ns = c.train_error_and_loss() 
+            tot_correct.append(ct*1.0)
+            num_samples.append(ns)
+            losses.append(cl*1.0)
+        ids = [c.id for c in self.users]
+        #groups = [c.group for c in self.clients]
+
+        return ids, num_samples, tot_correct, losses

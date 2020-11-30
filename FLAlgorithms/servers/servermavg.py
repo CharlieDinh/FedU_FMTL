@@ -1,14 +1,14 @@
 import torch
 import os
 
-from FLAlgorithms.users.useravg import UserAVG
+from FLAlgorithms.users.usermavg import UsermAVG
 from FLAlgorithms.servers.serverbase import Server
 from utils.model_utils import read_data, read_user_data
 import numpy as np
 
 # Implementation for FedAvg Server
 
-class FedAvg(Server):
+class mFedAvg(Server):
     def __init__(self, experiment, device, dataset,algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, num_users, times):
         super().__init__(experiment, device, dataset,algorithm, model[0], batch_size, learning_rate, beta, L_k, num_glob_iters,local_epochs, optimizer, num_users, times)
 
@@ -16,7 +16,7 @@ class FedAvg(Server):
         total_users = len(dataset[0][0])
         for i in range(total_users):
             id, train , test = read_user_data(i, dataset[0], dataset[1])
-            user = UserAVG(device, id, train, test, model, batch_size, learning_rate,beta,L_k, local_epochs, optimizer)
+            user = UsermAVG(device, id, train, test, model, batch_size, learning_rate,beta,L_k, local_epochs, optimizer)
             self.users.append(user)
             self.total_train_samples += user.train_samples
             
@@ -35,23 +35,29 @@ class FedAvg(Server):
             user.set_grads(grads)
 
     def train(self):
+        self.send_parameters()
+        #self.evaluate()
+
         for glob_iter in range(self.num_glob_iters):
             if(self.experiment):
                 self.experiment.set_epoch( glob_iter + 1)
             print("-------------Round number: ",glob_iter, " -------------")
-            #loss_ = 0
+        
+        
+            self.meta_split_users()
+            for user in self.train_users:
+                user.train(self.local_epochs)
+            # Agegrate parameter  to find meta model 
+            self.aggregate_parameters()
+
+            # send meta model to all 
             self.send_parameters()
 
-            # Evaluate model each interation
-            self.evaluate()
+            # evaluate on testing users 
+            for user in self.test_users:
+                user.train(self.local_epochs)
+            self.meta_evaluate()
 
-            self.selected_users = self.select_users(glob_iter,self.num_users)
-            for user in self.selected_users:
-                user.train(self.local_epochs) #* user.train_samples
-            self.aggregate_parameters()
-            #loss_ /= self.total_train_samples
-            #loss.append(loss_)
-            #print(loss_)
         #print(loss)
         self.save_results()
         self.save_model()

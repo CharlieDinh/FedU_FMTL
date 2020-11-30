@@ -8,9 +8,11 @@ import importlib
 import random
 import os
 from FLAlgorithms.servers.serveravg import FedAvg
+from FLAlgorithms.servers.servermavg import mFedAvg
 from FLAlgorithms.servers.serverpFedMe import pFedMe
 from FLAlgorithms.servers.serverperavg import PerAvg
 from FLAlgorithms.servers.serverSSGD import FedSSGD
+from FLAlgorithms.servers.servermSSGD import mFedSSGD
 from utils.model_utils import read_data
 from FLAlgorithms.trainmodel.models import *
 from utils.plot_utils import *
@@ -22,7 +24,7 @@ torch.manual_seed(0)
 
 # Create an experiment with your api key:
 def main(experiment, dataset, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters,
-         local_epochs, optimizer, numusers, K, personal_learning_rate, times):
+         local_epochs, optimizer, numusers, K, personal_learning_rate, times, commet):
     
     # Get device status: Check GPU or CPU
     device = torch.device("cuda:{}".format(args.gpu) if torch.cuda.is_available() and args.gpu != -1 else "cpu")
@@ -55,18 +57,37 @@ def main(experiment, dataset, algorithm, model, batch_size, learning_rate, beta,
                 model = DNN(60,20,10).to(device), model
             else:#(dataset == "Mnist"):
                 model = DNN().to(device), model
+        
+        if(model == "cnn"):
+            if(dataset == "Cifar10"):
+                model = CifarNet(), model
 
         # select algorithm
 
         if(algorithm == "FedAvg"):
-            experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+            if(commet):
+                experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
             server = FedAvg(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
         if(algorithm == "pFedMe"):
-            experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(personal_learning_rate) + "_" + str(learning_rate)+  "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+            if(commet):
+                experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(personal_learning_rate) + "_" + str(learning_rate)+  "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
             server = pFedMe(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
         if(algorithm == "SSGD"):
-            experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+            if(commet):
+                experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
             server = FedSSGD(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
+        if(algorithm == "mFedAvg"):
+            if(commet):
+                experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+            server = mFedAvg(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
+        if(algorithm == "pFedMe"):
+            if(commet):
+                experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(personal_learning_rate) + "_" + str(learning_rate)+  "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+            server = pFedMe(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
+        if(algorithm == "mSSGD"):
+            if(commet): 
+                experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+            server = mFedSSGD(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
 
         server.train()
         server.test()
@@ -78,17 +99,18 @@ if __name__ == "__main__":
     parser.add_argument("--dataset", type=str, default="human_activity", choices=["human_activity", "gleam","vehicle_sensor","Mnist", "Synthetic", "Cifar10"])
     parser.add_argument("--model", type=str, default="mclr", choices=["dnn", "mclr", "cnn"])
     parser.add_argument("--batch_size", type=int, default=20)
-    parser.add_argument("--learning_rate", type=float, default=0.001, help="Local learning rate")
+    parser.add_argument("--learning_rate", type=float, default=0.01, help="Local learning rate")
     parser.add_argument("--beta", type=float, default=1.0, help="Average moving parameter for pFedMe, or Second learning rate of Per-FedAvg")
     parser.add_argument("--L_k", type=int, default=20, help="Regularization term")
     parser.add_argument("--num_global_iters", type=int, default=200)
     parser.add_argument("--local_epochs", type=int, default=20)
     parser.add_argument("--optimizer", type=str, default="SGD")
-    parser.add_argument("--algorithm", type=str, default="FedAvg",choices=["pFedMe", "PerAvg", "FedAvg", "SSGD"]) 
-    parser.add_argument("--numusers", type=int, default=30, help="Number of Users per round")
+    parser.add_argument("--algorithm", type=str, default="mFedAvg",choices=["pFedMe", "PerAvg", "FedAvg", "SSGD", "mSSGD","mFedAvg"]) 
+    parser.add_argument("--numusers", type=int, default=20, help="Number of Users per round")
     parser.add_argument("--K", type=int, default=5, help="Computation steps")
     parser.add_argument("--personal_learning_rate", type=float, default=0.01, help="Persionalized learning rate to caculate theta aproximately using K steps")
     parser.add_argument("--times", type=int, default=1, help="running time")
+    parser.add_argument("--commet", type=int, default=1, help="log data to commet")
     args = parser.parse_args()
 
     print("=" * 80)
@@ -104,31 +126,33 @@ if __name__ == "__main__":
     print("Local Model       : {}".format(args.model))
     print("=" * 80)
 
-    # Create an experiment with your api key:
-    experiment = Experiment(
-        api_key="VtHmmkcG2ngy1isOwjkm5sHhP",
-        project_name="multitask-learning",
-        workspace="federated-learning-exp",
-    )
+    if(args.commet):
+        # Create an experiment with your api key:
+        experiment = Experiment(
+            api_key="VtHmmkcG2ngy1isOwjkm5sHhP",
+            project_name="multitask-learning",
+            workspace="federated-learning-exp",
+        )
 
-    hyper_params = {
-        "dataset":args.dataset,
-        "algorithm" : args.algorithm,
-        "model":args.model,
-        "batch_size":args.batch_size,
-        "learning_rate":args.learning_rate,
-        "beta" : args.beta, 
-        "L_k" : args.L_k,
-        "num_glob_iters":args.num_global_iters,
-        "local_epochs":args.local_epochs,
-        "optimizer": args.optimizer,
-        "numusers": args.numusers,
-        "K" : args.K,
-        "personal_learning_rate" : args.personal_learning_rate,
-        "times" : args.times
-    }
-
-    experiment.log_parameters(hyper_params)
+        hyper_params = {
+            "dataset":args.dataset,
+            "algorithm" : args.algorithm,
+            "model":args.model,
+            "batch_size":args.batch_size,
+            "learning_rate":args.learning_rate,
+            "beta" : args.beta, 
+            "L_k" : args.L_k,
+            "num_glob_iters":args.num_global_iters,
+            "local_epochs":args.local_epochs,
+            "optimizer": args.optimizer,
+            "numusers": args.numusers,
+            "K" : args.K,
+            "personal_learning_rate" : args.personal_learning_rate,
+            "times" : args.times
+        }
+        experiment.log_parameters(hyper_params)
+    else:
+        experiment = 0
 
     main(
         experiment= experiment,
@@ -145,7 +169,8 @@ if __name__ == "__main__":
         numusers = args.numusers,
         K=args.K,
         personal_learning_rate=args.personal_learning_rate,
-        times = args.times
+        times = args.times,
+        commet = args.commet
         )
 
 

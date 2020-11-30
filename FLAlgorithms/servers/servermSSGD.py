@@ -1,15 +1,15 @@
 import torch
 import os
 
-from FLAlgorithms.users.userperavg import UserPerAvg
+from FLAlgorithms.users.usermSSGD import UsermSSGD
 from FLAlgorithms.servers.serverbase import Server
 from utils.model_utils import read_data, read_user_data
+import numpy as np
 
-# Implementation for per-FedAvg Server
+# Implementation for FedAvg Server
 
-class PerAvg(Server):
-    def __init__(self,experiment, device, dataset,algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters,
-                 local_epochs, optimizer, num_users,times):
+class mFedSSGD(Server):
+    def __init__(self,experiment, device, dataset,algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, num_users, times):
         super().__init__(experiment, device, dataset,algorithm, model[0], batch_size, learning_rate, beta, L_k, num_glob_iters,
                          local_epochs, optimizer, num_users, times)
 
@@ -17,11 +17,12 @@ class PerAvg(Server):
         total_users = len(dataset[0][0])
         for i in range(total_users):
             id, train , test = read_user_data(i, dataset[0], dataset[1])
-            user = UserPerAvg(id, train, test, model, batch_size, learning_rate, beta, L_k, local_epochs, optimizer ,total_users , num_users)
+            user = UsermSSGD(device, id, train, test, model, batch_size, learning_rate,beta,L_k, local_epochs, optimizer)
             self.users.append(user)
             self.total_train_samples += user.train_samples
+            
         print("Number of users / total users:",num_users, " / " ,total_users)
-        print("Finished creating Local Per-Avg.")
+        print("Finished creating FedAvg server.")
 
     def send_grads(self):
         assert (self.users is not None and len(self.users) > 0)
@@ -35,24 +36,23 @@ class PerAvg(Server):
             user.set_grads(grads)
 
     def train(self):
+        self.send_parameters()
         for glob_iter in range(self.num_glob_iters):
             if(self.experiment):
                 self.experiment.set_epoch( glob_iter + 1)
             print("-------------Round number: ",glob_iter, " -------------")
-            # send all parameter for users 
-            self.send_parameters()
 
-            # Evaluate gloal model on user for each interation
-            print("Evaluate global model with one step update")
-            print("")
-            self.evaluate_one_step()
+            # For training process
+            #self.selected_users = self.select_users(glob_iter,self.num_users)
+            # local update at each users
+            for user in self.train_users:
+                user.train(self.local_epochs)
+            # Agegrate parameter at each user 
+            for user in self.train_users:
+                user.aggregate_parameters(self.users)
 
-            # choose several users to send back upated model to server
-            self.selected_users = self.select_users(glob_iter,self.num_users)
-            for user in self.selected_users:
-                user.train(self.local_epochs) #* user.train_samples
-                
-            self.aggregate_parameters()
-
+            # For testing meta model 
+            # For testing on                 
+            #
         self.save_results()
         self.save_model()

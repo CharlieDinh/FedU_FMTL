@@ -39,9 +39,9 @@ class pFedMe(Server):
             user.set_grads(grads)
 
     def train(self):
-        loss = []
         for glob_iter in range(self.num_glob_iters):
-            self.experiment.set_epoch( glob_iter + 1)
+            if(self.experiment):
+                self.experiment.set_epoch( glob_iter + 1)
             print("-------------Round number: ",glob_iter, " -------------")
             # send all parameter for users 
             self.send_parameters()
@@ -65,9 +65,7 @@ class pFedMe(Server):
             self.evaluate_personalized_model()
             #self.aggregate_parameters()
             self.persionalized_aggregate_parameters()
-
-
-        #print(loss)
+            
         self.save_results()
         self.save_model()
     
