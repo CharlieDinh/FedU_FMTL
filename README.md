@@ -10,7 +10,10 @@ Authors:
 
 - The code can be run on any pc, doesn't require GPU.
   
-# Dataset: We use 3 datasets: 
+# Dataset: We use 3 datasets:
+
+Download Link: https://drive.google.com/drive/folders/1DZm7kQQqlDspwd4Q4nt6in6hvcMgtKs8?usp=sharing
+
 - Google Glass (GLEAM) (38 tasks): This dataset consists of two hours of high resolution sensor data
 collected from 38 participants wearing Google Glass for the purpose of activity recognition.
 Following [41], we featurize the raw accelerometer, gyroscope, and magnetometer data into 180
