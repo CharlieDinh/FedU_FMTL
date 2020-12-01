@@ -24,10 +24,10 @@ torch.manual_seed(0)
 
 # Create an experiment with your api key:
 def main(experiment, dataset, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters,
-         local_epochs, optimizer, numusers, K, personal_learning_rate, times, commet):
+         local_epochs, optimizer, numusers, K, personal_learning_rate, times, commet, gpu):
     
     # Get device status: Check GPU or CPU
-    device = torch.device("cuda:{}".format(args.gpu) if torch.cuda.is_available() and args.gpu != -1 else "cpu")
+    device = torch.device("cuda:{}".format(gpu) if torch.cuda.is_available() and gpu != -1 else "cpu")
 
     data = read_data(dataset) , dataset
 
@@ -111,6 +111,7 @@ if __name__ == "__main__":
     parser.add_argument("--personal_learning_rate", type=float, default=0.01, help="Persionalized learning rate to caculate theta aproximately using K steps")
     parser.add_argument("--times", type=int, default=1, help="running time")
     parser.add_argument("--commet", type=int, default=1, help="log data to commet")
+    parser.add_argument("--gpu", type=int, default=-1, help="Which GPU to run the experiments")
     args = parser.parse_args()
 
     print("=" * 80)
@@ -148,7 +149,8 @@ if __name__ == "__main__":
             "numusers": args.numusers,
             "K" : args.K,
             "personal_learning_rate" : args.personal_learning_rate,
-            "times" : args.times
+            "times" : args.times,
+            "gpu": args.gpu
         }
         experiment.log_parameters(hyper_params)
     else:
@@ -170,7 +172,8 @@ if __name__ == "__main__":
         K=args.K,
         personal_learning_rate=args.personal_learning_rate,
         times = args.times,
-        commet = args.commet
+        commet = args.commet,
+        gpu=args.gpu
         )
 
 
