@@ -37,22 +37,41 @@ class mFedSSGD(Server):
 
     def train(self):
         self.send_parameters()
+        self.meta_split_users()
+
         for glob_iter in range(self.num_glob_iters):
             if(self.experiment):
                 self.experiment.set_epoch( glob_iter + 1)
             print("-------------Round number: ",glob_iter, " -------------")
 
             # For training process
-            #self.selected_users = self.select_users(glob_iter,self.num_users)
             # local update at each users
-            for user in self.train_users:
+            
+            for user in self.selected_train:
                 user.train(self.local_epochs)
             # Agegrate parameter at each user 
-            for user in self.train_users:
-                user.aggregate_parameters(self.users)
+            selected_train = self.select_sub_train_users(self.num_users)
+            for user in self.selected_train:
+                #user.aggregate_parameters(self.train_users)
+                user.aggregate_parameters2(self.train_users,self.model.parameters())
+            
+            self.aggregate_meta_parameters()
+            # send meta model to all 
+            self.send_meta_parameters_totest()
 
             # For testing meta model 
-            # For testing on                 
-            #
+            # For testing
+            for user in self.test_users:
+                # reset to initial point
+                #for param in user.model.parameters():
+                    #param.data = torch.zeros_like(param.data)
+                user.train(5)
+            # Agegrate parameter at each user 
+            for user in self.test_users:
+                user.aggregate_parameters(self.train_users)
+            
+            self.meta_evaluate()
+            
+            
         self.save_results()
         self.save_model()

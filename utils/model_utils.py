@@ -8,6 +8,7 @@ import torchvision.transforms as transforms
 from tqdm import trange
 import numpy as np
 import random
+from sklearn.model_selection import train_test_split
 
 IMAGE_SIZE = 28
 IMAGE_PIXELS = IMAGE_SIZE * IMAGE_SIZE
@@ -78,6 +79,7 @@ def get_batch_sample(data, batch_size):
 
 def read_cifa_data():
     transform = transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+
     trainset = torchvision.datasets.CIFAR10(root='./data', train=True,download=True, transform=transform)
     testset = torchvision.datasets.CIFAR10(root='./data', train=False,download=True, transform=transform)
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=len(trainset.data),shuffle=False)
@@ -92,6 +94,15 @@ def read_cifa_data():
     np.random.seed(1)
     NUM_USERS = 20 # should be muitiple of 10
     NUM_LABELS = 3
+    # Setup directory for train/test data
+    train_path = './data/train/cifa_train.json'
+    test_path = './data/test/cifa_test.json'
+    dir_path = os.path.dirname(train_path)
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+    dir_path = os.path.dirname(test_path)
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
 
     cifa_data_image = []
     cifa_data_label = []
@@ -108,6 +119,12 @@ def read_cifa_data():
         idx = cifa_data_label==i
         cifa_data.append(cifa_data_image[idx])
 
+
+    print("\nNumb samples of each label:\n", [len(v) for v in cifa_data])
+    users_lables = []
+
+    ###### CREATE USER DATA SPLIT #######
+    # Assign 100 samples to each user
     X = [[] for _ in range(NUM_USERS)]
     y = [[] for _ in range(NUM_USERS)]
     idx = np.zeros(10, dtype=np.int64)
@@ -115,16 +132,24 @@ def read_cifa_data():
         for j in range(NUM_LABELS):  # 3 labels for each users
             #l = (2*user+j)%10
             l = (user + j) % 10
+            print("L:", l)
             X[user] += cifa_data[l][idx[l]:idx[l]+10].tolist()
             y[user] += (l*np.ones(10)).tolist()
             idx[l] += 10
+
+    print("IDX1:", idx)  # counting samples for each labels
+
     # Assign remaining sample by power law
     user = 0
     props = np.random.lognormal(
         0, 2., (10, NUM_USERS, NUM_LABELS))  # last 5 is 5 labels
     props = np.array([[[len(v)-NUM_USERS]] for v in cifa_data]) * \
         props/np.sum(props, (1, 2), keepdims=True)
-
+    # print("here:",props/np.sum(props,(1,2), keepdims=True))
+    #props = np.array([[[len(v)-100]] for v in mnist_data]) * \
+    #    props/np.sum(props, (1, 2), keepdims=True)
+    #idx = 1000*np.ones(10, dtype=np.int64)
+    # print("here2:",props)
     for user in trange(NUM_USERS):
         for j in range(NUM_LABELS):  # 4 labels for each users
             # l = (2*user+j)%10
@@ -139,6 +164,10 @@ def read_cifa_data():
                 X[user] += cifa_data[l][idx[l]:idx[l]+num_samples].tolist()
                 y[user] += (l*np.ones(num_samples)).tolist()
                 idx[l] += num_samples
+                print("check len os user:", user, j,
+                    "len data", len(X[user]), num_samples)
+
+    print("IDX2:", idx) # counting samples for each labels
 
     # Create data structure
     train_data = {'users': [], 'user_data':{}, 'num_samples':[]}
@@ -148,20 +177,16 @@ def read_cifa_data():
     # for i in trange(5, ncols=120):
     for i in range(NUM_USERS):
         uname = 'f_{0:05d}'.format(i)
+
+        X_train, X_test, y_train, y_test = train_test_split(X[i], y[i], train_size=0.75, stratify=y[i])
+
+        train_data["user_data"][uname] = {'x': X_train, 'y': y_train}
+        train_data['users'].append(uname)
+        train_data['num_samples'].append(len(y_train))
         
-        combined = list(zip(X[i], y[i]))
-        random.shuffle(combined)
-        X[i][:], y[i][:] = zip(*combined)
-        num_samples = len(X[i])
-        train_len = int(0.75*num_samples)
-        test_len = num_samples - train_len
-        
-        train_data['users'].append(uname) 
-        train_data['user_data'][uname] = {'x': X[i][:train_len], 'y': y[i][:train_len]}
-        train_data['num_samples'].append(train_len)
         test_data['users'].append(uname)
-        test_data['user_data'][uname] = {'x': X[i][train_len:], 'y': y[i][train_len:]}
-        test_data['num_samples'].append(test_len)
+        test_data["user_data"][uname] = {'x': X_test, 'y': y_test}
+        test_data['num_samples'].append(len(y_test))
     # random.seed(1)
     # np.random.seed(1)
     # NUM_USERS = 1 # should be muitiple of 10
@@ -223,9 +248,9 @@ def read_data(dataset):
         test_data: dictionary of test data
     '''
 
-    #if(dataset == "Cifar10"):
-    #    clients, groups, train_data, test_data = read_cifa_data()
-    #    return clients, groups, train_data, test_data
+    if(dataset == "Cifar10"):
+        clients, groups, train_data, test_data = read_cifa_data()
+        return clients, groups, train_data, test_data
 
     train_data_dir = os.path.join('data',dataset,'data', 'train')
     test_data_dir = os.path.join('data',dataset,'data', 'test')

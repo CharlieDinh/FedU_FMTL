@@ -49,6 +49,16 @@ class Server:
         assert (self.users is not None and len(self.users) > 0)
         for user in self.users:
             user.set_parameters(self.model)
+    
+    def send_meta_parameters(self):
+        assert (self.users is not None and len(self.users) > 0)
+        for user in self.users:
+            user.set_meta_parameters(self.model)
+
+    def send_meta_parameters_totest(self):
+        assert (self.users is not None and len(self.test_users) > 0)
+        for user in self.test_users:
+            user.set_meta_parameters(self.model)        
 
     def add_parameters(self, user, ratio):
         model = self.model.parameters()
@@ -64,6 +74,17 @@ class Server:
         for user in self.selected_users:
             total_train += user.train_samples
         for user in self.selected_users:
+            self.add_parameters(user, user.train_samples / total_train)
+    
+    def aggregate_meta_parameters(self):
+        assert (self.users is not None and len(self.users) > 0)
+        for param in self.model.parameters():
+            param.data = torch.zeros_like(param.data)
+        total_train = 0
+        #if(self.num_users = self.to)
+        for user in self.train_users:
+            total_train += user.train_samples
+        for user in self.train_users:
             self.add_parameters(user, user.train_samples / total_train)
 
     def save_model(self):
@@ -103,6 +124,15 @@ class Server:
         self.train_users = self.users[0:len_train]
         self.test_users = self.users[len_train:]
 
+    def select_sub_train_users(self, num_users):
+        if(num_users >= len(self.train_users)):
+            print("All users are selected")
+            return self.train_users
+
+        num_users = min(num_users, len(self.train_users))
+        #np.random.seed(round)
+        return np.random.choice(self.train_users, num_users, replace=False) #, p=pk)
+        
     # define function for persionalized agegatation.
     def persionalized_update_parameters(self,user, ratio):
         # only argegate the local_weight_update

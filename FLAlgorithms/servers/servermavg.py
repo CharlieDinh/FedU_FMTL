@@ -35,27 +35,29 @@ class mFedAvg(Server):
             user.set_grads(grads)
 
     def train(self):
-        self.send_parameters()
+        self.send_meta_parameters()
         #self.evaluate()
-
+        self.meta_split_users()
         for glob_iter in range(self.num_glob_iters):
             if(self.experiment):
                 self.experiment.set_epoch( glob_iter + 1)
+
             print("-------------Round number: ",glob_iter, " -------------")
-        
-        
-            self.meta_split_users()
-            for user in self.train_users:
+
+            selected_train = self.select_sub_train_users(self.num_users)
+            for user in self.selected_train:
                 user.train(self.local_epochs)
+                
             # Agegrate parameter  to find meta model 
-            self.aggregate_parameters()
+            self.aggregate_meta_parameters()
 
             # send meta model to all 
-            self.send_parameters()
+            self.send_meta_parameters()
 
             # evaluate on testing users 
             for user in self.test_users:
-                user.train(self.local_epochs)
+                user.train(5)
+
             self.meta_evaluate()
 
         #print(loss)

@@ -55,5 +55,5 @@ class UsermAVG(User):
             loss = self.loss(output, y)
             loss.backward()
             self.optimizer.step()
-            self.clone_model_paramenter(self.model.parameters(), self.local_model)
+            #self.clone_model_paramenter(self.model.parameters(), self.local_model)
         return LOSS

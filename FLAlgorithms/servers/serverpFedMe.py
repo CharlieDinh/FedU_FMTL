@@ -1,6 +1,6 @@
 import torch
 import os
-
+import torch.multiprocessing as mp
 from FLAlgorithms.users.userpFedMe import UserpFedMe
 from FLAlgorithms.servers.serverbase import Server
 from utils.model_utils import read_data, read_user_data
@@ -52,9 +52,16 @@ class pFedMe(Server):
             self.evaluate()
 
             # do update for all users not only selected users
+            #for user in self.users:
+            #    user.train(self.local_epochs) #* user.train_samples
+            processes = []
+
             for user in self.users:
-                user.train(self.local_epochs) #* user.train_samples
-            
+                p = mp.Process(target=user.train(self.local_epochs))
+                p.start()
+                processes.append(p)
+            for p in processes:
+                p.join()
             # choose several users to send back upated model to server
             # self.personalized_evaluate()
             self.selected_users = self.select_users(glob_iter,self.num_users)

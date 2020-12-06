@@ -40,7 +40,7 @@ class UsermSSGD(User):
             loss = self.loss(output, y)
             loss.backward()
             self.optimizer.step()
-            self.clone_model_paramenter(self.model.parameters(), self.local_model)
+            #self.clone_model_paramenter(self.model.parameters(), self.local_model)
         return LOSS
     
     # def train(self, epochs):
@@ -57,7 +57,6 @@ class UsermSSGD(User):
     #             self.optimizer.step()
     #     self.clone_model_paramenter(self.model.parameters(), self.local_model)
     #     return LOSS
-
     def aggregate_parameters(self, user_list):
         avg_weight_different = copy.deepcopy(list(self.model.parameters()))
         alpha = np.ones(len(user_list))
@@ -71,7 +70,26 @@ class UsermSSGD(User):
         
         for avg, current_task in zip(avg_weight_different, self.model.parameters()):
             current_task.data = current_task.data - self.learning_rate*avg
+        self.clone_model_paramenter(self.model.parameters(), self.local_model)
+    
+    def aggregate_parameters2(self, user_list,server_param):
+        avg_weight_different = copy.deepcopy(list(self.model.parameters()))
+        alpha = np.ones(len(user_list))
+        for param in avg_weight_different:
+            param.data = torch.zeros_like(param.data)
         
+        # Calculate the diffence of model between all users or tasks
+        for i in range(len(user_list)):
+            for avg, current_task, other_tasks in zip(avg_weight_different, self.model.parameters(),user_list[i].model.parameters()):
+                avg.data += alpha[i]*(current_task.data.clone() - other_tasks.data.clone())
+        
+        for avg, current_task, server in zip(avg_weight_different,self.model.parameters(), server_param):
+            avg.data += alpha[i]*(current_task.data.clone() - server.data.clone())
+
+        # Calculate the diffence of model between userk or server
+        
+        for avg, current_task in zip(avg_weight_different, self.model.parameters()):
+            current_task.data = current_task.data - self.learning_rate*avg
         self.clone_model_paramenter(self.model.parameters(), self.local_model)
         
 

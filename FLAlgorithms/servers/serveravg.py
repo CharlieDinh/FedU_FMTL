@@ -1,5 +1,6 @@
 import torch
 import os
+import torch.multiprocessing as mp
 
 from FLAlgorithms.users.useravg import UserAVG
 from FLAlgorithms.servers.serverbase import Server
@@ -46,8 +47,22 @@ class FedAvg(Server):
             self.evaluate()
 
             self.selected_users = self.select_users(glob_iter,self.num_users)
+            
+            #NOTE: this is required for the ``fork`` method to work
             for user in self.selected_users:
-                user.train(self.local_epochs) #* user.train_samples
+                user.train(self.local_epochs)
+            processes = []
+            for user in self.selected_users:
+                p = mp.Process(target=user.train(self.local_epochs))
+                p.start()
+                processes.append(p)
+            for p in processes:
+                p.join()
+
+            #for user in self.selected_users:
+            #    user.train(self.local_epochs) #* user.train_samples
+
+
             self.aggregate_parameters()
             #loss_ /= self.total_train_samples
             #loss.append(loss_)
