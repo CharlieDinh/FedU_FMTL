@@ -10,9 +10,11 @@ import os
 from FLAlgorithms.servers.serveravg import FedAvg
 from FLAlgorithms.servers.servermavg import mFedAvg
 from FLAlgorithms.servers.serverpFedMe import pFedMe
+from FLAlgorithms.servers.servermpFedMe import mpFedMe
 from FLAlgorithms.servers.serverperavg import PerAvg
 from FLAlgorithms.servers.serverSSGD import FedSSGD
 from FLAlgorithms.servers.servermSSGD import mFedSSGD
+from FLAlgorithms.servers.servermSSGD3 import mFedSSGD3
 from utils.model_utils import read_data
 from FLAlgorithms.trainmodel.models import *
 from utils.plot_utils import *
@@ -84,10 +86,20 @@ def main(experiment, dataset, algorithm, model, batch_size, learning_rate, beta,
             if(commet):
                 experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(personal_learning_rate) + "_" + str(learning_rate)+  "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
             server = pFedMe(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
+        
+        if(algorithm == "mpFedMe"):
+            if(commet):
+                experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(personal_learning_rate) + "_" + str(learning_rate)+  "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+            server = mpFedMe(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
+
         if(algorithm == "mSSGD"):
             if(commet): 
                 experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
             server = mFedSSGD(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
+        if(algorithm == "mSSGD3"):
+            if(commet): 
+                experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(L_k) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+            server = mFedSSGD3(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
 
         server.train()
         server.test()
@@ -99,16 +111,16 @@ if __name__ == "__main__":
     parser.add_argument("--dataset", type=str, default="human_activity", choices=["human_activity", "gleam","vehicle_sensor","Mnist", "Synthetic", "Cifar10"])
     parser.add_argument("--model", type=str, default="mclr", choices=["dnn", "mclr", "cnn"])
     parser.add_argument("--batch_size", type=int, default=20)
-    parser.add_argument("--learning_rate", type=float, default=0.001, help="Local learning rate")
+    parser.add_argument("--learning_rate", type=float, default=0.005, help="Local learning rate")
     parser.add_argument("--beta", type=float, default=1.0, help="Average moving parameter for pFedMe, or Second learning rate of Per-FedAvg")
     parser.add_argument("--L_k", type=int, default=20, help="Regularization term")
     parser.add_argument("--num_global_iters", type=int, default=200)
     parser.add_argument("--local_epochs", type=int, default=20)
     parser.add_argument("--optimizer", type=str, default="SGD")
-    parser.add_argument("--algorithm", type=str, default="mFedAvg",choices=["pFedMe", "PerAvg", "FedAvg", "SSGD", "mSSGD","mFedAvg"]) 
-    parser.add_argument("--numusers", type=int, default=10, help="Number of Users per round")
+    parser.add_argument("--algorithm", type=str, default="mpFedMe",choices=["pFedMe", "PerAvg", "FedAvg", "SSGD", "mSSGD","mFedAvg"]) 
+    parser.add_argument("--numusers", type=int, default=30, help="Number of Users per round")
     parser.add_argument("--K", type=int, default=5, help="Computation steps")
-    parser.add_argument("--personal_learning_rate", type=float, default=0.01, help="Persionalized learning rate to caculate theta aproximately using K steps")
+    parser.add_argument("--personal_learning_rate", type=float, default=0.001, help="Persionalized learning rate to caculate theta aproximately using K steps")
     parser.add_argument("--times", type=int, default=1, help="running time")
     parser.add_argument("--commet", type=int, default=1, help="log data to commet")
     parser.add_argument("--gpu", type=int, default=0, help="Which GPU to run the experiments")

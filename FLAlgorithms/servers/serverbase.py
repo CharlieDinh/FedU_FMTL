@@ -159,7 +159,27 @@ class Server:
         # aaggregate avergage model with previous model using parameter beta 
         for pre_param, param in zip(previous_param, self.model.parameters()):
             param.data = (1 - self.beta)*pre_param.data + self.beta*param.data
-            
+
+    def persionalized_aggregate_meta_parameters(self):
+        assert (self.users is not None and len(self.users) > 0)
+
+        # store previous parameters
+        previous_param = copy.deepcopy(list(self.model.parameters()))
+        for param in self.model.parameters():
+            param.data = torch.zeros_like(param.data)
+        total_train = 0
+        #if(self.num_users = self.to)
+        for user in self.train_users:
+            total_train += user.train_samples
+
+        for user in self.train_users:
+            self.add_parameters(user, user.train_samples / total_train)
+            #self.add_parameters(user, 1 / len(self.selected_users))
+
+        # aaggregate avergage model with previous model using parameter beta 
+        for pre_param, param in zip(previous_param, self.model.parameters()):
+            param.data = (1 - self.beta)*pre_param.data + self.beta*param.data
+
     # Save loss, accurancy to h5 fiel
     def save_results(self):
         dir_path = "./results"
