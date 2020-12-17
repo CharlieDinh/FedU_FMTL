@@ -37,7 +37,7 @@ class User:
 
         # those parameters are for persionalized federated learing.
         self.local_model = copy.deepcopy(list(self.model.parameters()))
-        self.persionalized_model = copy.deepcopy(list(self.model.parameters()))
+        #self.persionalized_model = copy.deepcopy(list(self.model.parameters()))
         self.persionalized_model_bar = copy.deepcopy(list(self.model.parameters()))
     
     def set_parameters(self, model):

@@ -39,9 +39,10 @@ class FedSSGD(Server):
         loss = []
         # only board cast one time
         self.send_parameters()
-        self.meta_split_users()
+        #self.meta_split_users()
         for glob_iter in range(self.num_glob_iters):
-            self.experiment.set_epoch( glob_iter + 1)
+            if(self.experiment):
+                self.experiment.set_epoch( glob_iter + 1)
             print("-------------Round number: ",glob_iter, " -------------")
             self.selected_users = self.select_users(glob_iter,self.num_users)
             # local update at each users
@@ -52,7 +53,7 @@ class FedSSGD(Server):
             for user in self.selected_users:
                 user.aggregate_parameters(self.users)
                 
-            #self.evaluate()
-            self.meta_evaluate()
+            self.evaluate()
+            #self.meta_evaluate()
         self.save_results()
         self.save_model()

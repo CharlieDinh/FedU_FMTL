@@ -35,28 +35,28 @@ class UserPerAvg(User):
     def train(self, epochs):
         LOSS = 0
         self.model.train()
+        num_minibatch = int(self.train_samples / self.batch_size)
         for epoch in range(1, self.local_epochs + 1):  # local update 
-            
             self.model.train()
-
+            for i in range(num_minibatch):
             #step 1
-            X, y = self.get_next_train_batch()
-            self.optimizer.zero_grad()
-            output = self.model(X)
-            loss = self.loss(output, y)
-            loss.backward()
-            self.optimizer.step()
+                X, y = self.get_next_train_batch()
+                self.optimizer.zero_grad()
+                output = self.model(X)
+                loss = self.loss(output, y)
+                loss.backward()
+                self.optimizer.step()
 
-            #step 2
-            X, y = self.get_next_train_batch()
-            self.optimizer.zero_grad()
-            output = self.model(X)
-            loss = self.loss(output, y)
-            loss.backward()
-            self.optimizer.step(beta = self.beta)
+                #step 2
+                X, y = self.get_next_train_batch()
+                self.optimizer.zero_grad()
+                output = self.model(X)
+                loss = self.loss(output, y)
+                loss.backward()
+                self.optimizer.step(beta = self.beta)
 
-            # clone model to user model 
-            self.clone_model_paramenter(self.model.parameters(), self.local_model)
+                # clone model to user model 
+                self.clone_model_paramenter(self.model.parameters(), self.local_model)
 
         return LOSS    
 

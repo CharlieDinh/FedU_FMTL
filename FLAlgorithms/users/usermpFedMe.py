@@ -51,7 +51,7 @@ class UsermpFedMe(User):
 
             # update local weight after finding aproximate theta
             for new_param, localweight in zip(self.persionalized_model_bar, self.local_model):
-                localweight.data = localweight.data - self.L_k* self.learning_rate * (localweight.data - new_param.data)
+                localweight.data = localweight.data - self.L_k* self.learning_rate * (localweight.data - new_param.data.clone())
 
         #update local model as local_weight_upated
         #self.clone_model_paramenter(self.local_weight_updated, self.local_model)
@@ -64,12 +64,12 @@ class UsermpFedMe(User):
         for epoch in range(1, self.local_epochs + 1):  # local update
             self.model.train()
             # K = 30 # K is number of personalized steps
-            for i in range(self.K):
-                X, y = self.get_next_train_batch()
-                self.optimizer.zero_grad()
-                output = self.model(X)
-                loss = self.loss(output, y)
-                loss.backward()
-                self.persionalized_model_bar, _ = self.optimizer.step(self.local_model)
+            #for i in range(self.K):
+            X, y = self.get_next_train_batch()
+            self.optimizer.zero_grad()
+            output = self.model(X)
+            loss = self.loss(output, y)
+            loss.backward()
+            self.persionalized_model_bar, _ = self.optimizer.step(self.local_model)
 
         return LOSS

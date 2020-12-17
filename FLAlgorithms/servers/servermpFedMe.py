@@ -52,7 +52,7 @@ class mpFedMe(Server):
             for user in self.selected_train:
                 user.train(self.local_epochs)
             # Agegrate parameter at each user
-            self.persionalized_aggregate_parameters()
+            self.aggregate_meta_parameters()
             # choose several users to send back upated model to server
             # self.personalized_evaluate()
 

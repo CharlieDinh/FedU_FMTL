@@ -37,21 +37,21 @@ class UserpFedMe(User):
         LOSS = 0
         self.model.train()
         for epoch in range(1, self.local_epochs + 1):  # local update
-            
             self.model.train()
-            X, y = self.get_next_train_batch()
-
+            for X,y in self.trainloader:
+                X, y = X.to(self.device), y.to(self.device)#self.get_next_train_batch()
+            #X, y = self.get_next_train_batch()
             # K = 30 # K is number of personalized steps
-            for i in range(self.K):
-                self.optimizer.zero_grad()
-                output = self.model(X)
-                loss = self.loss(output, y)
-                loss.backward()
-                self.persionalized_model_bar, _ = self.optimizer.step(self.local_model)
+                for i in range(self.K):
+                    self.optimizer.zero_grad()
+                    output = self.model(X)
+                    loss = self.loss(output, y)
+                    loss.backward()
+                    self.persionalized_model_bar, _ = self.optimizer.step(self.local_model)
 
-            # update local weight after finding aproximate theta
-            for new_param, localweight in zip(self.persionalized_model_bar, self.local_model):
-                localweight.data = localweight.data - self.L_k* self.learning_rate * (localweight.data - new_param.data)
+                # update local weight after finding aproximate theta
+                for new_param, localweight in zip(self.persionalized_model_bar, self.local_model):
+                    localweight.data = localweight.data - self.L_k* self.learning_rate * (localweight.data - new_param.data)
 
         #update local model as local_weight_upated
         #self.clone_model_paramenter(self.local_weight_updated, self.local_model)
