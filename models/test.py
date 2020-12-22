@@ -100,21 +100,20 @@ def test_img_local_all(net_local_list, args, local_list_users, return_all= False
         net_local = net_local_list[idx]
         net_local.eval()
         a, b, c = test_img_local(net_local, args, local_list_users[idx])
-        total_correct += a
         correct_test_local[idx] = c
         acc_test_local[idx] = a
         loss_test_local[idx] = b
-
+        total_correct += c
     if return_all:
         return acc_test_local, loss_test_local
     else: 
-        return total_correct/total_test_sample, loss_test_local.mean()
-    #return acc_test_local.mean(), loss_test_local.mean()
+        return float(total_correct)/total_test_sample, loss_test_local.mean()
+        #return acc_test_local.mean(), loss_test_local.mean()
 
-def test_img_global(global_net, args, local_list_users):
-    correct_test_local = np.zeros(args.num_users)
-    loss_test_local = np.zeros(args.num_users)
-    acc_test_local = np.zeros(args.num_users)
+def test_img_global(global_net, args, local_list_users,return_all= False):
+    correct_test = np.zeros(args.num_users)
+    loss_test = np.zeros(args.num_users)
+    acc_test = np.zeros(args.num_users)
     total_test_sample = 0
     total_correct = 0
     for idx in range(args.num_users):
@@ -123,16 +122,21 @@ def test_img_global(global_net, args, local_list_users):
         net_local.eval()
         a, b, c = test_img_local(net_local, args, local_list_users[idx])
         total_correct += a
-        correct_test_local[idx] = c
-        acc_test_local[idx] = a
-        loss_test_local[idx] = b
-    
-    return total_correct/total_test_sample, loss_test_local.mean()
+        correct_test[idx] = c
+        acc_test[idx] = a
+        loss_test[idx] = b
+
+    if return_all:
+        return acc_test, loss_test
+    else: 
+        return total_correct/total_test_sample, loss_test.mean()
 
 def test_img_avg_all(net_glob, net_local_list, args, local_list_users, return_net=False):
+
     net_glob_temp = copy.deepcopy(net_glob)
     w_keys_epoch = net_glob.state_dict().keys()
     w_glob_temp = {}
+
     for idx in range(args.num_users):
         net_local = net_local_list[idx]
         w_local = net_local.state_dict()
@@ -145,40 +149,7 @@ def test_img_avg_all(net_glob, net_local_list, args, local_list_users, return_ne
 
     for k in w_keys_epoch:
         w_glob_temp[k] = torch.div(w_glob_temp[k], args.num_users)
+
     net_glob_temp.load_state_dict(w_glob_temp)
     acc_test_avg, loss_test_avg = test_img_global(net_glob_temp, args,  local_list_users)
-
-    if return_net:
-        return acc_test_avg, loss_test_avg, net_glob_temp
     return acc_test_avg, loss_test_avg
-
-criterion = nn.CrossEntropyLoss()
-
-def test_img_ensemble_all(net_local_list, args, local_list_users):
-    probs_all = []
-    preds_all = []
-    for idx in range(args.num_users):
-        net_local = net_local_list[idx]
-        net_local.eval()
-        # _, _, probs = test_img(net_local, dataset_test, args, return_probs=True, user_idx=idx)
-        acc, loss, probs = test_img(net_local, dataset_test, args, return_probs=True, user_idx=idx)
-        # print('Local model: {}, loss: {}, acc: {}'.format(idx, loss, acc))
-        probs_all.append(probs.detach())
-
-        preds = probs.data.max(1, keepdim=True)[1].cpu().numpy().reshape(-1)
-        preds_all.append(preds)
-
-    labels = np.array(dataset_test.targets)
-    preds_probs = torch.mean(torch.stack(probs_all), dim=0)
-
-    # ensemble (avg) metrics
-    preds_avg = preds_probs.data.max(1, keepdim=True)[1].cpu().numpy().reshape(-1)
-    loss_test = criterion(preds_probs, torch.tensor(labels).to(args.device)).item()
-    acc_test_avg = (preds_avg == labels).mean() * 100
-
-    # ensemble (maj)
-    preds_all = np.array(preds_all).T
-    preds_maj = stats.mode(preds_all, axis=1)[0].reshape(-1)
-    acc_test_maj = (preds_maj == labels).mean() * 100
-
-    return acc_test_avg, loss_test, acc_test_maj

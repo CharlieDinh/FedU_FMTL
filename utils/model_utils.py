@@ -248,9 +248,9 @@ def read_data(dataset):
         test_data: dictionary of test data
     '''
 
-    if(dataset == "Cifar10"):
-        clients, groups, train_data, test_data = read_cifa_data()
-        return clients, groups, train_data, test_data
+    #if(dataset == "Cifar10"):
+    #    clients, groups, train_data, test_data = read_cifa_data()
+    #    return clients, groups, train_data, test_data
 
     train_data_dir = os.path.join('data',dataset,'data', 'train')
     test_data_dir = os.path.join('data',dataset,'data', 'test')
