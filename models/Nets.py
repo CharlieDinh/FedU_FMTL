@@ -94,6 +94,7 @@ class Mclr_Logistic(nn.Module):
     def __init__(self, input_dim = 784, output_dim = 10):
         super(Mclr_Logistic, self).__init__()
         self.fc1 = nn.Linear(input_dim, output_dim)
+        self.weight_keys = [['fc1.weight', 'fc1.bias']]
 
     def forward(self, x):
         x = torch.flatten(x, 1)
