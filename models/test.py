@@ -60,7 +60,7 @@ def test_img(net_g, datatest, args, return_probs=False, user_idx=-1):
     return accuracy, test_loss
 
 
-def test_img_local(net_g, args, user):
+def test_img_local_test(net_g, args, user):
     net_g.eval()
     # testing
     test_loss = 0
@@ -84,12 +84,40 @@ def test_img_local(net_g, args, user):
     accuracy = 100.00 * float(correct) / len(data_loader.dataset)
     #accuracy = 100.00 * float(correct) / len(data_loader.dataset)
     if args.verbose:
-        print('Local model {}: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)'.format(
-            user_idx, test_loss, correct, len(data_loader.dataset), accuracy))
+        print('Local model {}: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)'.format(test_loss, correct, len(data_loader.dataset), accuracy))
 
     return accuracy, test_loss, correct
 
-def test_img_local_all(net_local_list, args, local_list_users, return_all= False):
+
+def test_img_local_train(net_g, args, user):
+    net_g.eval()
+    # testing
+    test_loss = 0
+    correct = 0
+    # data_loader = DataLoader(dataset, batch_size=args.bs)
+    data_loader = DataLoader(user.train_data, batch_size=len(user.train_data), shuffle=False)
+    l = len(data_loader)
+
+    for idx, (data, target) in enumerate(data_loader):
+        if args.gpu != -1:
+            data, target = data.to(args.device), target.to(args.device)
+        log_probs = net_g(data)
+
+        # sum up batch loss
+        test_loss += F.cross_entropy(log_probs, target, reduction='sum').item()
+        # get the index of the max log-probability
+        y_pred = log_probs.data.max(1, keepdim=True)[1]
+        correct += y_pred.eq(target.data.view_as(y_pred)).long().cpu().sum()
+
+    test_loss /= len(data_loader.dataset)
+    accuracy = 100.00 * float(correct) / len(data_loader.dataset)
+    #accuracy = 100.00 * float(correct) / len(data_loader.dataset)
+    if args.verbose:
+        print('Local model {}: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)'.format(user_idx, test_loss, correct, len(data_loader.dataset), accuracy))
+    return accuracy, test_loss, correct
+
+
+def test_img_local_all_test(net_local_list, args, local_list_users, return_all= False):
     correct_test_local = np.zeros(args.num_users)
     loss_test_local = np.zeros(args.num_users)
     acc_test_local = np.zeros(args.num_users)
@@ -99,7 +127,7 @@ def test_img_local_all(net_local_list, args, local_list_users, return_all= False
         total_test_sample += len(local_list_users[idx].test)
         net_local = net_local_list[idx]
         net_local.eval()
-        a, b, c = test_img_local(net_local, args, local_list_users[idx])
+        a, b, c = test_img_local_test(net_local, args, local_list_users[idx])
         correct_test_local[idx] = c
         acc_test_local[idx] = a
         loss_test_local[idx] = b
@@ -110,26 +138,26 @@ def test_img_local_all(net_local_list, args, local_list_users, return_all= False
         return float(total_correct)/total_test_sample, loss_test_local.mean()
         #return acc_test_local.mean(), loss_test_local.mean()
 
-def test_img_global(global_net, args, local_list_users,return_all= False):
-    correct_test = np.zeros(args.num_users)
-    loss_test = np.zeros(args.num_users)
-    acc_test = np.zeros(args.num_users)
+def test_img_local_all_train(net_local_list, args, local_list_users, return_all= False):
+    correct_test_local = np.zeros(args.num_users)
+    loss_test_local = np.zeros(args.num_users)
+    acc_test_local = np.zeros(args.num_users)
     total_test_sample = 0
     total_correct = 0
     for idx in range(args.num_users):
-        total_test_sample += len(local_list_users[idx].test)
-        net_local = global_net
+        total_test_sample += len(local_list_users[idx].train_data)
+        net_local = net_local_list[idx]
         net_local.eval()
-        a, b, c = test_img_local(net_local, args, local_list_users[idx])
-        total_correct += a
-        correct_test[idx] = c
-        acc_test[idx] = a
-        loss_test[idx] = b
-
+        a, b, c = test_img_local_train(net_local, args, local_list_users[idx])
+        correct_test_local[idx] = c
+        acc_test_local[idx] = a
+        loss_test_local[idx] = b
+        total_correct += c
     if return_all:
-        return acc_test, loss_test
+        return acc_test_local, loss_test_local
     else: 
-        return total_correct/total_test_sample, loss_test.mean()
+        return float(total_correct)/total_test_sample, loss_test_local.mean()
+        #return acc_test_local.mean(), loss_test_local.mean()
 
 def test_img_avg_all(net_glob, net_local_list, args, local_list_users, return_net=False):
 

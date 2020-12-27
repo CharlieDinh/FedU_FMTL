@@ -101,7 +101,7 @@ class Server:
     def model_exists(self):
         return os.path.exists(os.path.join("models", self.dataset, "server" + ".pt"))
     
-    def select_users(self, round, num_users):
+    def select_users(self, round, fac_users):
         '''selects num_clients clients weighted by number of samples from possible_clients
         Args:
             num_clients: number of clients to select; default 20
@@ -111,10 +111,10 @@ class Server:
         Return:
             list of selected clients objects
         '''
-        if(num_users == len(self.users)):
+        if(fac_users == 1):
             print("All users are selected")
             return self.users
-
+        num_users = int(fac_users * len(self.users))
         num_users = min(num_users, len(self.users))
         #np.random.seed(round)
         return np.random.choice(self.users, num_users, replace=False) #, p=pk)

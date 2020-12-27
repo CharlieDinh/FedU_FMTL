@@ -12,13 +12,11 @@ from scipy.stats import mode
 from torchvision import datasets, transforms, models
 import torch
 from torch import nn
-
 from utils.train_utils import get_model
 from utils.options import args_parser
 from models.Update import LocalUpdateMTL
-from models.test import test_img, test_img_local, test_img_local_all, test_img_avg_all
-
-from utils.model_utils import read_data, read_user_data
+from models.test import *
+from utils.model_utils import *
 
 import pdb
 
@@ -106,6 +104,8 @@ if __name__ == '__main__':
             w_local, loss = local_list_users[user].train(net=net_local_list[user].to(args.device), lr=lr, omega=omega, W_glob=W.clone(), idx=idx, w_glob_keys=w_glob_keys)
 
         # evaluate local model
-        acc_test_local, loss_test_local = test_img_local_all(net_local_list, args, local_list_users)
+        acc_test_local_train, loss_test_local_train = test_img_local_all_train(net_local_list, args, local_list_users)
+        acc_test_local_test, loss_test_local_test = test_img_local_all_test(net_local_list, args, local_list_users)
         
-        print('Round {:3d}, Loss (local): {:.3f}, Acc (local): {:.2f}'.format(iter, loss_test_local, acc_test_local))
+        print('Round {:4d}, Training Loss (local): {:.4f}, Training Acc (local): {:.4f} '.format(iter, loss_test_local_train, acc_test_local_train))
+        print('Round {:4d}, Testing Loss (local): {:.4f}, Testing Acc (local): {:.4f}'.format(iter, loss_test_local_test, acc_test_local_test))

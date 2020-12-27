@@ -49,8 +49,9 @@ class LocalUpdateMTL(object):
                 loss_regularizer = 0
                 loss_regularizer += W.norm() ** 2
 
-                k = 1000
-                for i in range(W.shape[0] // k):
+                #k = 1000
+                k = W.shape[1]
+                for i in range(k):
                     x = W[i * k:(i+1) * k, :]
                     loss_regularizer += x.mm(omega.to(self.args.device)).mm(x.T).trace()
                 f = (int)(math.log10(W.shape[0])+1) + 1
