@@ -16,7 +16,7 @@ class LocalUpdateMTL(object):
         self.selected_clients = []
         self.train_data = data_train
         self.test = data_test
-        self.ldr_train = DataLoader(data_train, batch_size=self.args.local_bs, shuffle=True)
+        self.ldr_train = DataLoader(data_train, batch_size=self.args.batch_size, shuffle=True)
         #self.ldr_test = DataLoader(data_test, batch_size=len(data_test), shuffle=True)
         self.pretrain = False
 
@@ -29,7 +29,7 @@ class LocalUpdateMTL(object):
         if self.pretrain:
             local_eps = self.args.local_ep_pretrain
         else:
-            local_eps = self.args.local_ep
+            local_eps = self.args.local_epochs
 
         for iter in range(local_eps):
             batch_loss = []

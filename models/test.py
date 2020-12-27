@@ -47,13 +47,13 @@ def test_img(net_g, datatest, args, return_probs=False, user_idx=-1):
 
     test_loss /= len(data_loader.dataset)
     accuracy = 100.00 * float(correct) / len(data_loader.dataset)
-    if args.verbose:
-        if user_idx < 0:
-            print('Test set: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)'.format(
-                test_loss, correct, len(data_loader.dataset), accuracy))
-        else:
-            print('Local model {}: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)'.format(
-                user_idx, test_loss, correct, len(data_loader.dataset), accuracy))
+    # if args.verbose:
+    #     if user_idx < 0:
+    #         print('Test set: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)'.format(
+    #             test_loss, correct, len(data_loader.dataset), accuracy))
+    #     else:
+    #         print('Local model {}: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)'.format(
+    #             user_idx, test_loss, correct, len(data_loader.dataset), accuracy))
 
     if return_probs:
         return accuracy, test_loss, torch.cat(probs)
@@ -83,8 +83,8 @@ def test_img_local_test(net_g, args, user):
     test_loss /= len(data_loader.dataset)
     accuracy = 100.00 * float(correct) / len(data_loader.dataset)
     #accuracy = 100.00 * float(correct) / len(data_loader.dataset)
-    if args.verbose:
-        print('Local model {}: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)'.format(test_loss, correct, len(data_loader.dataset), accuracy))
+    # if args.verbose:
+    #     print('Local model {}: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)'.format(test_loss, correct, len(data_loader.dataset), accuracy))
 
     return accuracy, test_loss, correct
 
@@ -112,8 +112,8 @@ def test_img_local_train(net_g, args, user):
     test_loss /= len(data_loader.dataset)
     accuracy = 100.00 * float(correct) / len(data_loader.dataset)
     #accuracy = 100.00 * float(correct) / len(data_loader.dataset)
-    if args.verbose:
-        print('Local model {}: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)'.format(user_idx, test_loss, correct, len(data_loader.dataset), accuracy))
+    # if args.verbose:
+    #     print('Local model {}: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)'.format(test_loss, correct, len(data_loader.dataset), accuracy))
     return accuracy, test_loss, correct
 
 

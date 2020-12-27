@@ -23,7 +23,6 @@ import pdb
 if __name__ == '__main__':
     # parse args
     args = args_parser()
-    
     data = read_data(args.dataset)
     args.num_users = len(data[0])
     args.device = torch.device('cuda:{}'.format(args.gpu) if torch.cuda.is_available() and args.gpu != -1 else 'cpu')
@@ -34,9 +33,9 @@ if __name__ == '__main__':
 
     print(net_glob)
     net_glob.train()
-
+    num_layers_keep  = 1
     total_num_layers = len(net_glob.weight_keys)
-    w_glob_keys = net_glob.weight_keys[total_num_layers - args.num_layers_keep:]
+    w_glob_keys = net_glob.weight_keys[total_num_layers - num_layers_keep:]
     w_glob_keys = list(itertools.chain.from_iterable(w_glob_keys))
 
     num_param_glob = 0
@@ -64,10 +63,10 @@ if __name__ == '__main__':
     best_acc = np.ones(args.num_users) * -1
     best_net_list = copy.deepcopy(net_local_list)
 
-    lr = args.lr
+    lr = args.learning_rate
     results = []
     local_list_users = []
-    m = max(int(args.frac * args.num_users), 1)
+    m = max(int(args.subusers * args.num_users), 1)
     I = torch.ones((m, m))
     i = torch.ones((m, 1))
     omega = I - 1 / m * i.mm(i.T)
@@ -85,10 +84,10 @@ if __name__ == '__main__':
             local = LocalUpdateMTL(args=args, data_train = train, data_test = test)
             local_list_users.append(local)
 
-    for iter in range(args.epochs):
+    for iter in range(args.num_global_iters):
         w_glob = {}
         loss_locals = []
-        m = max(int(args.frac * args.num_users), 1)
+        m = max(int(args.subusers * args.num_users), 1)
         idxs_users = np.random.choice(range(args.num_users), m, replace=False)
 
         W = torch.zeros((d, m)).to(args.device)#.cuda()
