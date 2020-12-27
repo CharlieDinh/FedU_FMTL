@@ -13,7 +13,7 @@ from torchvision import datasets, transforms, models
 import torch
 from torch import nn
 
-from utils.train_utils import get_model, get_data
+from utils.train_utils import get_model
 from utils.options import args_parser
 from models.Update import LocalUpdateMTL
 from models.test import test_img, test_img_local, test_img_local_all, test_img_avg_all
