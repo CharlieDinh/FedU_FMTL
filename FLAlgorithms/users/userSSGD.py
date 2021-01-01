@@ -47,6 +47,7 @@ class UserSSGD(User):
     def train(self, epochs):
         LOSS = 0
         self.model.train()
+        self.clone_model_paramenter(self.model.parameters(), self.local_model)
         for epoch in range(1, self.local_epochs + 1):
             self.model.train()
             for X,y in self.trainloader:
@@ -56,10 +57,9 @@ class UserSSGD(User):
                 loss = self.loss(output, y)
                 loss.backward()
                 self.optimizer.step()
-        self.clone_model_paramenter(self.model.parameters(), self.local_model)
         return LOSS
 
-    def aggregate_parameters(self, user_list):
+    def aggregate_parameters(self, user_list, global_in, num_clients):
         avg_weight_different = copy.deepcopy(list(self.model.parameters()))
         alpha = np.ones(len(user_list))
         for param in avg_weight_different:
@@ -73,7 +73,12 @@ class UserSSGD(User):
         for avg, current_task in zip(avg_weight_different, self.model.parameters()):
             current_task.data = current_task.data - self.learning_rate*avg
         
-        self.clone_model_paramenter(self.model.parameters(), self.local_model)
+        #beta = (float)(2 * num_clients)/ (global_in + 2 * num_clients)
+
+        # update current task follow 15 rulle
+        #for local, current_task in zip(self.local_model, self.model.parameters()):
+        #    current_task.data = (1 - beta)*local.data + beta * current_task.data
+        #self.clone_model_paramenter(self.model.parameters(), self.local_model)
         
 
 
