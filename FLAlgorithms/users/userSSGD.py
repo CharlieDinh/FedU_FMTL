@@ -47,7 +47,7 @@ class UserSSGD(User):
     def train(self, epochs):
         LOSS = 0
         self.model.train()
-        self.clone_model_paramenter(self.model.parameters(), self.local_model)
+        #self.clone_model_paramenter(self.model.parameters(), self.local_model)
         for epoch in range(1, self.local_epochs + 1):
             self.model.train()
             for X,y in self.trainloader:
@@ -68,16 +68,16 @@ class UserSSGD(User):
         # Calculate the diffence of model between all users or tasks
         for i in range(len(user_list)):
             for avg, current_task, other_tasks in zip(avg_weight_different, self.model.parameters(),user_list[i].model.parameters()):
-                avg.data += alpha[i]*(current_task.data.clone() - other_tasks.data.clone())
+                avg.data += alpha[i] * (current_task.data.clone() - other_tasks.data.clone())
         
         for avg, current_task in zip(avg_weight_different, self.model.parameters()):
-            current_task.data = current_task.data - self.learning_rate*avg
+            current_task.data = current_task.data - self.learning_rate * self.L_k *avg
         
-        #beta = (float)(2 * num_clients)/ (global_in + 2 * num_clients)
+        beta = (float)(2 * num_clients)/ (global_in + 2 * num_clients)
 
         # update current task follow 15 rulle
-        #for local, current_task in zip(self.local_model, self.model.parameters()):
-        #    current_task.data = (1 - beta)*local.data + beta * current_task.data
+        for local, current_task in zip(self.local_model, self.model.parameters()):
+            current_task.data = (1 - beta)*local.data + beta * current_task.data
         #self.clone_model_paramenter(self.model.parameters(), self.local_model)
         
 

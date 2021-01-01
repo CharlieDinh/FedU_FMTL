@@ -23,14 +23,9 @@ class LocalUpdateMTL(object):
     def train(self, net, lr=0.1, omega=None, W_glob=None, idx=None, w_glob_keys=None):
         net.train()
         # train and update
-        optimizer = torch.optim.SGD(net.parameters(), lr=lr, momentum=0.5)
-
+        optimizer = torch.optim.SGD(net.parameters(), lr=lr)
         epoch_loss = []
-        if self.pretrain:
-            local_eps = self.args.local_ep_pretrain
-        else:
-            local_eps = self.args.local_epochs
-
+        local_eps = self.args.local_epochs
         for iter in range(local_eps):
             batch_loss = []
             for batch_idx, (images, labels) in enumerate(self.ldr_train):

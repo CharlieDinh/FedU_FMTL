@@ -44,14 +44,14 @@ class FedSSGD(Server):
             if(self.experiment):
                 self.experiment.set_epoch( glob_iter + 1)
             print("-------------Round number: ",glob_iter, " -------------")
-            self.selected_users = self.select_users(glob_iter,self.num_users)
+            self.selected_users = self.select_users(glob_iter, self.num_users)
             # local update at each users
             for user in self.selected_users:
                 user.train(self.local_epochs)
                 
             # Agegrate parameter at each user 
             for user in self.selected_users:
-                user.aggregate_parameters(self.users,glob_iter,len(self.users))
+                user.aggregate_parameters(self.users, glob_iter, len(self.users))
                 
             self.evaluate()
             #self.meta_evaluate()

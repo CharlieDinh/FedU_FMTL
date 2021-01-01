@@ -1,6 +1,7 @@
 #
 # This code is adapted form paper
 #
+from comet_ml import Experiment
 import copy
 import os
 import pickle
@@ -23,6 +24,35 @@ import pdb
 if __name__ == '__main__':
     # parse args
     args = args_parser()
+    if(args.commet):
+        # Create an experiment with your api key:
+        experiment = Experiment(
+            api_key="VtHmmkcG2ngy1isOwjkm5sHhP",
+            project_name="multitask-learning",
+            workspace="federated-learning-exp",
+        )
+
+        hyper_params = {
+            "dataset":args.dataset,
+            "algorithm" : "MOCHA",
+            "model":args.model,
+            "batch_size":args.batch_size,
+            "learning_rate":args.learning_rate,
+            "beta" : args.beta, 
+            "L_k" : args.L_k,
+            "num_glob_iters":args.num_global_iters,
+            "local_epochs":args.local_epochs,
+            "optimizer": args.optimizer,
+            "numusers": args.subusers,
+            "K" : args.K,
+            "personal_learning_rate" : args.personal_learning_rate,
+            "times" : args.times,
+            "gpu": args.gpu
+        }
+        experiment.log_parameters(hyper_params)
+        experiment.set_name(args.dataset + "_" + "MOCHA" + "_" + args.model + "_" + str(args.batch_size) + "_" + str(args.learning_rate)+  "_" + str(args.num_global_iters) + "_"+ str(args.local_epochs) + "_"+ str(args.subusers))
+    else:
+        experiment = 0
     data = read_data(args.dataset)
     args.num_users = len(data[0])
     args.device = torch.device('cuda:{}'.format(args.gpu) if torch.cuda.is_available() and args.gpu != -1 else 'cpu')
@@ -53,7 +83,7 @@ if __name__ == '__main__':
     for user_ix in range(args.num_users):
         net_local_list.append(copy.deepcopy(net_glob))
 
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.NLLLoss()
 
     # training
     #results_save_path = os.path.join(base_save_dir, 'results.csv')
@@ -85,6 +115,8 @@ if __name__ == '__main__':
             local_list_users.append(local)
 
     for iter in range(args.num_global_iters):
+        if(experiment):
+            experiment.set_epoch(iter + 1)
         w_glob = {}
         loss_locals = []
         m = max(int(args.subusers * args.num_users), 1)
@@ -106,5 +138,10 @@ if __name__ == '__main__':
         acc_test_local_train, loss_test_local_train = test_img_local_all_train(net_local_list, args, local_list_users)
         acc_test_local_test, loss_test_local_test = test_img_local_all_test(net_local_list, args, local_list_users)
         
+        if(experiment):
+            experiment.log_metric("glob_acc",acc_test_local_test)
+            experiment.log_metric("train_acc",acc_test_local_train)
+            experiment.log_metric("train_loss",loss_test_local_train)
+            
         print('Round {:4d}, Training Loss (local): {:.4f}, Training Acc (local): {:.4f} '.format(iter, loss_test_local_train, acc_test_local_train))
         print('Round {:4d}, Testing Loss (local): {:.4f}, Testing Acc (local): {:.4f}'.format(iter, loss_test_local_test, acc_test_local_test))

@@ -14,7 +14,7 @@ def args_parser():
     parser.add_argument("--batch_size", type=int, default=20)
     parser.add_argument("--learning_rate", type=float, default=0.01, help="Local learning rate")
     parser.add_argument("--beta", type=float, default=1, help="Average moving parameter for pFedMe, or Second learning rate of Per-FedAvg")
-    parser.add_argument("--L_k", type=int, default=0, help="Regularization term")
+    parser.add_argument("--L_k", type=int, default=10, help="Regularization term")
     parser.add_argument("--num_global_iters", type=int, default=100)
     parser.add_argument("--local_epochs", type=int, default = 5)
     parser.add_argument("--optimizer", type=str, default="SGD")
@@ -24,7 +24,7 @@ def args_parser():
     parser.add_argument("--personal_learning_rate", type=float, default=0.01, help="Persionalized learning rate to caculate theta aproximately using K steps")
     parser.add_argument("--times", type=int, default=1, help="running time")
     parser.add_argument("--commet", type=int, default=0, help="log data to commet")
-    parser.add_argument("--gpu", type=int, default=-1, help="Which GPU to run the experiments")
+    parser.add_argument("--gpu", type=int, default=1, help="Which GPU to run the experiments")
     args = parser.parse_args()
 
     args = parser.parse_args()
