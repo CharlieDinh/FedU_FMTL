@@ -1,19 +1,34 @@
 from torchvision import datasets, transforms
-from models.Nets import *
+from FLAlgorithms.trainmodel.models import *
 
 def get_model(args):
-    if args.model == 'cnn' and args.dataset in ['Cifar10', 'Cifar100']:
-        net_glob = CNNCifar(args=args).to(args.device)
-    elif args.model == 'cnn' and args.dataset == 'Mnist':
-        net_glob = CNNMnist(args=args).to(args.device)
-    elif args.model == 'mlp' and args.dataset == 'Mnist':
-        net_glob = MLP(dim_in=784, dim_hidden=256, dim_out=args.num_classes).to(args.device)
-    elif args.model == 'mclr' and args.dataset == 'Mnist':
-        net_glob = Mclr_Logistic().to(args.device)
-    elif args.model == 'mclr' and args.dataset == 'human_activity':
-        net_glob = Mclr_Logistic(561,6).to(args.device)
-    else:
-        exit('Error: unrecognized model')
-    print(net_glob)
+    if(args.model == "mclr"):
+        if(args.dataset == "human_activity"):
+            model = Mclr_Logistic(561,6).to(args.device)
+        elif(args.dataset == "gleam"):
+            model = Mclr_Logistic(561,6).to(args.device)
+        elif(args.dataset == "vehicle_sensor"):
+            model = Mclr_Logistic(100,2).to(args.device)
+        elif(args.dataset == "Synthetic"):
+            model = Mclr_Logistic(60,10).to(args.device)
+        else:#(dataset == "Mnist"):
+            model = Mclr_Logistic().to(args.device)
 
-    return net_glob
+    elif(args.model == "dnn"):
+        if(args.dataset == "human_activity"):
+            model = DNN2(561,100,100,12).to(args.device)
+        elif(args.dataset == "gleam"):
+            model = DNN(561,20,6).to(args.device)
+        elif(args.dataset == "vehicle_sensor"):
+            model = DNN(100,20,2).to(args.device)
+        elif(args.dataset == "Synthetic"):
+            model = DNN(60,20,10).to(args.device)
+        else:#(dataset == "Mnist"):
+            model = DNN2().to(args.device)
+        
+    elif(args.model == "cnn"):
+        if(args.dataset == "Cifar10"):
+            model = CNNCifar().to(args.device)
+    else:
+        pasexit('Error: unrecognized model')
+    return model

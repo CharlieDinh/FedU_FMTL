@@ -62,7 +62,7 @@ def main(experiment, dataset, algorithm, model, batch_size, learning_rate, beta,
         
         if(model == "cnn"):
             if(dataset == "Cifar10"):
-                model = CifarNet().to(device), model
+                model = CNNCifar().to(device), model
 
         # select algorithm
 
