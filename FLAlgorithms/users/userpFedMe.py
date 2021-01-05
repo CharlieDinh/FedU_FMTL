@@ -52,7 +52,7 @@ class UserpFedMe(User):
                 # update local weight after finding aproximate theta
                 for new_param, localweight in zip(self.persionalized_model_bar, self.local_model):
                     localweight.data = localweight.data - self.L_k* self.learning_rate * (localweight.data - new_param.data)
-
+                    
         #update local model as local_weight_upated
         #self.clone_model_paramenter(self.local_weight_updated, self.local_model)
         self.update_parameters(self.local_model)

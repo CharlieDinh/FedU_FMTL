@@ -73,11 +73,11 @@ class UserSSGD(User):
         for avg, current_task in zip(avg_weight_different, self.model.parameters()):
             current_task.data = current_task.data - self.learning_rate * self.L_k *avg
         
-        beta = (float)(2 * num_clients)/ (global_in + 2 * num_clients)
+        #beta = (float)(2 * num_clients)/ (global_in + 2 * num_clients)
 
         # update current task follow 15 rulle
-        for local, current_task in zip(self.local_model, self.model.parameters()):
-            current_task.data = (1 - beta)*local.data + beta * current_task.data
+        #for local, current_task in zip(self.local_model, self.model.parameters()):
+        #    current_task.data = (1 - beta)*local.data + beta * current_task.data
         #self.clone_model_paramenter(self.model.parameters(), self.local_model)
         
 
