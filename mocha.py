@@ -165,4 +165,5 @@ if __name__ == '__main__':
                 hf.create_dataset('rs_train_acc', data=train_acc)
                 hf.create_dataset('rs_train_loss', data=train_loss)
                 hf.close()
+                
     average_data(num_users=args.subusers, loc_ep1=args.local_epochs, Numb_Glob_Iters=args.num_global_iters, lamb=args.L_k,learning_rate=args.learning_rate, beta = args.beta, algorithms=args.algorithm, batch_size=args.batch_size, dataset=args.dataset, k = args.K, personal_learning_rate = args.personal_learning_rate,times = args.times)

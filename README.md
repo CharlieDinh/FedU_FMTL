@@ -33,13 +33,27 @@ separate task and predict between AAV-type and DW-type vehicles
 
 # Produce experiments and figures
 - Human Activity
-
+<pre><code>
 python3 main.py --dataset human_activity --model mclr --learning_rate 0.02 --num_global_iters 200  --algorithm FedAvg --times 20 --commet 0 --time 20 --gpu 0
 
 python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 20 --gpu 0
 
-python3 mocha.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 10 --num_global_iters 200  --algorithm Mocha --commet 0 --time 20 --gpu 0
+python3 mocha.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 5 --num_global_iters 200  --algorithm Mocha --commet 0 --time 20 --gpu 0
 
 python3 main.py --dataset human_activity --model mclr --learning_rate 0.01 --personal_learning_rate 0.01 --beta 1 --L_k 15 --num_global_iters 200 --algorithm pFedMe --commet 0 --time 20 --gpu 0
 
 python3 main.py --dataset human_activity --model mclr --batch_size 20 --learning_rate 0.03 --beta 0.001  --num_global_iters 200 --local_epochs 5 --algorithm PerAvg --commet 0 --time 20 --gpu 0
+ </code></pre>
+
+- Vehicle Sensor Activity
+<pre><code>
+python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.02 --num_global_iters 200  --algorithm FedAvg --times 20 --commet 0 --time 20 --gpu 0
+
+python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 20 --gpu 0
+
+python3 mocha.py --dataset vehicle_sensor --model mclr --learning_rate 0.03 --L_k 5 --num_global_iters 200  --algorithm Mocha --commet 0 --time 20 --gpu 0
+
+python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.01 --personal_learning_rate 0.01 --beta 1 --L_k 15 --num_global_iters 200 --algorithm pFedMe --commet 0 --time 20 --gpu 0
+
+python3 main.py --dataset vehicle_sensor --model mclr --batch_size 20 --learning_rate 0.03 --beta 0.001  --num_global_iters 200 --local_epochs 5 --algorithm PerAvg --commet 0 --time 20 --gpu 0 
+</code></pre>
