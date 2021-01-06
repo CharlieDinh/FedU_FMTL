@@ -19,6 +19,7 @@ class LocalUpdateMTL(object):
         self.ldr_train = DataLoader(data_train, batch_size=self.args.batch_size, shuffle=True)
         #self.ldr_test = DataLoader(data_test, batch_size=len(data_test), shuffle=True)
         self.pretrain = False
+        self.L_k = args.L_k
 
     def train(self, net, lr=0.1, omega=None, W_glob=None, idx=None, w_glob_keys=None):
         net.train()
@@ -50,7 +51,7 @@ class LocalUpdateMTL(object):
                     x = W[i * k:(i+1) * k, :]
                     loss_regularizer += x.mm(omega.to(self.args.device)).mm(x.T).trace()
                 f = (int)(math.log10(W.shape[0])+1) + 1
-                loss_regularizer *= 10 ** (-f)
+                loss_regularizer *= self.L_k ** (-f)
 
                 loss = loss + loss_regularizer
                 loss.backward()
