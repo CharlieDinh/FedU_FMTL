@@ -33,81 +33,81 @@ def main(experiment, dataset, algorithm, model, batch_size, learning_rate, beta,
 
     data = read_data(dataset) , dataset
 
-    for i in range(times):
-        print("---------------Running time:------------",i)
-        # Generate model
-        if(model == "mclr"):
-            if(dataset == "human_activity"):
-                model = Mclr_Logistic(561,6).to(device), model
-            elif(dataset == "gleam"):
-                model = Mclr_Logistic(561,6).to(device), model
-            elif(dataset == "vehicle_sensor"):
-                model = Mclr_Logistic(100,2).to(device), model
-            elif(dataset == "Synthetic"):
-                model = Mclr_Logistic(60,10).to(device), model
-            else:#(dataset == "Mnist"):
-                model = Mclr_Logistic().to(device), model
+    # for i in range(times):
+    #     print("---------------Running time:------------",i)
+    #     # Generate model
+    #     if(model == "mclr"):
+    #         if(dataset == "human_activity"):
+    #             model = Mclr_Logistic(561,6).to(device), model
+    #         elif(dataset == "gleam"):
+    #             model = Mclr_Logistic(561,6).to(device), model
+    #         elif(dataset == "vehicle_sensor"):
+    #             model = Mclr_Logistic(100,2).to(device), model
+    #         elif(dataset == "Synthetic"):
+    #             model = Mclr_Logistic(60,10).to(device), model
+    #         else:#(dataset == "Mnist"):
+    #             model = Mclr_Logistic().to(device), model
 
-        if(model == "dnn"):
-            if(dataset == "human_activity"):
-                model = DNN2(561,100,100,12).to(device), model
-            elif(dataset == "gleam"):
-                model = DNN(561,20,6).to(device), model
-            elif(dataset == "vehicle_sensor"):
-                model = DNN(100,20,2).to(device), model
-            elif(dataset == "Synthetic"):
-                model = DNN(60,20,10).to(device), model
-            else:#(dataset == "Mnist"):
-                model = DNN2().to(device), model
+    #     if(model == "dnn"):
+    #         if(dataset == "human_activity"):
+    #             model = DNN2(561,100,100,12).to(device), model
+    #         elif(dataset == "gleam"):
+    #             model = DNN(561,20,6).to(device), model
+    #         elif(dataset == "vehicle_sensor"):
+    #             model = DNN(100,20,2).to(device), model
+    #         elif(dataset == "Synthetic"):
+    #             model = DNN(60,20,10).to(device), model
+    #         else:#(dataset == "Mnist"):
+    #             model = DNN2().to(device), model
         
-        if(model == "cnn"):
-            if(dataset == "Cifar10"):
-                model = CNNCifar().to(device), model
+    #     if(model == "cnn"):
+    #         if(dataset == "Cifar10"):
+    #             model = CNNCifar().to(device), model
 
-        # select algorithm
+    #     # select algorithm
 
-        if(algorithm == "FedAvg"):
-            if(commet):
-                experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
-            server = FedAvg(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
+    #     if(algorithm == "FedAvg"):
+    #         if(commet):
+    #             experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+    #         server = FedAvg(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
         
-        if(algorithm == "PerAvg"):
-            if(commet):
-                experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(personal_learning_rate) + "_" + str(learning_rate)+  "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
-            server = PerAvg(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
+    #     if(algorithm == "PerAvg"):
+    #         if(commet):
+    #             experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(personal_learning_rate) + "_" + str(learning_rate)+  "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+    #         server = PerAvg(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
 
-        if(algorithm == "SSGD"):
-            if(commet):
-                experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate)+ "_" + str(L_k) + "L_K"+ "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
-            server = FedSSGD(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
+    #     if(algorithm == "SSGD"):
+    #         if(commet):
+    #             experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate)+ "_" + str(L_k) + "L_K"+ "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+    #         server = FedSSGD(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
         
-        if(algorithm == "mFedAvg"):
-            if(commet):
-                experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
-            server = mFedAvg(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
+    #     if(algorithm == "mFedAvg"):
+    #         if(commet):
+    #             experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+    #         server = mFedAvg(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
         
-        if(algorithm == "pFedMe"):
-            if(commet):
-                experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(personal_learning_rate) +  "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
-            server = pFedMe(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
+    #     if(algorithm == "pFedMe"):
+    #         if(commet):
+    #             experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(personal_learning_rate) +  "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+    #         server = pFedMe(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
         
-        if(algorithm == "mpFedMe"):
-            if(commet):
-                experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(personal_learning_rate) +  "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
-            server = mpFedMe(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
+    #     if(algorithm == "mpFedMe"):
+    #         if(commet):
+    #             experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(personal_learning_rate) +  "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+    #         server = mpFedMe(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
 
-        if(algorithm == "mSSGD"):
-            if(commet): 
-                experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
-            server = mFedSSGD(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
+    #     if(algorithm == "mSSGD"):
+    #         if(commet): 
+    #             experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+    #         server = mFedSSGD(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
         
-        if(algorithm == "mSSGD3"):
-            if(commet): 
-                experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(L_k) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
-            server = mFedSSGD3(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
+    #     if(algorithm == "mSSGD3"):
+    #         if(commet): 
+    #             experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(L_k) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+    #         server = mFedSSGD3(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
 
-        server.train()
-        server.test()
+    #     server.train()
+    #     server.test()
 
     average_data(num_users=numusers, loc_ep1=local_epochs, Numb_Glob_Iters=num_glob_iters, lamb=L_k,learning_rate=learning_rate, beta = beta, algorithms=algorithm, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate,times = times)
 
@@ -130,7 +130,7 @@ if __name__ == "__main__":
         # Create an experiment with your api key:
         experiment = Experiment(
             api_key="VtHmmkcG2ngy1isOwjkm5sHhP",
-            project_name="multitask-learning",
+            project_name="multitask-for-test",
             workspace="federated-learning-exp",
         )
 
