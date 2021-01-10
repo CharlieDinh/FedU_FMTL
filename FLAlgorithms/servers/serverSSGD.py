@@ -51,7 +51,7 @@ class FedSSGD(Server):
                 
             # Agegrate parameter at each user 
             for user in self.selected_users:
-                user.aggregate_parameters(self.users, glob_iter, len(self.users))
+                user.aggregate_parameters(self.selected_users, glob_iter, len(self.users))
                 
             self.evaluate()
             #self.meta_evaluate()
