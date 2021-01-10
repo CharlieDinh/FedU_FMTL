@@ -67,8 +67,9 @@ class UserSSGD(User):
         
         # Calculate the diffence of model between all users or tasks
         for i in range(len(user_list)):
-            for avg, current_task, other_tasks in zip(avg_weight_different, self.model.parameters(),user_list[i].model.parameters()):
-                avg.data += alpha[i] * (current_task.data.clone() - other_tasks.data.clone())
+            if(self.id != user_list[i].id):
+                for avg, current_task, other_tasks in zip(avg_weight_different, self.model.parameters(),user_list[i].model.parameters()):
+                    avg.data += alpha[i] * (current_task.data.clone() - other_tasks.data.clone())
         
         for avg, current_task in zip(avg_weight_different, self.model.parameters()):
             current_task.data = current_task.data - self.learning_rate * self.L_k *avg
