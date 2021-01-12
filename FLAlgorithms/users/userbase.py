@@ -85,7 +85,7 @@ class User:
             #@loss += self.loss(output, y)
             #print(self.id + ", Test Accuracy:", test_acc / y.shape[0] )
             #print(self.id + ", Test Loss:", loss)
-        return test_acc, y.shape[0]
+        return test_acc, y.shape[0], test_acc / y.shape[0]
 
     def train_error_and_loss(self):
         self.model.eval()

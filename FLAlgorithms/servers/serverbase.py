@@ -216,13 +216,15 @@ class Server:
         num_samples = []
         tot_correct = []
         losses = []
+        mean_accurancy = []
         for c in self.users:
-            ct, ns = c.test()
+            ct, ns, ma = c.test()
             tot_correct.append(ct*1.0)
             num_samples.append(ns)
+            mean_accurancy.append(ma)
         ids = [c.id for c in self.users]
 
-        return ids, num_samples, tot_correct
+        return ids, num_samples, tot_correct, mean_accurancy
 
     def train_error_and_loss(self):
         num_samples = []
@@ -272,6 +274,7 @@ class Server:
         stats_train = self.train_error_and_loss()
         glob_acc = np.sum(stats[2])*1.0/np.sum(stats[1])
         train_acc = np.sum(stats_train[2])*1.0/np.sum(stats_train[1])
+        glob_acc_avg = np.mean(stats[3])
         # train_loss = np.dot(stats_train[3], stats_train[1])*1.0/np.sum(stats_train[1])
         train_loss = sum([x * y for (x, y) in zip(stats_train[1], stats_train[3])]).item() / np.sum(stats_train[1])
         self.rs_glob_acc.append(glob_acc)
@@ -281,6 +284,7 @@ class Server:
             self.experiment.log_metric("glob_acc",glob_acc)
             self.experiment.log_metric("train_acc",train_acc)
             self.experiment.log_metric("train_loss",train_loss)
+            self.experiment.log_metric("glob_avg",glob_avg)
         #print("stats_train[1]",stats_train[3][0])
         print("Average Global Accurancy: ", glob_acc)
         print("Average Global Trainning Accurancy: ", train_acc)
@@ -358,7 +362,7 @@ class Server:
         tot_correct = []
         losses = []
         for c in self.test_users:
-            ct, ns = c.test()
+            ct, ns, _ = c.test()
             tot_correct.append(ct*1.0)
             num_samples.append(ns)
         ids = [c.id for c in self.users]
