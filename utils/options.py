@@ -16,7 +16,7 @@ def args_parser():
     parser.add_argument("--beta", type=float, default=1, help="Average moving parameter for pFedMe, or Second learning rate of Per-FedAvg")
     parser.add_argument("--L_k", type=float, default=10, help="Regularization term")
     parser.add_argument("--num_global_iters", type=int, default=200)
-    parser.add_argument("--local_epochs", type=int, default = 5)
+    parser.add_argument("--local_epochs", type=int, default =1)
     parser.add_argument("--optimizer", type=str, default="SGD")
     parser.add_argument("--algorithm", type=str, default="SSGD",choices=["pFedMe", "pFedMe_p", "PerAvg", "FedAvg", "SSGD", "Mocha"]) 
     parser.add_argument("--subusers", type = float, default = 0.1, help="Number of Users per round")

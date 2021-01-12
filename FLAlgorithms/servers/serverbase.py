@@ -284,9 +284,10 @@ class Server:
             self.experiment.log_metric("glob_acc",glob_acc)
             self.experiment.log_metric("train_acc",train_acc)
             self.experiment.log_metric("train_loss",train_loss)
-            self.experiment.log_metric("glob_avg",glob_avg)
+            self.experiment.log_metric("glob_avg",glob_acc_avg)
         #print("stats_train[1]",stats_train[3][0])
         print("Average Global Accurancy: ", glob_acc)
+        print("Average Global AVG Accurancy: ", glob_acc_avg)
         print("Average Global Trainning Accurancy: ", train_acc)
         print("Average Global Trainning Loss: ",train_loss)
 
