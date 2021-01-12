@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader
 from FLAlgorithms.users.userbase import User
 import copy
 import numpy as np
+from FLAlgorithms.optimizers.fedoptimizer import MySGD
 # Implementation for FedAvg clients
 
 class UserLocal(User):
@@ -19,7 +20,7 @@ class UserLocal(User):
         else:
             self.loss = nn.NLLLoss()
 
-        self.optimizer = torch.optim.SGD(self.model.parameters(), lr=self.learning_rate, weight_decay = 0.01)
+        self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate, L_k = self.L_k)
 
     def set_grads(self, new_grads):
         if isinstance(new_grads, nn.Parameter):

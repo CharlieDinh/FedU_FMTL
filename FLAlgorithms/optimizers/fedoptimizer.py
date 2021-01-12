@@ -2,11 +2,11 @@ from torch.optim import Optimizer
 
 
 class MySGD(Optimizer):
-    def __init__(self, params, lr):
-        defaults = dict(lr=lr)
+    def __init__(self, params, lr, L_k):
+        defaults = dict(lr=lr, L_k = L_k)
         super(MySGD, self).__init__(params, defaults)
 
-    def step(self, closure=None, beta = 0):
+    def step(self, closure=None):
         loss = None
         if closure is not None:
             loss = closure
@@ -14,13 +14,7 @@ class MySGD(Optimizer):
         for group in self.param_groups:
             # print(group)
             for p in group['params']:
-                if p.grad is None:
-                    continue
-                d_p = p.grad.data
-                if(beta != 0):
-                    p.data.add_(-beta, d_p)
-                else:     
-                    p.data.add_(-group['lr'], d_p)
+                p.data = p.data - group['lr'] * (p.grad.data + group['L_k'] * p.data)
         return loss
 
 
