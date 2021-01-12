@@ -10,9 +10,10 @@ def simple_read_data(alg):
     print(alg)
     hf = h5py.File("./results/"+'{}.h5'.format(alg), 'r')
     rs_glob_acc = np.array(hf.get('rs_glob_acc')[:])
+    rs_avg_acc = np.array(hf.get('rs_avg_acc')[:])
     rs_train_acc = np.array(hf.get('rs_train_acc')[:])
     rs_train_loss = np.array(hf.get('rs_train_loss')[:])
-    return rs_train_acc, rs_train_loss, rs_glob_acc
+    return rs_train_acc, rs_train_loss, rs_glob_acc , rs_avg_acc
 
 def get_training_data_value(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], learning_rate=[],beta=[],algorithms_list=[], batch_size=[], dataset="", k= [] , personal_learning_rate = []):
     Numb_Algs = len(algorithms_list)
@@ -37,6 +38,7 @@ def get_all_training_data_value(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, la
     train_acc = np.zeros((times, Numb_Glob_Iters))
     train_loss = np.zeros((times, Numb_Glob_Iters))
     glob_acc = np.zeros((times, Numb_Glob_Iters))
+    avg_acc = np.zeros((times, Numb_Glob_Iters))
     algorithms_list  = [algorithms] * times
     for i in range(times):
         string_learning_rate = str(learning_rate)  
@@ -46,9 +48,9 @@ def get_all_training_data_value(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, la
         else:
             algorithms_list[i] = algorithms_list[i] + "_" + string_learning_rate + "_" + str(num_users) + "u" + "_" + str(batch_size) + "b"  "_" +str(loc_ep1) +  "_" +str(i)
 
-        train_acc[i, :], train_loss[i, :], glob_acc[i, :] = np.array(
+        train_acc[i, :], train_loss[i, :], glob_acc[i, :], avg_acc [i, :] = np.array(
             simple_read_data(dataset +"_"+ algorithms_list[i]))[:, :Numb_Glob_Iters]
-    return glob_acc, train_acc, train_loss
+    return glob_acc, train_acc, train_loss ,avg_acc
 
 
 def get_data_label_style(input_data = [], linestyles= [], algs_lbl = [], lamb = [], loc_ep1 = 0, batch_size =0):
@@ -64,17 +66,22 @@ def get_data_label_style(input_data = [], linestyles= [], algs_lbl = [], lamb = 
 def average_data(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb="", learning_rate="", beta="", algorithms="", batch_size=0, dataset = "", k = "", personal_learning_rate = "", times = 5):
     if(algorithms == "PerAvg"):
         algorithms = "PerAvg_p"
-    glob_acc, train_acc, train_loss = get_all_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, beta, algorithms, batch_size, dataset, k, personal_learning_rate,times)
+    glob_acc, train_acc, train_loss, avg_acc = get_all_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, beta, algorithms, batch_size, dataset, k, personal_learning_rate,times)
     glob_acc_data = np.average(glob_acc, axis=0)
+    avg_acc_data = np.average(avg_acc, axis=0)
     train_acc_data = np.average(train_acc, axis=0)
     train_loss_data = np.average(train_loss, axis=0)
     # store average value to h5 file
     max_accurancy = []
+    max_avg       = []
     for i in range(times):
-        max_accurancy.append(glob_acc[i].max())
+        max_accurancy.append(glob_acc[i][-1])
+        max_avg.append(avg_acc[i][-1])
     
-    print("std:", np.std(max_accurancy))
-    print("Mean:", np.mean(max_accurancy))
+    print("std max:", np.std(max_accurancy))
+    print("Mean max:", np.mean(max_accurancy))
+    print("std avg:", np.std(max_avg))
+    print("Mean avg:", np.mean(max_avg))
 
     alg = dataset + "_" + algorithms
     alg = alg + "_" + str(learning_rate) + "_" + str(beta) + "_" + str(lamb) + "_" + str(num_users) + "u" + "_" + str(batch_size) + "b" + "_" + str(loc_ep1)
@@ -84,6 +91,7 @@ def average_data(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb="", learning
     if (len(glob_acc) != 0 &  len(train_acc) & len(train_loss)) :
         with h5py.File("./results/"+'{}.h5'.format(alg,loc_ep1), 'w') as hf:
             hf.create_dataset('rs_glob_acc', data=glob_acc_data)
+            hf.create_dataset('rs_avg_acc', data=avg_acc_data)
             hf.create_dataset('rs_train_acc', data=train_acc_data)
             hf.create_dataset('rs_train_loss', data=train_loss_data)
             hf.close()

@@ -24,7 +24,7 @@ class Server:
         self.beta = beta
         self.L_k = L_k
         self.algorithm = algorithm
-        self.rs_train_acc, self.rs_train_loss, self.rs_glob_acc,self.rs_train_acc_per, self.rs_train_loss_per, self.rs_glob_acc_per = [], [], [], [], [], []
+        self.rs_train_acc, self.rs_train_loss, self.rs_glob_acc,self.rs_train_acc_per, self.rs_train_loss_per, self.rs_glob_acc_per , self.rs_avg_acc = [], [], [], [], [], [], []
         self.times = times
         self.experiment = experiment
         # Initialize the server's grads to zeros
@@ -195,6 +195,7 @@ class Server:
                 hf.create_dataset('rs_glob_acc', data=self.rs_glob_acc)
                 hf.create_dataset('rs_train_acc', data=self.rs_train_acc)
                 hf.create_dataset('rs_train_loss', data=self.rs_train_loss)
+                hf.create_dataset('rs_avg_acc', data=self.rs_avg_acc)
                 hf.close()
         
         # store persionalized value
@@ -277,6 +278,7 @@ class Server:
         glob_acc_avg = np.mean(stats[3])
         # train_loss = np.dot(stats_train[3], stats_train[1])*1.0/np.sum(stats_train[1])
         train_loss = sum([x * y for (x, y) in zip(stats_train[1], stats_train[3])]).item() / np.sum(stats_train[1])
+        self.rs_avg_acc.append(glob_acc_avg)
         self.rs_glob_acc.append(glob_acc)
         self.rs_train_acc.append(train_acc)
         self.rs_train_loss.append(train_loss)
