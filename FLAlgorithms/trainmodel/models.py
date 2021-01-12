@@ -171,14 +171,14 @@ class CNNMnist(nn.Module):
 
 
 class CNNCifar(nn.Module):
-    def __init__(self, args):
+    def __init__(self, num_classes):
         super(CNNCifar, self).__init__()
         self.conv1 = nn.Conv2d(3, 6, 5)
         self.pool = nn.MaxPool2d(2, 2)
         self.conv2 = nn.Conv2d(6, 16, 5)
         self.fc1 = nn.Linear(16 * 5 * 5, 120)
         self.fc2 = nn.Linear(120, 100)
-        self.fc3 = nn.Linear(100, args.num_classes)
+        self.fc3 = nn.Linear(100, num_classes)
 
         self.weight_keys = [['fc1.weight', 'fc1.bias'],
                             ['fc2.weight', 'fc2.bias'],
