@@ -24,7 +24,7 @@ class Server:
         self.beta = beta
         self.L_k = L_k
         self.algorithm = algorithm
-        self.rs_train_acc, self.rs_train_loss, self.rs_glob_acc,self.rs_train_acc_per, self.rs_train_loss_per, self.rs_glob_acc_per , self.rs_avg_acc = [], [], [], [], [], [], []
+        self.rs_train_acc, self.rs_train_loss, self.rs_glob_acc,self.rs_train_acc_per, self.rs_train_loss_per, self.rs_glob_acc_per , self.rs_avg_acc, self.rs_avg_acc_per = [], [], [], [], [], [], [], []
         self.times = times
         self.experiment = experiment
         # Initialize the server's grads to zeros
@@ -206,6 +206,7 @@ class Server:
         alg = alg + "_" + str(self.times)
         if (len(self.rs_glob_acc_per) != 0 &  len(self.rs_train_acc_per) & len(self.rs_train_loss_per)) :
             with h5py.File("./results/"+'{}.h5'.format(alg, self.local_epochs), 'w') as hf:
+                hf.create_dataset('rs_avg_acc', data=self.rs_avg_acc_per)
                 hf.create_dataset('rs_glob_acc', data=self.rs_glob_acc_per)
                 hf.create_dataset('rs_train_acc', data=self.rs_train_acc_per)
                 hf.create_dataset('rs_train_loss', data=self.rs_train_loss_per)
@@ -247,13 +248,15 @@ class Server:
         '''
         num_samples = []
         tot_correct = []
+        mean_accurancy = []
         for c in self.users:
-            ct, ns = c.test_persionalized_model()
+            ct, ns, ma = c.test_persionalized_model()
             tot_correct.append(ct*1.0)
             num_samples.append(ns)
+            mean_accurancy.append(ma)
         ids = [c.id for c in self.users]
 
-        return ids, num_samples, tot_correct
+        return ids, num_samples, tot_correct, mean_accurancy
 
     def train_error_and_loss_persionalized_model(self):
         num_samples = []
@@ -298,6 +301,7 @@ class Server:
         stats_train = self.train_error_and_loss_persionalized_model()
         glob_acc = np.sum(stats[2])*1.0/np.sum(stats[1])
         train_acc = np.sum(stats_train[2])*1.0/np.sum(stats_train[1])
+        glob_acc_avg = np.mean(stats[3])
         # train_loss = np.dot(stats_train[3], stats_train[1])*1.0/np.sum(stats_train[1])
         train_loss = sum([x * y for (x, y) in zip(stats_train[1], stats_train[3])]).item() / np.sum(stats_train[1])
         self.rs_glob_acc_per.append(glob_acc)
@@ -307,8 +311,10 @@ class Server:
             self.experiment.log_metric("glob_acc_persionalized",glob_acc)
             self.experiment.log_metric("train_acc_persionalized",train_acc)
             self.experiment.log_metric("train_loss_persionalized",train_loss)
+            self.experiment.log_metric("glob_persionalized_avg",glob_acc_avg)
         #print("stats_train[1]",stats_train[3][0])
         print("Average Personal Accurancy: ", glob_acc)
+        print("Average Personal Mean Accurancy: ", glob_acc_avg)
         print("Average Personal Trainning Accurancy: ", train_acc)
         print("Average Personal Trainning Loss: ",train_loss)
 

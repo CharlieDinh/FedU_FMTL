@@ -135,7 +135,7 @@ def test_img_local_all_test(net_local_list, args, local_list_users, return_all= 
     if return_all:
         return acc_test_local, loss_test_local
     else: 
-        return float(total_correct)/total_test_sample, loss_test_local.mean()
+        return float(total_correct)/total_test_sample, loss_test_local.mean() , acc_test_local.mean()
         #return acc_test_local.mean(), loss_test_local.mean()
 
 def test_img_local_all_train(net_local_list, args, local_list_users, return_all= False):
@@ -156,7 +156,7 @@ def test_img_local_all_train(net_local_list, args, local_list_users, return_all=
     if return_all:
         return acc_test_local, loss_test_local
     else: 
-        return float(total_correct)/total_test_sample, loss_test_local.mean()
+        return float(total_correct)/total_test_sample, loss_test_local.mean(), acc_test_local.mean()
         #return acc_test_local.mean(), loss_test_local.mean()
 
 def test_img_avg_all(net_glob, net_local_list, args, local_list_users, return_net=False):

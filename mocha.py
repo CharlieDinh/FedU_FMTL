@@ -118,6 +118,7 @@ if __name__ == '__main__':
         glob_acc = []
         train_acc = []
         train_loss = []
+        avg_acc =[]
 
         for iter in range(args.num_global_iters):
             if(experiment):
@@ -140,18 +141,20 @@ if __name__ == '__main__':
                 w_local, loss = local_list_users[user].train(net=net_local_list[user].to(args.device), lr=lr, omega=omega, W_glob=W.clone(), idx=idx, w_glob_keys=w_glob_keys)
 
             # evaluate local model
-            acc_test_local_train, loss_test_local_train = test_img_local_all_train(net_local_list, args, local_list_users)
-            acc_test_local_test, loss_test_local_test = test_img_local_all_test(net_local_list, args, local_list_users)
+            acc_test_local_train, loss_test_local_train, acc_test_local_train_mean = test_img_local_all_train(net_local_list, args, local_list_users)
+            acc_test_local_test, loss_test_local_test, acc_test_local_test_mean = test_img_local_all_test(net_local_list, args, local_list_users)
             glob_acc.append(acc_test_local_test)
+            avg_acc.appen(acc_test_local_test_mean)
             train_acc.append(acc_test_local_train)
             train_loss.append(loss_test_local_train)
             if(experiment):
                 experiment.log_metric("glob_acc",acc_test_local_test)
+                experiment.log_metric("avg_acc",acc_test_local_test_mean)
                 experiment.log_metric("train_acc",acc_test_local_train)
                 experiment.log_metric("train_loss",loss_test_local_train)
                 
             print('Round {:4d}, Training Loss (local): {:.4f}, Training Acc (local): {:.4f} '.format(iter, loss_test_local_train, acc_test_local_train))
-            print('Round {:4d}, Testing Loss (local): {:.4f}, Testing Acc (local): {:.4f}'.format(iter, loss_test_local_test, acc_test_local_test))
+            print('Round {:4d}, Testing Loss (local): {:.4f}, Testing Acc (local): {:.4f}, Testing Acc (mean): {:.4f}'.format(iter, loss_test_local_test, acc_test_local_test, acc_test_local_test_mean))
         
         dir_path = "./results"
         if not os.path.exists(dir_path):
@@ -161,6 +164,7 @@ if __name__ == '__main__':
         alg = alg + "_" + str(run_time)
         if (len(glob_acc) != 0 &  len(train_acc) & len(train_loss)) :
             with h5py.File("./results/"+'{}.h5'.format(alg, args.local_epochs), 'w') as hf:
+                hf.create_dataset('rs_avg_acc', data=avg_acc)
                 hf.create_dataset('rs_glob_acc', data=glob_acc)
                 hf.create_dataset('rs_train_acc', data=train_acc)
                 hf.create_dataset('rs_train_loss', data=train_loss)

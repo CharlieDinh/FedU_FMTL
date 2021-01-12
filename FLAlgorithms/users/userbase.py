@@ -112,7 +112,7 @@ class User:
             #print(self.id + ", Test Accuracy:", test_acc / y.shape[0] )
             #print(self.id + ", Test Loss:", loss)
         self.update_parameters(self.local_model)
-        return test_acc, y.shape[0]
+        return test_acc, y.shape[0] , test_acc / y.shape[0]
 
     def train_error_and_loss_persionalized_model(self):
         self.model.eval()
