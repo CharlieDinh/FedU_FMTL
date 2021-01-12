@@ -45,7 +45,7 @@ class FedLocal(Server):
             self.selected_users = self.select_users(glob_iter, self.num_users)
             # local update at each users
             for user in self.selected_users:
-                user.train(self.local_epochs,self.num_glob_iters)
+                user.train()
             self.evaluate()
             #self.meta_evaluate()
         self.save_results()

@@ -29,7 +29,7 @@ class UserLocal(User):
             for idx, model_grad in enumerate(self.model.parameters()):
                 model_grad.data = new_grads[idx]
 
-    def train(self, epochs):
+    def train(self):
         LOSS = 0
         self.model.train()
         for epoch in range(1, self.local_epochs + 1):

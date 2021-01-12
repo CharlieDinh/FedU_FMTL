@@ -18,7 +18,7 @@ def args_parser():
     parser.add_argument("--num_global_iters", type=int, default=200)
     parser.add_argument("--local_epochs", type=int, default =1)
     parser.add_argument("--optimizer", type=str, default="SGD")
-    parser.add_argument("--algorithm", type=str, default="SSGD",choices=["pFedMe", "pFedMe_p", "PerAvg", "FedAvg", "SSGD", "Mocha"]) 
+    parser.add_argument("--algorithm", type=str, default="SSGD",choices=["pFedMe", "pFedMe_p", "PerAvg", "FedAvg", "SSGD", "Mocha", "Local"]) 
     parser.add_argument("--subusers", type = float, default = 0.1, help="Number of Users per round")
     parser.add_argument("--K", type=int, default=5, help="Computation steps")
     parser.add_argument("--personal_learning_rate", type=float, default=0.01, help="Persionalized learning rate to caculate theta aproximately using K steps")
