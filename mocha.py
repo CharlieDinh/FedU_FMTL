@@ -144,7 +144,7 @@ if __name__ == '__main__':
             acc_test_local_train, loss_test_local_train, acc_test_local_train_mean = test_img_local_all_train(net_local_list, args, local_list_users)
             acc_test_local_test, loss_test_local_test, acc_test_local_test_mean = test_img_local_all_test(net_local_list, args, local_list_users)
             glob_acc.append(acc_test_local_test)
-            avg_acc.appen(acc_test_local_test_mean)
+            avg_acc.append(acc_test_local_test_mean)
             train_acc.append(acc_test_local_train)
             train_loss.append(loss_test_local_train)
             if(experiment):
