@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import os
 import json
 from torch.utils.data import DataLoader
-from FLAlgorithms.optimizers.fedoptimizer import MySGD, FEDLOptimizer
+from FLAlgorithms.optimizers.fedoptimizer import PerFedAvg, FEDLOptimizer
 from FLAlgorithms.users.userbase import User
 
 # Implementation for Per-FedAvg clients
@@ -22,7 +22,7 @@ class UserPerAvg(User):
         else:
             self.loss = nn.NLLLoss()
 
-        self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate)
+        self.optimizer = PerFedAvg(self.model.parameters(), lr=self.learning_rate)
 
     def set_grads(self, new_grads):
         if isinstance(new_grads, nn.Parameter):

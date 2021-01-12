@@ -2,7 +2,7 @@ from torch.optim import Optimizer
 
 
 class MySGD(Optimizer):
-    def __init__(self, params, lr, L_k):
+    def __init__(self, params, lr, L_k = 0):
         defaults = dict(lr=lr, L_k = L_k)
         super(MySGD, self).__init__(params, defaults)
 
@@ -17,6 +17,28 @@ class MySGD(Optimizer):
                 p.data = p.data - group['lr'] * (p.grad.data + group['L_k'] * p.data)
         return loss
 
+
+class PerFedAvg(Optimizer):
+    def __init__(self, params, lr):
+        defaults = dict(lr=lr)
+        super(PerFedAvg, self).__init__(params, defaults)
+
+    def step(self, closure=None, beta = 0):
+        loss = None
+        if closure is not None:
+            loss = closure
+
+        for group in self.param_groups:
+            # print(group)
+            for p in group['params']:
+                if p.grad is None:
+                    continue
+                d_p = p.grad.data
+                if(beta != 0):
+                    p.data.add_(-beta, d_p)
+                else:     
+                    p.data.add_(-group['lr'], d_p)
+        return loss
 
 class FEDLOptimizer(Optimizer):
     def __init__(self, params, lr=0.01, server_grads=None, pre_grads=None, eta=0.1):
