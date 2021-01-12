@@ -49,10 +49,10 @@ class FedSSGD(Server):
             for user in self.selected_users:
                 user.train(self.local_epochs)
                 
-            # Agegrate parameter at each user 
-            for user in self.selected_users:
-                user.aggregate_parameters(self.selected_users, glob_iter, len(self.users))
-                
+            # Agegrate parameter at each user
+            if(self.L_k != 0): # if L_K = 0 it is local model 
+                for user in self.selected_users:
+                    user.aggregate_parameters(self.selected_users, glob_iter, len(self.users))
             self.evaluate()
             #self.meta_evaluate()
         self.save_results()
