@@ -16,6 +16,7 @@ from FLAlgorithms.servers.serverSSGD import FedSSGD
 from FLAlgorithms.servers.servermSSGD import mFedSSGD
 from FLAlgorithms.servers.servermSSGD3 import mFedSSGD3
 from FLAlgorithms.servers.serverlocal import FedLocal
+from FLAlgorithms.servers.serverglobal import FedGlobal
 from utils.model_utils import read_data
 from FLAlgorithms.trainmodel.models import *
 from utils.plot_utils import *
@@ -112,6 +113,10 @@ def main(experiment, dataset, algorithm, model, batch_size, learning_rate, beta,
                 experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(L_k) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
             server = FedLocal(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
 
+        if(algorithm == "Global"):
+            if(commet): 
+                experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(L_k) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+            server = FedGlobal(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i)
 
         server.train()
         server.test()
