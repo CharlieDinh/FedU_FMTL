@@ -16,10 +16,10 @@ class FedSSGD(Server):
         # Initialize data for all  users
         #subset data
         self.sub_data = 1
-        np.random.seed(0)
+        #np.random.seed(0)
         if(self.sub_data):
             total_users = len(dataset[0][0])
-            partion = int(0.8* total_users)
+            partion = int(0.9* total_users)
             randomList = np.random.choice(range(0, total_users), int(0.8*total_users), replace =False)
         
         for i in range(total_users):
