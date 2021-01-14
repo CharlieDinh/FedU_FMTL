@@ -11,17 +11,32 @@ class FedGlobal(Server):
         super().__init__(experiment, device, dataset,algorithm, model[0], batch_size, learning_rate, beta, L_k, num_glob_iters,
                          local_epochs, optimizer, num_users, times)
 
+
+        self.sub_data = 1
+        np.random.seed(0)
+        if(self.sub_data):
+            total_users = len(dataset[0][0])
+            partion = int(0.8* total_users)
+            randomList = np.random.choice(range(0, total_users), int(0.8*total_users), replace =False)
+
         # Initialize data for all  users
         total_users = len(dataset[0][0])
         train_all = []
         test_all = []
-
+        
         for i in range(total_users):
             id, train , test = read_user_data(i, dataset[0], dataset[1])
-            train_all += train
-            test_all += test
+            if(i in randomList and self.sub_data):
+                train_ = train[int(0.95*len(train)):]
+                test_ = test[int(0.8*len(test)):]
+                train_all += train_
+                test_all += test_
+            else:
+                train_all += train
+                test_all += test
 
         id = "0001"
+        
         user = UserGlobal(device, id, train_all, test_all, model, batch_size, learning_rate,beta,L_k, local_epochs, optimizer)
         self.users.append(user)
         self.total_train_samples = len(train_all)

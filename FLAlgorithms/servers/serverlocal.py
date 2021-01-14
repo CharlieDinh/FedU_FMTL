@@ -12,10 +12,21 @@ class FedLocal(Server):
                          local_epochs, optimizer, num_users, times)
 
         # Initialize data for all  users
-        total_users = len(dataset[0][0])
+        self.sub_data = 1
+        np.random.seed(0)
+        if(self.sub_data):
+            total_users = len(dataset[0][0])
+            partion = int(0.8* total_users)
+            randomList = np.random.choice(range(0, total_users), int(0.8*total_users), replace =False)
+        
         for i in range(total_users):
             id, train , test = read_user_data(i, dataset[0], dataset[1])
-            user = UserLocal(device, id, train, test, model, batch_size, learning_rate,beta,L_k, local_epochs, optimizer)
+            if(i in randomList and self.sub_data):
+                train_ = train[int(0.95*len(train)):]
+                test_ = test[int(0.8*len(test)):]
+                user = UserLocal(device, id,train_ , test_, model, batch_size, learning_rate,beta,L_k, local_epochs, optimizer)
+            else:
+                user = UserLocal(device, id, train, test, model, batch_size, learning_rate,beta,L_k, local_epochs, optimizer)
             self.users.append(user)
             self.total_train_samples += user.train_samples
             
