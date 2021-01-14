@@ -67,3 +67,11 @@ python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.01 --per
 python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.02 --num_global_iters 200  --algorithm FedAvg --times 20 --commet 0 --time 20 --gpu 0
 python3 main.py --dataset vehicle_sensor --model mclr --batch_size 20 --learning_rate 0.03 --beta 0.001  --num_global_iters 200 --local_epochs 5 --algorithm PerAvg --commet 0 --time 20 --gpu 0 
 </code></pre>
+
+- MNIST
+<pre><code>
+python3 main.py --dataset Mnist --model mclr --learning_rate 0.02 --num_global_iters 500  --algorithm FedAvg --times 20 --subusers 0.1 --commet 0 --time 20 --gpu 0
+python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --L_k 0.001 --num_global_iters 500  --algorithm SSGD --subusers 0.1 --commet 0 --time 20 --gpu 0
+python3 main.py --dataset Mnist --model mclr --learning_rate 0.01 --personal_learning_rate 0.01 --beta 1 --L_k 15 --num_global_iters 500 --algorithm pFedMe --subusers 0.1 --commet 0 --time 20 --gpu 0
+python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --beta 0.001  --num_global_iters 500 --local_epochs 5 --algorithm PerAvg --subusers 0.1 --commet 0 --time 20 --gpu 1 
+</code></pre>
