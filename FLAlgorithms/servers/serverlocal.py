@@ -21,7 +21,7 @@ class FedLocal(Server):
             
         for i in range(total_users):
             id, train , test = read_user_data(i, dataset[0], dataset[1])
-            if(self.sub_data)
+            if(self.sub_data):
                 if(i in randomList):
                     train_ = train[int(0.95*len(train)):]
                     test_ = test[int(0.8*len(test)):]
