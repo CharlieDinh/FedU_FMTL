@@ -12,13 +12,13 @@ class FedGlobal(Server):
                          local_epochs, optimizer, num_users, times)
 
 
-        self.sub_data = 1
-        np.random.seed(0)
+        self.sub_data = 0
+        total_users = len(dataset[0][0])
+        #np.random.seed(0)
         if(self.sub_data):
-            total_users = len(dataset[0][0])
-            partion = int(0.8* total_users)
-            randomList = np.random.choice(range(0, total_users), int(0.8*total_users), replace =False)
-
+            partion = int(0.9* total_users)
+            randomList = np.random.choice(range(0, total_users), int(0.9*total_users), replace =False)
+            
         # Initialize data for all  users
         total_users = len(dataset[0][0])
         train_all = []
@@ -26,11 +26,12 @@ class FedGlobal(Server):
         
         for i in range(total_users):
             id, train , test = read_user_data(i, dataset[0], dataset[1])
-            if(i in randomList and self.sub_data):
-                train_ = train[int(0.95*len(train)):]
-                test_ = test[int(0.8*len(test)):]
-                train_all += train_
-                test_all += test_
+            if(self.sub_data):
+                if(i in randomList):
+                    train_ = train[int(0.95*len(train)):]
+                    test_ = test[int(0.8*len(test)):]
+                    train_all += train_
+                    test_all += test_
             else:
                 train_all += train
                 test_all += test
