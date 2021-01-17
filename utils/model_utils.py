@@ -155,8 +155,9 @@ def read_cifa_data():
             # l = (2*user+j)%10
             l = (user + j) % 10
             num_samples = int(props[l, user//int(NUM_USERS/10), j])
-            numran = random.randint(1, 10)
-            num_samples = (num_samples) + numran
+            numran1 = random.randint(10, 50)
+            numran2 = random.randint(1, 10)
+            num_samples = (num_samples) * numran2 + numran1 + 100
             if(NUM_USERS <= 20): 
                 num_samples = num_samples * 2
             if idx[l] + num_samples < len(cifa_data[l]):
