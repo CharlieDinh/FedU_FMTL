@@ -81,7 +81,7 @@ python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --beta 0.001  
 - CIFAR10
 <pre><code>
 python3 main.py --dataset Cifar10 --model cnn --learning_rate 0.001 --num_global_iters 1000  --algorithm FedAvg --times 1 --commet 0 --gpu 0 
-python3 main.py --dataset Cifar10 --model cnn --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 0.1
+python3 main.py --dataset Cifar10 --model cnn --learning_rate 0.05 --L_k 0.01 --num_global_iters 1000  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 0.1
 python3 main.py --dataset Cifar10 --model cnn --learning_rate 0.05 --personal_learning_rate 0.01 --beta 1 --L_k 15 --num_global_iters 200 --algorithm pFedMe --commet 0 --time 10 --gpu 0 --subusers 0.1
-python3 main.py --dataset Cifar10 --model cnn --learning_rate 0.05 --beta 0.001  --num_global_iters 100 --local_epochs 5 --algorithm PerAvg --commet 0 --time 5 --gpu 0  --subusers 0.1
+python3 main.py --dataset Cifar10 --model cnn --learning_rate 0.05 --beta 0.001  --num_global_iters 1000 --local_epochs 5 --algorithm PerAvg --commet 0 --time 5 --gpu 0  --subusers 0.1
 </code></pre>
