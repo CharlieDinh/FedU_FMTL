@@ -24,7 +24,7 @@ class LocalUpdateMTL(object):
     def train(self, net, lr=0.1, omega=None, W_glob=None, idx=None, w_glob_keys=None):
         net.train()
         # train and update
-        optimizer = torch.optim.SGD(net.parameters(), lr=lr)
+        optimizer = torch.optim.SGD(net.parameters(), lr=lr )
         epoch_loss = []
         local_eps = self.args.local_epochs
         for iter in range(local_eps):
@@ -47,13 +47,15 @@ class LocalUpdateMTL(object):
 
                 #k = 1000
                 if(self.L_k != 0):
-                    k = int(W.shape[1] * 0.1)
-                    for i in range(k):
+                    index = int(W.shape[1] * 0.1)# + 1
+                    k = W.shape[1] // index
+                    for i in range(index):
                         x = W[i * k:(i+1) * k, :]
                         loss_regularizer += x.mm(omega.to(self.args.device)).mm(x.T).trace()
                     f = (int)(math.log10(W.shape[0])+1) + 1
-                    loss_regularizer *= 100 ** (-f)
-                    #loss = loss + self.L_k *loss_regularizer
+                    loss_regularizer *= self.L_k ** (-f)
+                    #print(loss_regularizer)
+                    loss = loss + loss_regularizer
                 
                 loss.backward()
                 optimizer.step()
