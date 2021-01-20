@@ -44,7 +44,9 @@ class DNN(nn.Module):
         # define network layers
         self.fc1 = nn.Linear(input_dim, mid_dim)
         self.fc2 = nn.Linear(mid_dim, output_dim)
-        
+        self.weight_keys = [['fc1.weight', 'fc1.bias'],
+                            ['fc2.weight', 'fc2.bias']
+                            ]
     def forward(self, x):
         # define forward pass
         x = torch.flatten(x, 1)
