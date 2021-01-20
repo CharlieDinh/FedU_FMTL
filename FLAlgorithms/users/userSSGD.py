@@ -59,17 +59,17 @@ class UserSSGD(User):
                     if(similar <= 0):
                         akl[i] = 0
                     elif(similar == 1):
-                        akl[i] = 1
+                        akl[i] = 0.5
                     else:
-                        akl[i] = 2
+                        akl[i] = 1
                 else: 
-                    akl[i] = 1
+                    akl[i] = 0.5
 
                 for avg, current_task, other_tasks in zip(avg_weight_different, self.model.parameters(),user_list[i].model.parameters()):
                     avg.data += akl[i] * (current_task.data.clone() - other_tasks.data.clone())
         
         for avg, current_task in zip(avg_weight_different, self.model.parameters()):
-            current_task.data = current_task.data - self.learning_rate * self.L_k *avg
+            current_task.data = current_task.data - self.learning_rate * self.L_k * self.beta * self.local_epochs * avg
 
         # update current task follow 15 rulle
         #if(self.beta > 1):
