@@ -16,6 +16,7 @@ class FedSSGD(Server):
         # Initialize data for all  users
         #subset data
         self.sub_data = 0
+        self.data_set_name = dataset[1]
         total_users = len(dataset[0][0])
         #np.random.seed(0)
         if(self.sub_data):
@@ -65,7 +66,7 @@ class FedSSGD(Server):
             # Agegrate parameter at each user
             if(self.L_k != 0): # if L_K = 0 it is local model 
                 for user in self.selected_users:
-                    user.aggregate_parameters(self.selected_users, glob_iter, len(self.users))
+                    user.aggregate_parameters(self.selected_users, glob_iter, len(self.users), self.data_set_name)
             self.evaluate()
             #self.meta_evaluate()
         self.save_results()

@@ -29,25 +29,9 @@ class UserSSGD(User):
             for idx, model_grad in enumerate(self.model.parameters()):
                 model_grad.data = new_grads[idx]
 
-    # def train(self, epochs):
-    #     LOSS = 0
-    #     self.model.train()
-    #     for epoch in range(1, self.local_epochs + 1):
-    #         self.model.train()
-    #         X, y = self.get_next_train_batch()
-    #         self.optimizer.zero_grad()
-    #         output = self.model(X)
-    #         loss = self.loss(output, y)
-    #         loss.backward()
-    #         self.optimizer.step()
-    #         # local model is perci
-    #         self.clone_model_paramenter(self.model.parameters(), self.local_model)
-    #     return LOSS
-    
     def train(self, epochs):
         LOSS = 0
         self.model.train()
-        #self.clone_model_paramenter(self.model.parameters(), self.local_model)
         for epoch in range(1, self.local_epochs + 1):
             self.model.train()
             for X,y in self.trainloader:
@@ -59,26 +43,38 @@ class UserSSGD(User):
                 self.optimizer.step()
         return LOSS
 
-    def aggregate_parameters(self, user_list, global_in, num_clients):
+    def aggregate_parameters(self, user_list, global_in, num_clients, dataset):
         avg_weight_different = copy.deepcopy(list(self.model.parameters()))
-        alpha = np.ones(len(user_list))
+        akl = np.ones(len(user_list))
         for param in avg_weight_different:
             param.data = torch.zeros_like(param.data)
         
         # Calculate the diffence of model between all users or tasks
         for i in range(len(user_list)):
             if(self.id != user_list[i].id):
+                if(dataset == "Mnist"):
+                    y_1 = [e[1] for e in list(self.trainloaderfull.dataset)]
+                    y_2 = [e[1] for e in list(user_list[i].trainloaderfull.dataset)]
+                    similar = len(set(np.array(y_1)).intersection(set(np.array(y_2))))
+                    if(similar <= 0):
+                        akl[i] = 0
+                    elif(similar == 1):
+                        akl[i] = 1
+                    else:
+                        akl[i] = 2
+                else: 
+                    akl[i] = 1
+
                 for avg, current_task, other_tasks in zip(avg_weight_different, self.model.parameters(),user_list[i].model.parameters()):
-                    avg.data += alpha[i] * (current_task.data.clone() - other_tasks.data.clone())
+                    avg.data += akl[i] * (current_task.data.clone() - other_tasks.data.clone())
         
         for avg, current_task in zip(avg_weight_different, self.model.parameters()):
             current_task.data = current_task.data - self.learning_rate * self.L_k *avg
-        
-        #beta = (float)(2 * num_clients)/ (global_in + 2 * num_clients)
 
         # update current task follow 15 rulle
-        #for local, current_task in zip(self.local_model, self.model.parameters()):
-        #    current_task.data = (1 - beta)*local.data + beta * current_task.data
+        #if(self.beta > 1):
+        #    for local, current_task in zip(self.local_model, self.model.parameters()):
+        #        current_task.data = (1 - self.beta)*local.data + self.beta * current_task.data  
         #self.clone_model_paramenter(self.model.parameters(), self.local_model)
         
 

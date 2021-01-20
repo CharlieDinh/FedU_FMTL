@@ -47,6 +47,8 @@ def main(experiment, dataset, algorithm, model, batch_size, learning_rate, beta,
                 model = Mclr_Logistic(100,2).to(device), model
             elif(dataset == "Synthetic"):
                 model = Mclr_Logistic(60,10).to(device), model
+            elif(dataset == "EMNIST"):
+                model = Mclr_Logistic(784,62).to(device), model
             else:#(dataset == "Mnist"):
                 model = Mclr_Logistic().to(device), model
 
@@ -59,6 +61,8 @@ def main(experiment, dataset, algorithm, model, batch_size, learning_rate, beta,
                 model = DNN(100,20,2).to(device), model
             elif(dataset == "Synthetic"):
                 model = DNN(60,20,10).to(device), model
+            elif(dataset == "EMNIST"):
+                model = DNN(784,200,62).to(device), model
             else:#(dataset == "Mnist"):
                 model = DNN2().to(device), model
         
