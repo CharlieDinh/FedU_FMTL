@@ -45,16 +45,16 @@ class LocalUpdateMTL(object):
                 loss_regularizer = 0
                 loss_regularizer += W.norm() ** 2
 
-                #k = 1000
+                k = 1000 # human acitivity
+                #k = 200 # vehical sensor
                 if(self.L_k != 0):
-                    index = int(W.shape[1] * 0.1)# + 1
-                    k = W.shape[1] // index
+                   # print(W.shape[0])
+                    index = int(W.shape[0] // k)
                     for i in range(index):
                         x = W[i * k:(i+1) * k, :]
                         loss_regularizer += x.mm(omega.to(self.args.device)).mm(x.T).trace()
                     f = (int)(math.log10(W.shape[0])+1) + 1
                     loss_regularizer *= self.L_k ** (-f)
-                    #print(loss_regularizer)
                     loss = loss + loss_regularizer
                 
                 loss.backward()
