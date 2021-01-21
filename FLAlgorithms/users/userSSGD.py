@@ -59,11 +59,13 @@ class UserSSGD(User):
                     if(similar <= 0):
                         akl[i] = 0
                     elif(similar == 1):
+                        akl[i] = 0.25
+                    elif(similar == 2):
                         akl[i] = 0.5
                     else:
                         akl[i] = 1
-                else: 
-                    akl[i] = 0.5
+                else: # all user has same akl connection
+                    akl[i] = 0.25
 
                 for avg, current_task, other_tasks in zip(avg_weight_different, self.model.parameters(),user_list[i].model.parameters()):
                     avg.data += akl[i] * (current_task.data.clone() - other_tasks.data.clone())
