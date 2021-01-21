@@ -54,7 +54,7 @@ def main(experiment, dataset, algorithm, model, batch_size, learning_rate, beta,
 
         if(model == "dnn"):
             if(dataset == "human_activity"):
-                model = DNN2(561,100,100,12).to(device), model
+                model = DNN(561,100,12).to(device), model
             elif(dataset == "gleam"):
                 model = DNN(561,20,6).to(device), model
             elif(dataset == "vehicle_sensor"):

@@ -16,7 +16,7 @@ def get_model(args):
 
     elif(args.model == "dnn"):
         if(args.dataset == "human_activity"):
-            model = DNN2(561,100,100,12).to(args.device)
+            model = DNN(561,100,12).to(args.device)
         elif(args.dataset == "gleam"):
             model = DNN(561,20,6).to(args.device)
         elif(args.dataset == "vehicle_sensor"):
