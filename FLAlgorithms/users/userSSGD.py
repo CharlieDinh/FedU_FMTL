@@ -53,20 +53,20 @@ class UserSSGD(User):
         for i in range(len(user_list)):
             if(self.id != user_list[i].id):
                 if(self.K == 0):
-                    akl[self.id][user_list[i].id] = 0.25
+                    akl[int(self.id)][int(user_list[i].id)] = 0.25
                 else:
                     if(dataset == "Mnist"):
                         y_1 = [e[1] for e in list(self.trainloaderfull.dataset)]
                         y_2 = [e[1] for e in list(user_list[i].trainloaderfull.dataset)]
                         similar = len(set(np.array(y_1)).intersection(set(np.array(y_2))))
                         if(similar <= 0):
-                            akl[self.id][user_list[i].id] = 0
+                            akl[int(self.id)][int(user_list[i].id)] = 0
                         elif(similar == 1):
-                            akl[self.id][user_list[i].id] = 0.25
+                            akl[int(self.id)][int(user_list[i].id)] = 0.25
                         elif(similar == 2):
-                            akl[self.id][user_list[i].id] = 0.5
+                            akl[int(self.id)][int(user_list[i].id)] = 0.5
                         else:
-                            akl[self.id][user_list[i].id] = 1
+                            akl[int(self.id)][int(user_list[i].id)] = 1
                     #else: # all user has same akl connection
                     #    akl[self.id][user_list[i].id] = 0.25
 
