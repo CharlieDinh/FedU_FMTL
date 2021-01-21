@@ -58,7 +58,7 @@ train_data = {'users': [], 'user_data':{}, 'num_samples':[]}
 test_data = {'users': [], 'user_data':{}, 'num_samples':[]}
 
 for i in range(NUM_USERS):
-    uname = 'f_{0:05d}'.format(i)
+    uname = i #'f_{0:05d}'.format(i)
 
     X_train, X_test, y_train, y_test = train_test_split(X[i], y[i], train_size=0.75, stratify=y[i])
 

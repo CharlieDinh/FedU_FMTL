@@ -87,7 +87,7 @@ test_data = {'users': [], 'user_data':{}, 'num_samples':[]}
 # Setup 5 users
 # for i in trange(5, ncols=120):
 for i in range(NUM_USERS):
-    uname = 'f_{0:05d}'.format(i)
+    uname = i
     X_train, X_test, y_train, y_test = train_test_split(X[i], y[i], train_size=0.75, stratify=y[i])
 
     train_data["user_data"][uname] = {'x': X_train, 'y': y_train}
