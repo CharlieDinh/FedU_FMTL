@@ -110,7 +110,7 @@ if __name__ == '__main__':
         d = len(W)
         del W
         
-        sub_data = 0
+        sub_data = args.cutoff
         total_users = len(data[0])
         print(total_users)
         if(sub_data):
@@ -174,7 +174,11 @@ if __name__ == '__main__':
             os.makedirs(dir_path)
         alg = args.dataset + "_" + args.algorithm
         alg = alg + "_" + str(args.learning_rate) + "_" + str(args.beta) + "_" + str(args.L_k) + "_" + str(args.subusers) + "u" + "_" + str(args.batch_size) + "b" +  "_" + str(args.local_epochs)
+        
+        if(args.cutoff):
+            alg = alg + "_"+ "subdata"
         alg = alg + "_" + str(run_time)
+        
         if (len(glob_acc) != 0 &  len(train_acc) & len(train_loss)) :
             with h5py.File("./results/"+'{}.h5'.format(alg, args.local_epochs), 'w') as hf:
                 hf.create_dataset('rs_avg_acc', data=avg_acc)
@@ -183,4 +187,4 @@ if __name__ == '__main__':
                 hf.create_dataset('rs_train_loss', data=train_loss)
                 hf.close()
                 
-    average_data(num_users=args.subusers, loc_ep1=args.local_epochs, Numb_Glob_Iters=args.num_global_iters, lamb=args.L_k,learning_rate=args.learning_rate, beta = args.beta, algorithms=args.algorithm, batch_size=args.batch_size, dataset=args.dataset, k = args.K, personal_learning_rate = args.personal_learning_rate,times = args.times)
+    average_data(num_users=args.subusers, loc_ep1=args.local_epochs, Numb_Glob_Iters=args.num_global_iters, lamb=args.L_k,learning_rate=args.learning_rate, beta = args.beta, algorithms=args.algorithm, batch_size=args.batch_size, dataset=args.dataset, k = args.K, personal_learning_rate = args.personal_learning_rate,times = args.times,cutoff = args.cutoff)

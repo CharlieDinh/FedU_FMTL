@@ -27,6 +27,7 @@ class Server:
         self.rs_train_acc, self.rs_train_loss, self.rs_glob_acc,self.rs_train_acc_per, self.rs_train_loss_per, self.rs_glob_acc_per , self.rs_avg_acc, self.rs_avg_acc_per = [], [], [], [], [], [], [], []
         self.times = times
         self.experiment = experiment
+        self.sub_data = 0
         # Initialize the server's grads to zeros
         #for param in self.model.parameters():
         #    param.data = torch.zeros_like(param.data)
@@ -189,6 +190,8 @@ class Server:
         alg = alg + "_" + str(self.learning_rate) + "_" + str(self.beta) + "_" + str(self.L_k) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b" + "_" + str(self.local_epochs)
         if(self.algorithm == "pFedMe" or self.algorithm == "pFedMe_p"):
             alg = alg + "_" + str(self.K) + "_" + str(self.personal_learning_rate)
+        if(self.sub_data):
+            alg = alg + "_" + "subdata"
         alg = alg + "_" + str(self.times)
         if (len(self.rs_glob_acc) != 0 &  len(self.rs_train_acc) & len(self.rs_train_loss)) :
             with h5py.File("./results/"+'{}.h5'.format(alg, self.local_epochs), 'w') as hf:
@@ -280,7 +283,8 @@ class Server:
         train_acc = np.sum(stats_train[2])*1.0/np.sum(stats_train[1])
         glob_acc_avg = np.mean(stats[3])
         # train_loss = np.dot(stats_train[3], stats_train[1])*1.0/np.sum(stats_train[1])
-        train_loss = sum([x * y for (x, y) in zip(stats_train[1], stats_train[3])]).item() / np.sum(stats_train[1])
+        #train_loss = sum([x * y for (x, y) in zip(stats_train[1], stats_train[3])]).item() / np.sum(stats_train[1])
+        train_loss = np.mean(stats_train[3])
         self.rs_avg_acc.append(glob_acc_avg)
         self.rs_glob_acc.append(glob_acc)
         self.rs_train_acc.append(train_acc)

@@ -9,13 +9,13 @@ import numpy as np
 # Implementation for FedAvg Server
 
 class FedSSGD(Server):
-    def __init__(self,experiment, device, dataset,algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, num_users, times):
+    def __init__(self,experiment, device, dataset,algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, num_users, times, cutoff):
         super().__init__(experiment, device, dataset,algorithm, model[0], batch_size, learning_rate, beta, L_k, num_glob_iters,
                          local_epochs, optimizer, num_users, times)
 
         # Initialize data for all  users
         #subset data
-        self.sub_data = 0
+        self.sub_data = cutoff
         self.data_set_name = dataset[1]
         total_users = len(dataset[0][0])
         #np.random.seed(0)
@@ -36,7 +36,7 @@ class FedSSGD(Server):
             self.total_train_samples += user.train_samples
             
         print("Number of users / total users:",num_users, " / " ,total_users)
-        print("Finished creating FedAvg server.")
+        print("Finished creating SSGD server.")
 
     def send_grads(self):
         assert (self.users is not None and len(self.users) > 0)

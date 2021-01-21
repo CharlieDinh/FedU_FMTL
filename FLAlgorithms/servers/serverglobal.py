@@ -7,12 +7,11 @@ from utils.model_utils import read_data, read_user_data
 import numpy as np
 
 class FedGlobal(Server):
-    def __init__(self,experiment, device, dataset,algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, num_users, times):
-        super().__init__(experiment, device, dataset,algorithm, model[0], batch_size, learning_rate, beta, L_k, num_glob_iters,
-                         local_epochs, optimizer, num_users, times)
+    def __init__(self,experiment, device, dataset,algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, num_users, times, cutoff):
+        super().__init__(experiment, device, dataset,algorithm, model[0], batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, num_users, times)
 
 
-        self.sub_data = 0
+        self.sub_data = cutoff
         total_users = len(dataset[0][0])
         #np.random.seed(0)
         if(self.sub_data):

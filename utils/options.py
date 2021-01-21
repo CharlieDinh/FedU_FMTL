@@ -25,6 +25,7 @@ def args_parser():
     parser.add_argument("--times", type=int, default=1, help="running time")
     parser.add_argument("--commet", type=int, default=0, help="log data to commet")
     parser.add_argument("--gpu", type=int, default=1, help="Which GPU to run the experiments")
+    parser.add_argument("--cutoff", type=int, default=0, help="Cutoff data sample")
     args = parser.parse_args()
 
     args = parser.parse_args()

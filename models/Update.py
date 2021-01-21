@@ -20,6 +20,7 @@ class LocalUpdateMTL(object):
         #self.ldr_test = DataLoader(data_test, batch_size=len(data_test), shuffle=True)
         self.pretrain = False
         self.L_k = args.L_k
+        self.K = args.K
 
     def train(self, net, lr=0.1, omega=None, W_glob=None, idx=None, w_glob_keys=None):
         net.train()
@@ -45,8 +46,9 @@ class LocalUpdateMTL(object):
                 loss_regularizer = 0
                 loss_regularizer += W.norm() ** 2
 
-                k = 1000 # human acitivity
-                #k = 200 # vehical sensor
+                k = self.K 
+                #k = 1000 human acitivity
+                #k = 200  vehical sensor
                 if(self.L_k != 0):
                    # print(W.shape[0])
                     index = int(W.shape[0] // k)

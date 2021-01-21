@@ -9,7 +9,7 @@ from utils.model_utils import read_data, read_user_data
 
 class PerAvg(Server):
     def __init__(self,experiment, device, dataset,algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters,
-                 local_epochs, optimizer, num_users,times):
+                 local_epochs, optimizer, num_users,times, cutoff):
         super().__init__(experiment, device, dataset,algorithm, model[0], batch_size, learning_rate, beta, L_k, num_glob_iters,
                          local_epochs, optimizer, num_users, times)
 
