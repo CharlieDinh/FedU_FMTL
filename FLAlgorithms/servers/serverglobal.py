@@ -27,13 +27,11 @@ class FedGlobal(Server):
             id, train , test = read_user_data(i, dataset[0], dataset[1])
             if(self.sub_data):
                 if(i in randomList):
-                    train_ = train[int(0.95*len(train)):]
-                    test_ = test[int(0.8*len(test)):]
-                    train_all += train_
-                    test_all += test_
-            else:
-                train_all += train
-                test_all += test
+                    train = train[int(0.95*len(train)):]
+                    test = test[int(0.8*len(test)):]
+
+            train_all += train
+            test_all += test
 
         id = "0001"
         

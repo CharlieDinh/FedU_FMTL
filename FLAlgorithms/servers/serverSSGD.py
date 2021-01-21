@@ -27,11 +27,11 @@ class FedSSGD(Server):
             id, train , test = read_user_data(i, dataset[0], dataset[1])
             if(self.sub_data):
                 if(i in randomList):
-                    train_ = train[int(0.95*len(train)):]
-                    test_ = test[int(0.8*len(test)):]
-                    user = UserSSGD(device, id,train_ , test_, model, batch_size, learning_rate,beta,L_k, local_epochs, optimizer)
-            else:
-                user = UserSSGD(device, id, train, test, model, batch_size, learning_rate,beta,L_k, local_epochs, optimizer)
+                    train = train[int(0.95*len(train)):]
+                    test = test[int(0.8*len(test)):]
+                
+            user = UserSSGD(device, id, train, test, model, batch_size, learning_rate,beta,L_k, local_epochs, optimizer)
+            
             self.users.append(user)
             self.total_train_samples += user.train_samples
             
