@@ -60,6 +60,7 @@ if __name__ == '__main__':
 
     # build model
     for run_time in range(args.times):
+        print("-------------------Running time------------------",run_time)
         net_glob = get_model(args)
         net_glob.train()
 
