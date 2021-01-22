@@ -98,7 +98,7 @@ class User:
             loss += self.loss(output, y)
             #print(self.id + ", Train Accuracy:", train_acc)
             #print(self.id + ", Train Loss:", loss)
-        return train_acc, loss.data , self.train_samples
+        return train_acc, loss.data.tolist() , self.train_samples
     
     def test_persionalized_model(self):
         self.model.eval()
