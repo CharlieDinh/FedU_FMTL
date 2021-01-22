@@ -46,7 +46,8 @@ class LocalUpdateMTL(object):
                 loss_regularizer = 0
                 loss_regularizer += W.norm() ** 2
 
-                k = self.K 
+                k = self.K
+                #k = 2000 MNIST
                 #k = 1000 human acitivity
                 #k = 200  vehical sensor
                 if(self.L_k != 0):
