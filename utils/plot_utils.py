@@ -257,7 +257,7 @@ def plot_summary_vehicle_eta(num_users, loc_ep1, Numb_Glob_Iters, lamb, learning
     plt.ylabel('Training Loss')
     plt.xlabel('Global rounds')
     #plt.ylim([0.05,  0.6]) # non convex-case
-    plt.ylim([0.15,  0.42]) # convex-case
+    plt.ylim([0.14,  0.6]) # convex-case
     plt.savefig(dataset.upper() + "_eta_train_convex.pdf", bbox_inches="tight")
     plt.figure(2,figsize=(5, 5))
     plt.grid(True)
