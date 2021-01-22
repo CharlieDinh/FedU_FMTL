@@ -24,7 +24,7 @@ def args_parser():
     parser.add_argument("--personal_learning_rate", type=float, default=0.01, help="Persionalized learning rate to caculate theta aproximately using K steps")
     parser.add_argument("--times", type=int, default=1, help="running time")
     parser.add_argument("--commet", type=int, default=0, help="log data to commet")
-    parser.add_argument("--gpu", type=int, default=1, help="Which GPU to run the experiments")
+    parser.add_argument("--gpu", type=int, default=0, help="Which GPU to run the experiments")
     parser.add_argument("--cutoff", type=int, default=0, help="Cutoff data sample")
     args = parser.parse_args()
 
