@@ -47,7 +47,7 @@ def get_all_training_data_value(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, la
         if(algorithms == "pFedMe" or algorithms == "pFedMe_p"):
             algorithms_list[i] = algorithms_list[i] + "_" + string_learning_rate + "_" + str(num_users) + "u" + "_" + str(batch_size) + "b" + "_" +str(loc_ep1) + "_"+ str(k)  + "_"+ str(personal_learning_rate)
         else:
-            algorithms_list[i] = algorithms_list[i] + "_" + string_learning_rate + "_" + str(num_users) + "u" + "_" + str(batch_size) + "b"  "_" +str(loc_ep1) 
+            algorithms_list[i] = algorithms_list[i] + "_" + string_learning_rate + "_" + str(num_users) + "u" + "_" + str(batch_size) + "b"  "_" +str(loc_ep1)  + "_"+ str(k)
         if(cutoff):
             algorithms_list[i] += "_" + "subdata"
         algorithms_list[i] = algorithms_list[i] +  "_"  + str(i)
@@ -87,7 +87,7 @@ def average_data(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb="", learning
     print("Mean avg:", np.mean(max_avg))
 
     alg = dataset + "_" + algorithms
-    alg = alg + "_" + str(learning_rate) + "_" + str(beta) + "_" + str(lamb) + "_" + str(num_users) + "u" + "_" + str(batch_size) + "b" + "_" + str(loc_ep1)
+    alg = alg + "_" + str(learning_rate) + "_" + str(beta) + "_" + str(lamb) + "_" + str(num_users) + "u" + "_" + str(batch_size) + "b" + "_" + str(loc_ep1) + "_" + str(k)
     if(algorithms == "pFedMe" or algorithms == "pFedMe_p"):
         alg = alg + "_" + str(k) + "_" + str(personal_learning_rate)
     alg = alg + "_" + "avg"
