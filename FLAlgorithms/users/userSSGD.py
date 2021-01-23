@@ -54,7 +54,20 @@ class UserSSGD(User):
             if(self.id != user_list[i].id):
                 if(self.K == 0):
                     akl[int(self.id)][int(user_list[i].id)] = 0.25
-                else:
+                elif(self.K == 1):
+                    if(self.train_samples > 300):
+                        akl[int(self.id)][int(user_list[i].id)] = 0.25
+                    elif(user_list[i].train_samples < 10):
+                        akl[int(self.id)][int(user_list[i].id)] = 0.0
+                    elif(10 <= user_list[i].train_samples < 100):
+                        akl[int(self.id)][int(user_list[i].id)] = 0.25
+                    elif(100 <= user_list[i].train_samples < 1000):
+                        akl[int(self.id)][int(user_list[i].id)] = 0.5
+                    elif(1000 <= user_list[i].train_samples < 5000):
+                        akl[int(self.id)][int(user_list[i].id)] = 0.75
+                    else:
+                        akl[int(self.id)][int(user_list[i].id)] = 1
+                elif(self.K == 2): # depen on similarity
                     if(dataset == "Mnist"):
                         y_1 = [e[1] for e in list(self.trainloaderfull.dataset)]
                         y_2 = [e[1] for e in list(user_list[i].trainloaderfull.dataset)]
@@ -67,9 +80,9 @@ class UserSSGD(User):
                             akl[int(self.id)][int(user_list[i].id)] = 0.5
                         else:
                             akl[int(self.id)][int(user_list[i].id)] = 1
-                    #else: # all user has same akl connection
-                    #    akl[self.id][user_list[i].id] = 0.25
 
+                # K == 3 : akl will be generate randomly for MNIST
+   
                 for avg, current_task, other_tasks in zip(avg_weight_different, self.model.parameters(),user_list[i].model.parameters()):
                     avg.data += akl[int(self.id)][int(user_list[i].id)] * (current_task.data.clone() - other_tasks.data.clone())
         
@@ -81,7 +94,3 @@ class UserSSGD(User):
         #    for local, current_task in zip(self.local_model, self.model.parameters()):
         #        current_task.data = (1 - self.beta)*local.data + self.beta * current_task.data  
         #self.clone_model_paramenter(self.model.parameters(), self.local_model)
-        
-
-
-

@@ -24,7 +24,7 @@ class FedSSGD(Server):
         N = total_users
         b = np.random.uniform(0,1,size=(N,N))
         b_symm = (b + b.T)/2
-        b_symm[b_symm < 0.2] = 0
+        b_symm[b_symm < 0.25] = 0
         self.alk_connection = b_symm
         #np.random.seed(0)
         if(self.sub_data):
