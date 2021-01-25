@@ -187,9 +187,11 @@ class Server:
         if not os.path.exists(dir_path):
             os.makedirs(dir_path)
         alg = self.dataset[1] + "_" + self.algorithm
-        alg = alg + "_" + str(self.learning_rate) + "_" + str(self.beta) + "_" + str(self.L_k) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b" + "_" + str(self.local_epochs) + "_" + str(self.K)
+        alg = alg + "_" + str(self.learning_rate) + "_" + str(self.beta) + "_" + str(self.L_k) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b" + "_" + str(self.local_epochs) 
         if(self.algorithm == "pFedMe" or self.algorithm == "pFedMe_p"):
             alg = alg + "_" + str(self.K) + "_" + str(self.personal_learning_rate)
+        elif(self.algorithm == SSGD):
+             alg = alg + "_" + str(self.K)
         if(self.sub_data):
             alg = alg + "_" + "subdata"
         alg = alg + "_" + str(self.times)
