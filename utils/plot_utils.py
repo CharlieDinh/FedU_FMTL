@@ -51,8 +51,10 @@ def get_all_training_data_value(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, la
         string_learning_rate = string_learning_rate + "_" +str(beta) + "_" +str(lamb)
         if(algorithms == "pFedMe" or algorithms == "pFedMe_p"):
             algorithms_list[i] = algorithms_list[i] + "_" + string_learning_rate + "_" + str(num_users) + "u" + "_" + str(batch_size) + "b" + "_" +str(loc_ep1) + "_"+ str(k)  + "_"+ str(personal_learning_rate)
-        else:
+        elif(algorithms == "SSGD"):
             algorithms_list[i] = algorithms_list[i] + "_" + string_learning_rate + "_" + str(num_users) + "u" + "_" + str(batch_size) + "b"  "_" +str(loc_ep1)  + "_"+ str(k)
+        else:
+            algorithms_list[i] = algorithms_list[i] + "_" + string_learning_rate + "_" + str(num_users) + "u" + "_" + str(batch_size) + "b"  "_" +str(loc_ep1)
         if(cutoff):
             algorithms_list[i] += "_" + "subdata"
         algorithms_list[i] = algorithms_list[i] +  "_"  + str(i)
