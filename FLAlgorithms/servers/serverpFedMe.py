@@ -53,15 +53,10 @@ class pFedMe(Server):
 
             # do update for all users not only selected users
             #for user in self.users:
-            #    user.train(self.local_epochs) #* user.train_samples
-            processes = []
+            #    user.train(self.local_epochs) #* user.train_sample
 
             for user in self.users:
-                p = mp.Process(target=user.train(self.local_epochs))
-                p.start()
-                processes.append(p)
-            for p in processes:
-                p.join()
+                user.train(self.local_epochs) 
             # choose several users to send back upated model to server
             # self.personalized_evaluate()
             self.selected_users = self.select_users(glob_iter,self.num_users)
