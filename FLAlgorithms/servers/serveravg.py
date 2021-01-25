@@ -14,6 +14,7 @@ class FedAvg(Server):
         super().__init__(experiment, device, dataset,algorithm, model[0], batch_size, learning_rate, beta, L_k, num_glob_iters,local_epochs, optimizer, num_users, times)
 
         # Initialize data for all  users
+        self.K = 0
         total_users = len(dataset[0][0])
         for i in range(total_users):
             id, train , test = read_user_data(i, dataset[0], dataset[1])

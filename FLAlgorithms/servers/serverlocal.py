@@ -12,6 +12,7 @@ class FedLocal(Server):
                          local_epochs, optimizer, num_users, times)
 
         # Initialize data for all  users
+        self.K = 0
         self.sub_data = cutoff
         total_users = len(dataset[0][0])
         #np.random.seed(0)

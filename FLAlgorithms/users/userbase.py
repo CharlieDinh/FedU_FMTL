@@ -127,7 +127,7 @@ class User:
             #print(self.id + ", Train Accuracy:", train_acc)
             #print(self.id + ", Train Loss:", loss)
         self.update_parameters(self.local_model)
-        return train_acc, loss , self.train_samples
+        return train_acc, loss.data.tolist() , self.train_samples
     
     def get_next_train_batch(self):
         if(self.batch_size == 0):
