@@ -52,22 +52,8 @@ class FedAvg(Server):
             #NOTE: this is required for the ``fork`` method to work
             for user in self.selected_users:
                 user.train(self.local_epochs)
-            processes = []
-            for user in self.selected_users:
-                p = mp.Process(target=user.train(self.local_epochs))
-                p.start()
-                processes.append(p)
-            for p in processes:
-                p.join()
-
-            #for user in self.selected_users:
-            #    user.train(self.local_epochs) #* user.train_samples
-
 
             self.aggregate_parameters()
-            #loss_ /= self.total_train_samples
-            #loss.append(loss_)
-            #print(loss_)
-        #print(loss)
+            
         self.save_results()
         self.save_model()
