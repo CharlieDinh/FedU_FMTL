@@ -65,10 +65,10 @@ python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --L_k 0.01 --n
 python3 main.py --dataset Mnist --model mclr --learning_rate 0.01 --personal_learning_rate 0.01 --beta 1 --L_k 15 --num_global_iters 200 --algorithm pFedMe  --time 10 --subusers 0.1
 python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --beta 0.001  --num_global_iters 200 --local_epochs 5 --algorithm PerAvg --subusers 0.1 --time 10  --subusers 0.1
 
-python3 main.py --dataset Cifar10 --model cnn --learning_rate 0.001 --num_global_iters 200  --algorithm FedAvg --times 10 --subusers 0.1
-python3 main.py --dataset Cifar10 --model cnn --learning_rate 0.03 --L_k 0.02 --num_global_iters 200  --algorithm SSGD --time 10 --subusers 0.1
-python3 main.py --dataset Cifar10 --model cnn --learning_rate 0.05 --personal_learning_rate 0.01 --beta 1 --L_k 15 --num_global_iters 200 --algorithm pFedMe --time 10 --subusers 0.1
-python3 main.py --dataset Cifar10 --model cnn --learning_rate 0.05 --beta 0.001  --num_global_iters 200 --local_epochs 5 --algorithm PerAvg --time 10 --subusers 0.1
+python3 main.py --dataset Cifar10 --model cnn --learning_rate 0.005 --num_global_iters 200  --algorithm FedAvg --times 10 --subusers 0.1
+python3 main.py --dataset Cifar10 --model cnn --learning_rate 0.01 --L_k 0.02 --num_global_iters 200  --algorithm SSGD --time 10 --subusers 0.1
+python3 main.py --dataset Cifar10 --model cnn --learning_rate 0.01 --personal_learning_rate 0.01 --beta 1 --L_k 15 --num_global_iters 200 --algorithm pFedMe --time 10 --subusers 0.1
+python3 main.py --dataset Cifar10 --model cnn --learning_rate 0.01 --beta 0.001  --num_global_iters 200 --local_epochs 5 --algorithm PerAvg --time 10 --subusers 0.1
 </code></pre>
 
 - Effect of eta
