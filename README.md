@@ -21,6 +21,7 @@ Download Link: https://drive.google.com/drive/folders/1DZm7kQQqlDspwd4Q4nt6in6hv
 # Produce experiments and figures
 
 - Table comparison for Multi-Task Learning
+
                               | Dataset        | Algorithm |         Test accuracy        |
                               |----------------|-----------|---------------|--------------|
                               |                            | Convex        | Non Convex   |
@@ -36,6 +37,7 @@ Download Link: https://drive.google.com/drive/folders/1DZm7kQQqlDspwd4Q4nt6in6hv
                               |                | Local     | 88.16 ± 0.05  | 92.10 ± 0.06 |
                               |                | Global    | 80.21 ± 0.12  | 83.00 ± 0.11 |
                               |----------------|-----------|---------------|--------------|
+                              
 - Table comparison for Persionalized Federated Learning
 
 - Human Activity
