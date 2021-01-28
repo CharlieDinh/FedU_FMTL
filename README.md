@@ -35,7 +35,18 @@ Download Link: https://drive.google.com/drive/folders/1DZm7kQQqlDspwd4Q4nt6in6hv
                               |                | Local     | 88.16 ± 0.05  | 92.10 ± 0.06 |
                               |                | Global    | 80.21 ± 0.12  | 83.00 ± 0.11 |
                               |----------------|-----------|---------------|--------------|
-                              
+
+<pre><code>
+python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm SSGD  --time 10  --subusers 1
+python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm Local --time 10  --subusers 1
+python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm Global --time 10 --subusers 1
+python3 mocha.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 100 --K 1000 --num_global_iters 200  --algorithm Mocha --time 10 --subusers 1
+
+python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm SSGD  --time 10  --subusers 1
+python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm Local --time 10  --subusers 1
+python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm Global --time 10 --subusers 1
+</code></pre>
+ 
 - Table comparison for Persionalized Federated Learning
 
                               | Algorithm  |            Test accuracy     |
