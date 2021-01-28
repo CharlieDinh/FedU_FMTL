@@ -38,6 +38,15 @@ Download Link: https://drive.google.com/drive/folders/1DZm7kQQqlDspwd4Q4nt6in6hv
                               
 - Table comparison for Persionalized Federated Learning
 
+                              | Algorithm  |            Test accuracy     |
+                              |------------|---------------|--------------|
+                              |            | MNIST         | CIFAR10      |
+                              | FedU       | 97.84 ± 0.02  | 79.45 ± 0.02 |
+                              | MOCHA      | 97.80 ± 0.02  |              |
+                              | pFedMe     | 95.38 ± 0.09  | 78.70 ± 0.05 |
+                              | Per-FedAvg | 91.77 ± 0.23  | 67.61 ± 0.03 |
+                              | FedAvg     | 90.14 ± 0.61  | 41.01 ± 1.03 |
+
 - Human Activity
 Convex
 <pre><code>
