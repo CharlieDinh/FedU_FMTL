@@ -26,8 +26,6 @@ Download Link: https://drive.google.com/drive/folders/1DZm7kQQqlDspwd4Q4nt6in6hv
                               |----------------|-----------|---------------|--------------|
                               |                            | Convex        | Non Convex   |
                               |----------------|-----------|---------------|--------------|
-                              | Human Activity | FedU      |               |              |
-                              |                | MOCHA     |               |              |
                               | Human Activity | FedU      | 99.10 ± 0.18  | 99.21 ± 0.15 |
                               |                | MOCHA     | 98.79 ± 0.04  |              |
                               |                | Local     | 98.29 ± 0.01  | 98.34 ± 0.03 |
