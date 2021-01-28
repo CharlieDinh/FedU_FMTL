@@ -1,4 +1,4 @@
-# Multitask Federated Learning
+# FedU: A Unified Framework for Federated Multi-Task Learning with Laplacian Regularization
 This repository implements all experiments in the paper the ** FedU: A Unified Framework for Federated Multi-Task Learning with Laplacian Regularization **.
   
 Authors: 
