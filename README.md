@@ -1,5 +1,5 @@
 # Multitask Federated Learning
-This repository implements all experiments in the paper the ** Multitask for Federated Learning **.
+This repository implements all experiments in the paper the ** FedU: A Unified Framework for Federated Multi-Task Learning with Laplacian Regularization **.
   
 Authors: 
 
@@ -13,12 +13,9 @@ Authors:
 # Dataset: We use 4 datasets:
 
 Download Link: https://drive.google.com/drive/folders/1DZm7kQQqlDspwd4Q4nt6in6hvcMgtKs8?usp=sharing
-- Human Activity Recognition (30 clients):
-
-- Sensor (23 clients):
-
-- MNIST (100 clients): 
-
+- Human Activity Recognition (30 clients)
+- Sensor (23 clients)
+- MNIST (100 clients)
 - CIFAR (20 clients)
 
 # Produce experiments and figures
