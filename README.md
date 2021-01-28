@@ -10,7 +10,7 @@ Authors:
 
 - The code can be run on any pc, doesn't require GPU.
   
-# Dataset: We use 4 datasets:
+# Dataset:
 
 - Human Activity Recognition (30 clients)
 - Sensor (23 clients)
