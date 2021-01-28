@@ -21,7 +21,21 @@ Download Link: https://drive.google.com/drive/folders/1DZm7kQQqlDspwd4Q4nt6in6hv
 # Produce experiments and figures
 
 - Table comparison for Multi-Task Learning
-
+                              | Dataset        | Algorithm |         Test accuracy        |
+                              |----------------|-----------|---------------|--------------|
+                              |                            | Convex        | Non Convex   |
+                              |----------------|-----------|---------------|--------------|
+                              | Human Activity | FedU      |               |              |
+                              |                | MOCHA     |               |              |
+                              | Human Activity | FedU      | 99.10 ± 0.18  | 99.21 ± 0.15 |
+                              |                | MOCHA     | 98.79 ± 0.04  |              |
+                              |                | Local     | 98.29 ± 0.01  | 98.34 ± 0.03 |
+                              |                | Global    | 93.79 ± 0.27  | 94.58 ± 0.16 |
+                              | Vehicle Sensor | FedU      | 91.16 ± 0.02  | 95.43 ± 0.09 |
+                              |                | MOCHA     | 90.94 ± 0.05  |              |
+                              |                | Local     | 88.16 ± 0.05  | 92.10 ± 0.06 |
+                              |                | Global    | 80.21 ± 0.12  | 83.00 ± 0.11 |
+                              |----------------|-----------|---------------|--------------|
 - Table comparison for Persionalized Federated Learning
 
 - Human Activity
