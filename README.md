@@ -71,11 +71,9 @@ python3 main.py --dataset Cifar10 --model cnn --learning_rate 0.01 --personal_le
 python3 main.py --dataset Cifar10 --model cnn --learning_rate 0.01 --beta 0.001  --num_global_iters 200 --local_epochs 5 --algorithm PerAvg --time 10 --subusers 0.1
 </code></pre>
 
-- Effect of eta
-- Effect of A_kl
+- Effect of eta:
 
 - Human Activity
-
 Convex
 <pre><code>
 python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.001 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1
@@ -132,7 +130,33 @@ python3 mocha.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_
 python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 0.1
 </code></pre>
 
+- MNIST
+Convex
+<pre><code>
+python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --L_k 0.001 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --L_k 0.005 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --L_k 0.05 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
 
+python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm Local --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm Global --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+python3 mocha.py --dataset Mnist --model mclr --learning_rate 0.05 --L_k 100 --K 1000 --num_global_iters 200  --algorithm Mocha --commet 0 --time 10 --gpu 0 --subusers 1
+</code></pre>
+
+NonConvex
+Convex
+<pre><code>
+python3 main.py --dataset Mnist --model dnn --learning_rate 0.03 --L_k 0.001 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+python3 main.py --dataset Mnist --model dnn --learning_rate 0.03 --L_k 0.005 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+python3 main.py --dataset Mnist --model dnn --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+python3 main.py --dataset Mnist --model dnn --learning_rate 0.03 --L_k 0.05 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+
+python3 main.py --dataset Mnist --model dnn --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm Local --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+python3 main.py --dataset Mnist --model dnn --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm Global --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+python3 mocha.py --dataset Mnist --model dnn --learning_rate 0.05 --L_k 100 --K 1000 --num_global_iters 200  --algorithm Mocha --commet 0 --time 10 --gpu 0 --subusers 1
+</code></pre>
+
+- Effect of A_kl
 
 <pre><code>
 python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 0.1
