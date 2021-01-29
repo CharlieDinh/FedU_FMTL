@@ -4,7 +4,7 @@ This repository implements all experiments in the paper the **FedU: A Unified Fr
 Authors: 
 
 # Software requirements:
-- numpy, scipy, torch, Pillow, matplotlib.
+- numpy, scipy, torch, Pillow, matplotlib, tqdm, pandas, h5py, comet_ml
 
 - To download the dependencies: **pip3 install -r requirements.txt**
 
