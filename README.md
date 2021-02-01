@@ -76,49 +76,49 @@ Download Link: https://drive.google.com/drive/folders/1DZm7kQQqlDspwd4Q4nt6in6hv
 ### Human Activity
 - Convex
     <pre><code>
-    python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.001 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1
-    python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1
-    python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1
-    python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1
+    python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.001 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+    python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+    python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+    python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
 
-    python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm Local --commet 0 --time 10 --gpu 0 --subusers 1
-    python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm Global --commet 0 --time 10 --gpu 0 --subusers 1
-    python3 mocha.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 100 --K 1000 --num_global_iters 200  --algorithm Mocha --commet 0 --time 10 --gpu 0 --subusers 1
+    python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm Local --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+    python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm Global --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+    python3 mocha.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 100 --K 1000 --num_global_iters 200  --algorithm Mocha --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
     </code></pre>
 
 - Non Convex
     <pre><code>
-    python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.001 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1
-    python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1
-    python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1
-    python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1
+    python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.001 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+    python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+    python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+    python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
 
-    python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm Local --commet 0 --time 10 --gpu 0 --subusers 1
-    python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm Global --commet 0 --time 10 --gpu 0 --subusers 1
+    python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm Local --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+    python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm Global --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
     </code></pre>
 
 ### Vehicle Sensor Activity
 - Convex
     <pre><code>
-    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.001 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1
-    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1
-    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1
-    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1
+    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.001 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
 
-    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm Local --commet 0 --time 10 --gpu 0 --subusers 1
-    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm Global --commet 0 --time 10 --gpu 0 --subusers 1
-    python3 mocha.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 100 --K 200 --num_global_iters 200  --algorithm Mocha --commet 0 --time 10 --gpu 0 --subusers 1
+    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm Local --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm Global --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+    python3 mocha.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 100 --K 200 --num_global_iters 200  --algorithm Mocha --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
     </code></pre>
 
 - Non-Convex
     <pre><code>
-    python3 main.py --dataset vehicle_sensor --model dnn --learning_rate 0.05 --L_k 0.001 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1
-    python3 main.py --dataset vehicle_sensor --model dnn --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1
-    python3 main.py --dataset vehicle_sensor --model dnn --learning_rate 0.05 --L_k 0.1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1
-    python3 main.py --dataset vehicle_sensor --model dnn --learning_rate 0.05 --L_k 1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1
+    python3 main.py --dataset vehicle_sensor --model dnn --learning_rate 0.05 --L_k 0.001 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+    python3 main.py --dataset vehicle_sensor --model dnn --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+    python3 main.py --dataset vehicle_sensor --model dnn --learning_rate 0.05 --L_k 0.1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+    python3 main.py --dataset vehicle_sensor --model dnn --learning_rate 0.05 --L_k 1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
 
-    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm Local --commet 0 --time 10 --gpu 0 --subusers 1
-    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm Global --commet 0 --time 10 --gpu 0 --subusers 1
+    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm Local --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
+    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm Global --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
     </code></pre>
 
 ### MNIST
@@ -146,6 +146,53 @@ Download Link: https://drive.google.com/drive/folders/1DZm7kQQqlDspwd4Q4nt6in6hv
     </code></pre>
 
 ## Effect of A_kl
+
+### Human Activity
+- Convex
+    <pre><code>
+    python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --K 0 --cutoff 1
+    python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --K 1 --cutoff 1
+    python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --K 2 --cutoff 1
+    </code></pre>
+
+- Non Convex
+    <pre><code>
+    python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --K 0 --cutoff 1
+    python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --K 1 --cutoff 1
+    python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.1 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --K 2 --cutoff 1
+    </code></pre>
+
+### Vehicle Sensor Activity
+- Convex
+    <pre><code>
+    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --K 0 --cutoff 1
+    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --K 1 --cutoff 1
+    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --K 2 --cutoff 1
+    </code></pre>
+
+- Non-Convex
+    <pre><code>
+    python3 main.py --dataset vehicle_sensor --model dnn --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --K 0 --cutoff 1
+    python3 main.py --dataset vehicle_sensor --model dnn --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --K 1 --cutoff 1
+    python3 main.py --dataset vehicle_sensor --model dnn --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --K 2 --cutoff 1
+    </code></pre>
+
+### MNIST
+- Convex
+    <pre><code>
+    python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --L_k 0.005  --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1 --K 0
+    python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --L_k 0.005  --num_global_iters 200  --algorithm Local --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1 --K 1
+    python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --L_k 0.005  --num_global_iters 200  --algorithm Global --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1 --K 2
+    python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --L_k 0.005  --num_global_iters 200  --algorithm Global --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1 --K 3
+    </code></pre>
+
+- NonConvex
+    <pre><code>
+    python3 main.py --dataset Mnist --model dnn --learning_rate 0.03 --L_k 0.005  --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1 --K 0
+    python3 main.py --dataset Mnist --model dnn --learning_rate 0.03 --L_k 0.005  --num_global_iters 200  --algorithm Local --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1 --K 1
+    python3 main.py --dataset Mnist --model dnn --learning_rate 0.03 --L_k 0.005  --num_global_iters 200  --algorithm Global --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1 --K 2
+    python3 main.py --dataset Mnist --model dnn --learning_rate 0.03 --L_k 0.005  --num_global_iters 200  --algorithm Global --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1 --K 3
+    </code></pre>
 
 <pre><code>
 python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 0.1
