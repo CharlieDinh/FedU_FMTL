@@ -13,7 +13,7 @@ Authors:
 # Dataset:
 
 - Human Activity Recognition (30 clients)
-- Sensor (23 clients)
+- Vehicle Sensor (23 clients)
 - MNIST (100 clients)
 - CIFAR (20 clients): This dataset will be downloaded and generated automatically when runing algorithms.
 
