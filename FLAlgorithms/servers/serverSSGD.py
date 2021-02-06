@@ -74,7 +74,7 @@ class FedSSGD(Server):
             # Agegrate parameter at each user
             if(self.L_k != 0): # if L_K = 0 it is local model 
                 for user in self.selected_users:
-                    user.aggregate_parameters(self.selected_users, glob_iter, len(self.users), self.data_set_name , self.alk_connection)
+                    user.aggregate_parameters(self.users, glob_iter, len(self.users), self.data_set_name , self.alk_connection)
             self.evaluate()
             #self.meta_evaluate()
         self.save_results()
