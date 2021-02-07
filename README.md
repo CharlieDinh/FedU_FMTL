@@ -48,6 +48,15 @@ All dataset after downloading must be stored at folder \data
     python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm SSGD  --time 10  --subusers 1
     python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm Local --time 10  --subusers 1
     python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm Global --time 10 --subusers 1
+    
+    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm SSGD  --time 10  --subusers 1
+    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm Local --time 10  --subusers 1
+    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm Global --time 10 --subusers 1
+    python3 mocha.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 100 --K 200 --num_global_iters 200  --algorithm Mocha --time 10 --subusers 1
+
+    python3 main.py --dataset vehicle_sensor --model dnn --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm SSGD  --time 10  --subusers 1
+    python3 main.py --dataset vehicle_sensor --model dnn --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm Local --time 10  --subusers 1
+    python3 main.py --dataset vehicle_sensor --model dnn --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm Global --time 10 --subusers 1
     </code></pre>
  
 ## Table comparison for Persionalized Federated Learning
