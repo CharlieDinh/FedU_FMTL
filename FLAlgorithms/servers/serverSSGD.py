@@ -19,14 +19,14 @@ class FedSSGD(Server):
         self.data_set_name = dataset[1]
         self.K = K
         total_users = len(dataset[0][0])
-
-        #self.alk_connection = 
         N = total_users
         b = np.random.uniform(0,1,size=(N,N))
         b_symm = (b + b.T)/2
         b_symm[b_symm < 0.25] = 0
         self.alk_connection = b_symm
+
         #np.random.seed(0)
+        
         if(self.sub_data):
             partion = int(0.9* total_users)
             randomList = np.random.choice(range(0, total_users), int(0.9*total_users), replace =False)

@@ -157,6 +157,39 @@ class User:
                 (X, y) = next(self.iter_testloader)
             return (X.to(self.device), y.to(self.device))
 
+    def get_alk(self,user_list,dataset, index):
+        i = index
+        akl = 0
+        if(self.K == 0):
+            akl = 0.25
+        elif(self.K == 1):
+            if(self.train_samples > 300):
+                akl = 0.25
+            elif(user_list[i].train_samples < 10):
+                akl = 0.0
+            elif(10 <= user_list[i].train_samples < 100):
+                akl = 0.25
+            elif(100 <= user_list[i].train_samples < 1000):
+                akl = 0.5
+            elif(1000 <= user_list[i].train_samples < 5000):
+                akl = 0.75
+            else:
+                akl = 1
+        elif(self.K == 2):
+            if(dataset == "Mnist"):
+                y_1 = [e[1] for e in list(self.trainloaderfull.dataset)]
+                y_2 = [e[1] for e in list(user_list[i].trainloaderfull.dataset)]
+                similar = len(set(np.array(y_1)).intersection(set(np.array(y_2))))
+                if(similar <= 0):
+                    akl = 0
+                elif(similar == 1):
+                    akl = 0.25
+                elif(similar == 2):
+                    akl = 0.5
+                else:
+                    akl = 1
+        return akl
+        
     def save_model(self):
         model_path = os.path.join("models", self.dataset)
         if not os.path.exists(model_path):
