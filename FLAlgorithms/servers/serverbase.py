@@ -33,7 +33,23 @@ class Server:
         #    param.data = torch.zeros_like(param.data)
         #    param.grad = torch.zeros_like(param.data)
         #self.send_parameters()
-        
+
+    def get_data(self,train,test):
+        if(self.sub_data == 1):
+            train = train[int(0.95*len(train)):]
+            test = test[int(0.8*len(test)):]
+        else:
+            train = train[int(0.5*len(train)):]
+            test = test[int(0.5*len(test)):]
+        return train, test
+    def get_partion(self, total_users):
+        if(self.sub_data):
+            if(self.sub_data == 1):
+                partion = int(0.9 * total_users)
+            else:
+                partion = int(0.5 * total_users)
+        randomList = np.random.choice(range(0, total_users), partion, replace =False)
+        return randomList
     def aggregate_grads(self):
         assert (self.users is not None and len(self.users) > 0)
         for param in self.model.parameters():
@@ -208,6 +224,8 @@ class Server:
         alg = alg  + "_" + str(self.learning_rate) + "_" + str(self.beta) + "_" + str(self.L_k) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b"+ "_" + str(self.local_epochs)
         if(self.algorithm == "pFedMe" or self.algorithm == "pFedMe_p"):
             alg = alg + "_" + str(self.K) + "_" + str(self.personal_learning_rate)
+        if(self.sub_data):
+            alg = alg + "_" + "subdata"
         alg = alg + "_" + str(self.times)
         if (len(self.rs_glob_acc_per) != 0 &  len(self.rs_train_acc_per) & len(self.rs_train_loss_per)) :
             with h5py.File("./results/"+'{}.h5'.format(alg, self.local_epochs), 'w') as hf:

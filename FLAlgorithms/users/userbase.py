@@ -28,6 +28,8 @@ class User:
             self.testloader =  DataLoader(test_data, self.test_samples,shuffle=True)
         else:
             self.trainloader = DataLoader(train_data, self.batch_size,shuffle=True)
+            if(self.batch_size > len(test_data)):
+                self.batch_size = int(len(test_data)/5)
             self.testloader =  DataLoader(test_data, self.batch_size,shuffle=True)
 
         self.testloaderfull = DataLoader(test_data, self.test_samples,shuffle=True)

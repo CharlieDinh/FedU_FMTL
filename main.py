@@ -67,10 +67,7 @@ def main(experiment, dataset, algorithm, model, batch_size, learning_rate, beta,
                 model = CNNCifar(10).to(device), model
             else:
                 return
-        
-        else:
-            print("Model is invalid")
-            return
+                
         # select algorithm
 
         if(algorithm == "FedAvg"):
@@ -152,6 +149,7 @@ if __name__ == "__main__":
             "gpu": args.gpu,
             "cut-off": args.cutoff
         }
+        
         experiment.log_parameters(hyper_params)
     else:
         experiment = 0

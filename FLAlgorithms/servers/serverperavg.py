@@ -1,6 +1,6 @@
 import torch
 import os
-
+import numpy as np
 from FLAlgorithms.users.userperavg import UserPerAvg
 from FLAlgorithms.servers.serverbase import Server
 from utils.model_utils import read_data, read_user_data
@@ -18,15 +18,13 @@ class PerAvg(Server):
         total_users = len(dataset[0][0])
         self.sub_data = cutoff
         if(self.sub_data):
-            partion = int(0.9 * total_users)
-            randomList = np.random.choice(range(0, total_users), partion, replace =False)
+            randomList = self.get_partion(total_users)
             
         for i in range(total_users):
             id, train , test = read_user_data(i, dataset[0], dataset[1])
             if(self.sub_data):
                 if(i in randomList):
-                    train = train[int(0.95*len(train)):]
-                    test = test[int(0.8*len(test)):]
+                    train, test = self.get_data(train, test)
             user = UserPerAvg(device, id, train, test, model, batch_size, learning_rate, beta, L_k, local_epochs, optimizer ,total_users , num_users)
             self.users.append(user)
             self.total_train_samples += user.train_samples
