@@ -243,10 +243,10 @@ All dataset after downloading must be stored at folder \data
 
 ### Human Activity
     <pre><code>
-    python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 0.1 --cutoff 2
+    python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.05 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 0.1 --cutoff 2
     python3 main.py --dataset human_activity --model mclr --learning_rate 0.02 --num_global_iters 200  --algorithm FedAvg  --commet 0 --time 10 --gpu 0 --subusers 0.1 --cutoff 2
-    python3 main.py --dataset human_activity --model mclr --learning_rate 0.01 --personal_learning_rate 0.01 --beta 1 --L_k 15 --num_global_iters 200 --algorithm pFedMe --commet 0 --time 10 --gpu 0 --subusers 0.1 --cutoff 2 --K 5
-    python3 main.py --dataset human_activity --model mclr --batch_size 20 --learning_rate 0.03 --beta 0.001  --num_global_iters 200 --local_epochs 5 --algorithm PerAvg --commet 0 --time 10 --gpu 0 --subusers  0.1 --cutoff 2
+    python3 main.py --dataset human_activity --model mclr --learning_rate 0.01 --personal_learning_rate 0.01 --beta 1 --L_k 10 --num_global_iters 200 --algorithm pFedMe --commet 0 --time 10 --gpu 0 --subusers 0.1 --cutoff 2 --K 5
+    python3 main.py --dataset human_activity --model mclr --batch_size 20 --learning_rate 0.01 --beta 0.001  --num_global_iters 200 --local_epochs 5 --algorithm PerAvg --commet 0 --time 10 --gpu 0 --subusers  0.1 --cutoff 2
     python3 mocha.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 100 --K 1000 --num_global_iters 200  --algorithm Mocha --commet 0 --time 10 --gpu 0 --subusers 0.1  --cutoff 2
     
     python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --commet 0 --time 10 --gpu 0 --subusers 0.1 --cutoff 2

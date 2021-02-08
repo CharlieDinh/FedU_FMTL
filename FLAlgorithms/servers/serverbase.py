@@ -39,9 +39,10 @@ class Server:
             train = train[int(0.95*len(train)):]
             test = test[int(0.8*len(test)):]
         else:
-            train = train[int(0.5*len(train)):]
-            test = test[int(0.5*len(test)):]
+            train = train[int(0.8*len(train)):]
+            test = test[int(0.6*len(test)):]
         return train, test
+
     def get_partion(self, total_users):
         if(self.sub_data):
             if(self.sub_data == 1):
@@ -50,6 +51,7 @@ class Server:
                 partion = int(0.5 * total_users)
         randomList = np.random.choice(range(0, total_users), partion, replace =False)
         return randomList
+
     def aggregate_grads(self):
         assert (self.users is not None and len(self.users) > 0)
         for param in self.model.parameters():
