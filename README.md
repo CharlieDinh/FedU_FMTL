@@ -276,6 +276,11 @@ All dataset after downloading must be stored at folder \data
     python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --subusers 0.1  --time 10 --subusers 0.1 --cutoff 2
     python3 main.py --dataset Mnist --model mclr --learning_rate 0.01 --personal_learning_rate 0.01 --beta 1 --L_k 15 --num_global_iters 200 --algorithm pFedMe  --time 10 --subusers 0.1 --cutoff 2 --K 5
     python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --beta 0.001  --num_global_iters 200 --local_epochs 5 --algorithm PerAvg --subusers 0.1 --time 10  --subusers 0.1 --cutoff 2
+    
+    python3 main.py --dataset Mnist --model dnn --learning_rate 0.03 --num_global_iters 200  --algorithm FedAvg --times 10 --subusers 0.1 --cutoff 2
+    python3 main.py --dataset Mnist --model dnn --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm SSGD --subusers 0.1  --time 10 --subusers 0.1 --cutoff 2
+    python3 main.py --dataset Mnist --model dnn --learning_rate 0.01 --personal_learning_rate 0.01 --beta 1 --L_k 15 --num_global_iters 200 --algorithm pFedMe  --time 10 --subusers 0.1 --cutoff 2 --K 5
+    python3 main.py --dataset Mnist --model dnn --learning_rate 0.03 --beta 0.001  --num_global_iters 200 --local_epochs 5 --algorithm PerAvg --subusers 0.1 --time 10  --subusers 0.1 --cutoff 2
     </code></pre>
 
 ### CIFAR-10
