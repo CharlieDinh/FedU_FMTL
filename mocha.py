@@ -1,5 +1,5 @@
 #
-# This code is adapted form paper
+# This code is adapted form "https://github.com/pliang279/LG-FedAvg"
 #
 from comet_ml import Experiment
 import copy
