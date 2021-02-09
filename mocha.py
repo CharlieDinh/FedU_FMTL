@@ -114,9 +114,12 @@ if __name__ == '__main__':
         sub_data = args.cutoff
         total_users = len(data[0])
         print(total_users)
-        if(sub_data):
-            partion = int(0.9* total_users)
-            randomList = np.random.choice(range(0, total_users), int(0.9*total_users), replace =False)
+        
+        if(sub_data == 1):
+            partion = int(0.9 * total_users)
+        else:
+            partion = int(0.5 * total_users)
+        randomList = np.random.choice(range(0, total_users), int(0.9*total_users), replace =False)
         
         #print(total_users,randomList)
 
@@ -124,8 +127,12 @@ if __name__ == '__main__':
             id, train , test = read_user_data(idx, data, args.dataset)
             if(sub_data):
                 if(idx in randomList):
-                    train = train[int(0.95*len(train)):]
-                    test   = test[int(0.8*len(test)):]
+                    if(sub_data == 1):
+                        train = train[int(0.95*len(train)):]
+                        test = test[int(0.8*len(test)):]
+                    elif(sub_data == 2):
+                        train = train[int(0.8*len(train)):]
+                        test = test[int(0.6*len(test)):]
             local = LocalUpdateMTL(args=args, data_train = train, data_test = test)
             local_list_users.append(local)
 

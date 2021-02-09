@@ -15,9 +15,8 @@ class FedGlobal(Server):
         total_users = len(dataset[0][0])
         #np.random.seed(0)
         if(self.sub_data):
-            partion = int(0.9* total_users)
-            randomList = np.random.choice(range(0, total_users), int(0.9*total_users), replace =False)
-            
+            randomList = self.get_partion(total_users)  
+
         # Initialize data for all  users
         total_users = len(dataset[0][0])
         train_all = []
@@ -27,8 +26,7 @@ class FedGlobal(Server):
             id, train , test = read_user_data(i, dataset[0], dataset[1])
             if(self.sub_data):
                 if(i in randomList):
-                    train = train[int(0.95*len(train)):]
-                    test = test[int(0.8*len(test)):]
+                    train, test = self.get_data(train, test)
 
             train_all += train
             test_all += test
