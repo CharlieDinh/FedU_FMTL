@@ -20,6 +20,7 @@ from models.test import *
 from utils.model_utils import *
 import h5py
 import pdb
+from utils.sampling import *
 from utils.plot_utils import *
 
 if __name__ == '__main__':
@@ -115,12 +116,7 @@ if __name__ == '__main__':
         total_users = len(data[0])
         print(total_users)
         
-        if(sub_data == 1):
-            partion = int(0.9 * total_users)
-        else:
-            partion = int(0.5 * total_users)
-        randomList = np.random.choice(range(0, total_users), int(0.9*total_users), replace =False)
-        
+        randomList = get_cutoff_client(sub_data)        
         #print(total_users,randomList)
 
         for idx in range(len(net_local_list)):
