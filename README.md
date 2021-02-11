@@ -157,56 +157,6 @@ All dataset after downloading must be stored at folder \data
     python3 main.py --dataset Mnist --model dnn --learning_rate 0.03 --L_k 0.01 --num_global_iters 200  --algorithm Global --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1
     </code></pre>
 
-## Effect of A_kl
-
-### Human Activity
-- Convex
-    <pre><code>
-    python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.1 --num_global_iters 200  --algorithm FedU --commet 0 --time 10 --gpu 0 --subusers 1 --K 0 --cutoff 1
-    python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.1 --num_global_iters 200  --algorithm FedU --commet 0 --time 10 --gpu 0 --subusers 1 --K 1 --cutoff 1
-    python3 main.py --dataset human_activity --model mclr --learning_rate 0.03 --L_k 0.1 --num_global_iters 200  --algorithm FedU --commet 0 --time 10 --gpu 0 --subusers 1 --K 2 --cutoff 1
-    </code></pre>
-
-- Non Convex
-    <pre><code>
-    python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.1 --num_global_iters 200  --algorithm FedU --commet 0 --time 10 --gpu 0 --subusers 1 --K 0 --cutoff 1
-    python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.1 --num_global_iters 200  --algorithm FedU --commet 0 --time 10 --gpu 0 --subusers 1 --K 1 --cutoff 1
-    python3 main.py --dataset human_activity --model dnn --learning_rate 0.03 --L_k 0.1 --num_global_iters 200  --algorithm FedU --commet 0 --time 10 --gpu 0 --subusers 1 --K 2 --cutoff 1
-    </code></pre>
-
-### Vehicle Sensor Activity
-- Convex
-    <pre><code>
-    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm FedU --commet 0 --time 10 --gpu 0 --subusers 1 --K 0 --cutoff 1
-    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm FedU --commet 0 --time 10 --gpu 0 --subusers 1 --K 1 --cutoff 1
-    python3 main.py --dataset vehicle_sensor --model mclr --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm FedU --commet 0 --time 10 --gpu 0 --subusers 1 --K 2 --cutoff 1
-    </code></pre>
-
-- Non-Convex
-    <pre><code>
-    python3 main.py --dataset vehicle_sensor --model dnn --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm FedU --commet 0 --time 10 --gpu 0 --subusers 1 --K 0 --cutoff 1
-    python3 main.py --dataset vehicle_sensor --model dnn --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm FedU --commet 0 --time 10 --gpu 0 --subusers 1 --K 1 --cutoff 1
-    python3 main.py --dataset vehicle_sensor --model dnn --learning_rate 0.05 --L_k 0.01 --num_global_iters 200  --algorithm FedU --commet 0 --time 10 --gpu 0 --subusers 1 --K 2 --cutoff 1
-    </code></pre>
-
-### MNIST
-- Convex
-    <pre><code>
-    python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --L_k 0.005  --num_global_iters 200  --algorithm FedU --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1 --K 0
-    python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --L_k 0.005  --num_global_iters 200  --algorithm Local --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1 --K 1
-    python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --L_k 0.005  --num_global_iters 200  --algorithm Global --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1 --K 2
-    python3 main.py --dataset Mnist --model mclr --learning_rate 0.03 --L_k 0.005  --num_global_iters 200  --algorithm Global --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1 --K 3
-    </code></pre>
-
-- NonConvex
-    <pre><code>
-    python3 main.py --dataset Mnist --model dnn --learning_rate 0.03 --L_k 0.005  --num_global_iters 200  --algorithm FedU --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1 --K 0
-    python3 main.py --dataset Mnist --model dnn --learning_rate 0.03 --L_k 0.005  --num_global_iters 200  --algorithm Local --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1 --K 1
-    python3 main.py --dataset Mnist --model dnn --learning_rate 0.03 --L_k 0.005  --num_global_iters 200  --algorithm Global --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1 --K 2
-    python3 main.py --dataset Mnist --model dnn --learning_rate 0.03 --L_k 0.005  --num_global_iters 200  --algorithm Global --commet 0 --time 10 --gpu 0 --subusers 1 --cutoff 1 --K 3
-    </code></pre>
-
-# Produce extra experiments in supplement
 
 ## Comparison for Persionalized Federated Learning using full data
 
