@@ -161,8 +161,8 @@ class User:
 
     def get_alk(self,user_list,dataset, index):
         # temporary fix value of akl, all client has same value of akl
-        akl = 0.25 # can set any value but need to modify eta accordingly
-        #akl = 0.5
+        #akl = 0.25 # can set any value but need to modify eta accordingly
+        akl = 0.5
         #akl = 1
         return akl
         
