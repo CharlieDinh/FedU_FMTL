@@ -59,11 +59,4 @@ class UserFedU(User):
                     avg.data += akl[int(self.id)][int(user_list[i].id)] * (current_task.data.clone() - other_tasks.data.clone())
         
         for avg, current_task in zip(avg_weight_different, self.model.parameters()):
-            current_task.data = current_task.data - self.learning_rate * self.L_k * self.beta * self.local_epochs * avg
-
-        # update current task follow 15 rulle
-        #if(self.beta > 1):
-        #    for local, current_task in zip(self.local_model, self.model.parameters()):
-        #        current_task.data = (1 - self.beta)*local.data + self.beta * current_task.data  
-        #self.clone_model_paramenter(self.model.parameters(), self.local_model)
-    
+            current_task.data = current_task.data - 0.5 * self.learning_rate * self.L_k * self.beta * self.local_epochs * avg
