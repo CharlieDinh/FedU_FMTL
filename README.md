@@ -1,7 +1,8 @@
 # FedU: A Unified Framework for Federated Multi-Task Learning with Laplacian Regularization
 This repository implements all experiments in the paper the **FedU: A Unified Framework for Federated Multi-Task Learning with Laplacian Regularization**.
   
-Authors: 
+Authors: Canh T. Dinh, Tung T. Vu, Nguyen H. Tran, Minh N. Dao, Hongyu Zhang.
+https://arxiv.org/pdf/2102.07148.pdf
 
 # Software requirements:
 - numpy, scipy, torch, Pillow, matplotlib, tqdm, pandas, h5py, comet_ml
