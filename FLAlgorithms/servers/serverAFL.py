@@ -18,14 +18,16 @@ class FedAFL(Server):
         self.grad_learning_rate = learning_rate
         # Initialize lambdas
 
-        lamdas_length = int(num_users) # all clients will be involved in selection for training
+       
+
+        total_users = len(dataset[0][0])
+        lamdas_length = int(num_users * total_users) # all clients will be involved in selection for training
 
         self.lambdas = np.ones(lamdas_length) * 1.0 /(lamdas_length)
         self.learning_rate_lambda = 0.001
         print(f"lambdas learning rate: {self.learning_rate_lambda}")
         self.K = 0
 
-        total_users = len(dataset[0][0])
         self.sub_data = cutoff
         if(self.sub_data):
             randomList = self.get_partion(total_users)     
