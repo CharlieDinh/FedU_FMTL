@@ -25,7 +25,7 @@ class FedAvg(Server):
             if(self.sub_data):
                 if(i in randomList):
                     train, test = self.get_data(train, test)
-            user = UserAVG(device, id, train, test, model, batch_size, learning_rate,beta,L_k, local_epochs, optimizer)
+            user = UserAVG(device, id, train, test, model, batch_size, learning_rate, beta, L_k, local_epochs, optimizer)
             self.users.append(user)
             self.total_train_samples += user.train_samples
             

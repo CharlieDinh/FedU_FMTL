@@ -36,7 +36,8 @@ class User:
         self.trainloaderfull = DataLoader(train_data, self.train_samples,shuffle=True)
         self.iter_trainloader = iter(self.trainloader)
         self.iter_testloader = iter(self.testloader)
-
+        self.delta_model = [torch.zeros_like(p.data) for p in self.model.parameters() if p.requires_grad]
+        self.server_model = [torch.zeros_like(p.data) for p in self.model.parameters() if p.requires_grad]
         # those parameters are for persionalized federated learing.
         self.local_model = copy.deepcopy(list(self.model.parameters()))
         #self.persionalized_model = copy.deepcopy(list(self.model.parameters()))

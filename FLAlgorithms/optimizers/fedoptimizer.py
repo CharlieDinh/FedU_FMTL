@@ -110,3 +110,5 @@ class APFLOptimizer(Optimizer):
                 d_p = beta  * n_k * p.grad.data
                 p.data.add_(-group['lr'], d_p)
         return loss
+
+
