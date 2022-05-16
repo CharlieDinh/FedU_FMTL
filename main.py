@@ -11,6 +11,7 @@ from FLAlgorithms.servers.serveravg import FedAvg
 from FLAlgorithms.servers.serverpFedMe import pFedMe
 from FLAlgorithms.servers.serverperavg import PerAvg
 from FLAlgorithms.servers.serverFedU import FedU
+from FLAlgorithms.servers.serverAFL import FedAFL
 from FLAlgorithms.servers.serverlocal import FedLocal
 from FLAlgorithms.servers.serverglobal import FedGlobal
 from utils.model_utils import read_data
@@ -89,6 +90,11 @@ def main(experiment, dataset, algorithm, model, batch_size, learning_rate, beta,
             if(commet):
                 experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(personal_learning_rate) +  "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
             server = pFedMe(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i, cutoff)
+        
+        elif(algorithm == "AFL"):
+            if(commet):
+                experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(personal_learning_rate) +  "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+            server = FedAFL(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i, cutoff)
         
         elif(algorithm == "Local"):
             if(commet): 
