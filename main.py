@@ -12,6 +12,7 @@ from FLAlgorithms.servers.serverpFedMe import pFedMe
 from FLAlgorithms.servers.serverperavg import PerAvg
 from FLAlgorithms.servers.serverFedU import FedU
 from FLAlgorithms.servers.serverScaffold import SCAFFOLD
+from FLAlgorithms.servers.serverfedprox import FedProx
 from FLAlgorithms.servers.serverAFL import FedAFL
 from FLAlgorithms.servers.serverlocal import FedLocal
 from FLAlgorithms.servers.serverglobal import FedGlobal
@@ -47,6 +48,8 @@ def main(experiment, dataset, algorithm, model, batch_size, learning_rate, beta,
                 model = Mclr_Logistic(60,10).to(device), model
             elif(dataset == "EMNIST"):
                 model = Mclr_Logistic(784,62).to(device), model
+            elif(dataset == "Synthetic"):
+                model = Mclr_Logistic(60,10).to(device), model
             else:#(dataset == "Mnist"):
                 model = Mclr_Logistic().to(device), model
 
@@ -77,11 +80,16 @@ def main(experiment, dataset, algorithm, model, batch_size, learning_rate, beta,
                 experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
             server = FedAvg(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i, cutoff)
         
-        if(algorithm == "SCAFFOLD"):
+        elif(algorithm == "SCAFFOLD"):
             if(commet):
                 experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
             server = SCAFFOLD(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i, cutoff)
         
+        elif(algorithm == "FedProx"):
+            if(commet):
+                experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
+            server = SCAFFOLD(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i, cutoff)
+  
         elif(algorithm == "PerAvg"):
             if(commet):
                 experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(personal_learning_rate) + "_" + str(learning_rate)+  "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))

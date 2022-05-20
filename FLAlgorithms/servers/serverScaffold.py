@@ -69,7 +69,7 @@ class SCAFFOLD(Server):
                 self.apply_channel_effect()
 
         self.save_results()
-        self.save_norms()
+        #self.save_norms()
         self.save_model()
 
     def send_parameters(self):

@@ -27,10 +27,14 @@ class User:
             self.trainloader = DataLoader(train_data, self.train_samples,shuffle=True)
             self.testloader =  DataLoader(test_data, self.test_samples,shuffle=True)
         else:
-            self.trainloader = DataLoader(train_data, self.batch_size,shuffle=True)
+            if(len(train_data) < self.batch_size):
+                batch_size = len(train_data)
+            self.trainloader = DataLoader(train_data, batch_size,shuffle=True)
             if(len(train_data) < 200):
                 self.batch_size = int(len(test_data)/10)
-            self.testloader =  DataLoader(test_data, self.batch_size,shuffle=True)
+            if(len(test_data) < self.batch_size):
+                    batch_size = len(test_data)
+            self.testloader =  DataLoader(test_data, batch_size, shuffle=True)
 
         self.testloaderfull = DataLoader(test_data, self.test_samples,shuffle=True)
         self.trainloaderfull = DataLoader(train_data, self.train_samples,shuffle=True)
@@ -44,9 +48,10 @@ class User:
         self.persionalized_model_bar = copy.deepcopy(list(self.model.parameters()))
     
     def set_parameters(self, model):
-        for old_param, new_param, local_param in zip(self.model.parameters(), model.parameters(), self.local_model):
+        for old_param, new_param, local_param, server_param in zip(self.model.parameters(), model.parameters(), self.local_model, self.server_model):
             old_param.data = new_param.data.clone()
             local_param.data = new_param.data.clone()
+            server_param.data = new_param.data.clone()
     
     def set_meta_parameters(self, model):
         for old_param, new_param in zip(self.model.parameters(), model.parameters()):
