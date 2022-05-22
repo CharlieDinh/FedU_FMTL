@@ -50,13 +50,13 @@ class UserFedU(User):
             param.data = torch.zeros_like(param.data)
         
         # Calculate the diffence of model between all users or tasks
-        for i in range(len(user_list)):
-            if(self.id != user_list[i].id):
-                if(self.K > 0 and self.K <= 2):
-                    akl[int(self.id)][int(user_list[i].id)] = self.get_alk(user_list, dataset, i)
+        #for i in range(len(user_list)):
+        #    if(self.id != user_list[i].id):
+        #        if(self.K > 0 and self.K <= 2):
+        #            akl[int(self.id)][int(user_list[i].id)] = self.get_alk(user_list, dataset, i)
                 # K == 3 : akl will be generate randomly for MNIST
-                for avg, current_task, other_tasks in zip(avg_weight_different, self.model.parameters(),user_list[i].model.parameters()):
-                    avg.data += akl[int(self.id)][int(user_list[i].id)] * (current_task.data.clone() - other_tasks.data.clone())
+        #        for avg, current_task, other_tasks in zip(avg_weight_different, self.model.parameters(),user_list[i].model.parameters()):
+        #            avg.data += akl[int(self.id)][int(user_list[i].id)] * (current_task.data.clone() - other_tasks.data.clone())
         
         for avg, current_task in zip(avg_weight_different, self.model.parameters()):
             current_task.data = current_task.data - 0.5 * self.learning_rate * self.L_k * self.beta * self.local_epochs * avg
