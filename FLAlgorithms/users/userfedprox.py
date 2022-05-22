@@ -38,9 +38,10 @@ class UserFedProx(User):
                 X, y = X.to(self.device), y.to(self.device)
                 self.optimizer.zero_grad()
                 output = self.model(X)
-                for w, w_t in zip(self.model.parameters(), self.server_model.parameters()):
-                    proximal_term += (w - w_t).norm(2)
-                loss = self.loss(output, y) + self.L_k * proximal_term
+                proximal_term = 0.0
+                #for w, w_t in zip(self.model.parameters(), self.server_model):
+                #    proximal_term += (w - w_t).norm(2)
+                loss = self.loss(output, y) #+ self.L_k * proximal_term
                 loss.backward()
                 self.optimizer.step()
         self.clone_model_paramenter(self.model.parameters(), self.local_model)
