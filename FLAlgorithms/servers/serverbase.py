@@ -137,6 +137,7 @@ class Server:
         num_users = int(fac_users * len(self.users))
         num_users = min(num_users, len(self.users))
         #np.random.seed(round)
+        np.random.seed(round * (self.times + 2))
         return np.random.choice(self.users, num_users, replace=False) #, p=pk)
 
     def meta_split_users(self, ratio=0.8):

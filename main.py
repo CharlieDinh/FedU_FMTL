@@ -20,7 +20,6 @@ from utils.model_utils import read_data
 from FLAlgorithms.trainmodel.models import *
 from utils.plot_utils import *
 import torch
-torch.manual_seed(0)
 from utils.options import args_parser
 
 # import comet_ml at the top of your file
@@ -28,15 +27,15 @@ from utils.options import args_parser
 # Create an experiment with your api key:
 def main(experiment, dataset, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters,
          local_epochs, optimizer, numusers, K, personal_learning_rate, times, commet, gpu, cutoff):
-    
+
     # Get device status: Check GPU or CPU
     device = torch.device("cuda:{}".format(gpu) if torch.cuda.is_available() and gpu != -1 else "cpu")
 
     data = read_data(dataset) , dataset
-
     for i in range(times):
         print("---------------Running time:------------",i)
-        # Generate model
+        # Generate model\
+        torch.manual_seed(0)
         if(model == "mclr"):
             if(dataset == "human_activity"):
                 model = Mclr_Logistic(561,6).to(device), model
@@ -88,7 +87,7 @@ def main(experiment, dataset, algorithm, model, batch_size, learning_rate, beta,
         elif(algorithm == "FedProx"):
             if(commet):
                 experiment.set_name(dataset + "_" + algorithm + "_" + model[1] + "_" + str(batch_size) + "_" + str(learning_rate) + "_" + str(num_glob_iters) + "_"+ str(local_epochs) + "_"+ str(numusers))
-            server = SCAFFOLD(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i, cutoff)
+            server = FedProx(experiment, device, data, algorithm, model, batch_size, learning_rate, beta, L_k, num_glob_iters, local_epochs, optimizer, numusers, i, cutoff)
   
         elif(algorithm == "PerAvg"):
             if(commet):
