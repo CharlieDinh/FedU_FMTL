@@ -54,6 +54,10 @@ class User:
             local_param.data = new_param.data.clone()
             server_param.data = new_param.data.clone()
     
+    def set_local_parameters(self, model):
+        for old_param, new_param in zip(self.model.parameters(), model):
+            old_param.data = new_param.data.clone()
+    
     def set_meta_parameters(self, model):
         for old_param, new_param in zip(self.model.parameters(), model.parameters()):
             old_param.data = new_param.data.clone()
