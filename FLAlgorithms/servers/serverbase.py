@@ -69,7 +69,12 @@ class Server:
         assert (self.users is not None and len(self.users) > 0)
         for user in self.users:
             user.set_parameters(self.model)
-    
+
+    def send_presentation_parameters(self):
+        assert (self.users is not None and len(self.users) > 0)
+        for user in self.users:
+            user.set_presentation(self.model) 
+
     def send_meta_parameters(self):
         assert (self.users is not None and len(self.users) > 0)
         for user in self.users:

@@ -32,6 +32,7 @@ class Mclr_CrossEntropy(nn.Module):
     def __init__(self, input_dim = 784, output_dim = 10):
         super(Mclr_CrossEntropy, self).__init__()
         self.linear = torch.nn.Linear(input_dim, output_dim)
+        self.weight_keys = [['last.weight', 'last.bias']]
 
     def forward(self, x):
         x = torch.flatten(x, 1)
@@ -43,15 +44,13 @@ class DNN(nn.Module):
         super(DNN, self).__init__()
         # define network layers
         self.fc1 = nn.Linear(input_dim, mid_dim)
-        self.fc2 = nn.Linear(mid_dim, output_dim)
-        self.weight_keys = [['fc1.weight', 'fc1.bias'],
-                            ['fc2.weight', 'fc2.bias']
-                            ]
+        self.last = nn.Linear(mid_dim, output_dim)
+        
     def forward(self, x):
         # define forward pass
         x = torch.flatten(x, 1)
         x = F.relu(self.fc1(x))
-        x = self.fc2(x)
+        x = self.last(x)
         x = F.log_softmax(x, dim=1)
         return x
 
@@ -61,14 +60,14 @@ class DNN2(nn.Module):
         # define network layers
         self.fc1 = nn.Linear(input_dim, mid_dim_in)
         self.fc2 = nn.Linear(mid_dim_in, mid_dim_out)
-        self.fc3 = nn.Linear(mid_dim_out, output_dim)
+        self.last = nn.Linear(mid_dim_out, output_dim)
     
     def forward(self, x):
         # define forward pass
         x = torch.flatten(x, 1)
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
-        x = self.fc3(x)
+        x = self.last(x)
         x = F.log_softmax(x, dim=1)
         return x
 #################################
@@ -180,29 +179,29 @@ class CNNCifar(nn.Module):
         self.conv2 = nn.Conv2d(6, 16, 5)
         self.fc1 = nn.Linear(16 * 5 * 5, 120)
         self.fc2 = nn.Linear(120, 100)
-        self.fc3 = nn.Linear(100, num_classes)
+        self.last = nn.Linear(100, num_classes)
 
-        self.weight_keys = [['fc1.weight', 'fc1.bias'],
-                            ['fc2.weight', 'fc2.bias'],
-                            ['fc3.weight', 'fc3.bias'],
-                            ['conv2.weight', 'conv2.bias'],
-                            ['conv1.weight', 'conv1.bias'],
-                            ]
-                            
+        #self.weight_keys = [['fc1.weight', 'fc1.bias'],
+        #                    ['fc2.weight', 'fc2.bias'],
+        #                    ['last.weight', 'last.bias'],
+        #                    ['conv2.weight', 'conv2.bias'],
+        #                    ['conv1.weight', 'conv1.bias'],
+        #                    ]
+                        
     def forward(self, x):
         x = self.pool(F.relu(self.conv1(x)))
         x = self.pool(F.relu(self.conv2(x)))
         x = x.view(-1, 16 * 5 * 5)
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
-        x = self.fc3(x)
+        x = self.last(x)
         return F.log_softmax(x, dim=1)
 
 class Mclr_Logistic(nn.Module):
     def __init__(self, input_dim = 784, output_dim = 10):
         super(Mclr_Logistic, self).__init__()
         self.fc1 = nn.Linear(input_dim, output_dim)
-        self.weight_keys = [['fc1.weight', 'fc1.bias']]
+        self.weight_keys = [['last.weight', 'last.bias']]
 
     def forward(self, x):
         x = torch.flatten(x, 1)

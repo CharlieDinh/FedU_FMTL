@@ -54,6 +54,15 @@ class User:
             local_param.data = new_param.data.clone()
             server_param.data = new_param.data.clone()
     
+    def set_presentation(self, model):
+        # only clone the presentation
+        for old_param, (name_new, new_param) in zip(self.model.parameters(), model.named_parameters()):
+            if "last.weight" in name_new or "last.bias" in name_new:
+                break
+            else:
+                old_param.data = new_param.data.clone()
+            
+    
     def set_local_parameters(self, model):
         for old_param, new_param in zip(self.model.parameters(), model):
             old_param.data = new_param.data.clone()
