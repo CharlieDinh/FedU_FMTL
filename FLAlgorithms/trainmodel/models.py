@@ -180,13 +180,6 @@ class CNNCifar(nn.Module):
         self.fc1 = nn.Linear(16 * 5 * 5, 120)
         self.fc2 = nn.Linear(120, 100)
         self.last = nn.Linear(100, num_classes)
-
-        #self.weight_keys = [['fc1.weight', 'fc1.bias'],
-        #                    ['fc2.weight', 'fc2.bias'],
-        #                    ['last.weight', 'last.bias'],
-        #                    ['conv2.weight', 'conv2.bias'],
-        #                    ['conv1.weight', 'conv1.bias'],
-        #                    ]
                         
     def forward(self, x):
         x = self.pool(F.relu(self.conv1(x)))
@@ -200,11 +193,11 @@ class CNNCifar(nn.Module):
 class Mclr_Logistic(nn.Module):
     def __init__(self, input_dim = 784, output_dim = 10):
         super(Mclr_Logistic, self).__init__()
-        self.fc1 = nn.Linear(input_dim, output_dim)
-        self.weight_keys = [['last.weight', 'last.bias']]
+        self.last = nn.Linear(input_dim, output_dim)
+        #self.weight_keys = [['last.weight', 'last.bias']]
 
     def forward(self, x):
         x = torch.flatten(x, 1)
-        x = self.fc1(x)
+        x = self.last(x)
         output = F.log_softmax(x, dim=1)
         return output
